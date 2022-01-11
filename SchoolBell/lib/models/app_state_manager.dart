@@ -10,11 +10,9 @@ class AppStateManager extends ChangeNotifier {
   bool _initialized = false; // 스플래시 노출 여부: 최초 실행 시에만 노출
 
   bool _counting = false;
-  int _selectedTab = SchoolBellTab.current;
 
   bool get isInitialized => _initialized;
   bool get isCounting => _counting;
-  int get getSelectedTab => _selectedTab;
 
   void initializeApp() {
     Timer(
@@ -42,11 +40,6 @@ class AppStateManager extends ChangeNotifier {
     // SharedPrefeerence 업데이트
     // 알람 카운트 모두 종료
 
-    notifyListeners();
-  }
-
-  void goToTab(index) {
-    _selectedTab = index;
     notifyListeners();
   }
 }
