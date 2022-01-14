@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'models/models.dart';
 import 'navigation/app_router.dart';
+import 'schoolbell_theme.dart';
 
 void main() {
   runApp(const SchoolBell());
@@ -38,6 +39,7 @@ class _SchoolBellState extends State<SchoolBell> {
       ],
       child: MaterialApp(
         title: 'SchoolBell',
+        theme: SchoolBellTheme.mainTheme(),
         home: Router(
           routerDelegate: _appRouter,
           backButtonDispatcher: RootBackButtonDispatcher(), // 물리버튼 처리

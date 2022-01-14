@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../models/models.dart';
+import '../schoolbell_colors.dart';
 
 import 'counting_screen.dart';
 import 'settings_screen.dart';
@@ -54,21 +55,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           ),
           extendBody: true,
           bottomNavigationBar: BottomAppBar(
-            shape: const CircularNotchedRectangle(),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
                     icon: const Icon(Icons.access_time),
-                    color: const Color.fromRGBO(255, 193, 7, 1),
+                    color: SchoolBellColor.colorMain,
                     onPressed: () {
                       _tabController.animateTo(0);
                     }),
                 const SizedBox(width: 40), // 40 == FAB diameter
                 IconButton(
                     icon: const Icon(Icons.settings),
-                    color: const Color.fromRGBO(255, 193, 7, 1),
+                    color: SchoolBellColor.colorMain,
                     onPressed: () {
                       _tabController.animateTo(1);
                     }),
@@ -76,7 +76,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ),
           ),
           floatingActionButton: FloatingActionButton(
-              backgroundColor: const Color.fromRGBO(255, 193, 7, 1),
               child: Icon(Icons.notifications),
               onPressed: () {
                 Fluttertoast.showToast(

@@ -12,7 +12,7 @@ class CountingScreen extends StatelessWidget {
         children: [
           Text(
             '지금은 쉬는 중♡',
-            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.headline1,
           ),
           const SizedBox(height: 46),
           Image.asset('assets/character_play.png')
