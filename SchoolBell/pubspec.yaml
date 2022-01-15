@@ -28,6 +28,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/character/
   fonts:
     - family: LevelTwo
       fonts:

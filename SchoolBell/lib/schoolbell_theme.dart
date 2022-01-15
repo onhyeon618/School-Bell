@@ -60,6 +60,7 @@ class SchoolBellTheme {
       ),
       textTheme: mainTextTheme,
       fontFamily: 'LevelTwo',
+      iconTheme: const IconThemeData(color: SchoolBellColor.colorMain),
     );
   }
 }

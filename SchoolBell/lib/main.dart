@@ -18,6 +18,7 @@ class SchoolBell extends StatefulWidget {
 
 class _SchoolBellState extends State<SchoolBell> {
   final _appStateManager = AppStateManager();
+  final _classManager = ClassManager();
 
   late AppRouter _appRouter;
 
@@ -26,6 +27,7 @@ class _SchoolBellState extends State<SchoolBell> {
     super.initState();
     _appRouter = AppRouter(
       appStateManager: _appStateManager,
+      classManager: _classManager,
     );
   }
 
@@ -35,6 +37,9 @@ class _SchoolBellState extends State<SchoolBell> {
       providers: [
         ChangeNotifierProvider(
           create: (context) => _appStateManager,
+        ),
+        ChangeNotifierProvider(
+          create: (context) => _classManager,
         ),
       ],
       child: MaterialApp(
