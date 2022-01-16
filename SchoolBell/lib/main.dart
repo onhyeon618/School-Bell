@@ -19,6 +19,7 @@ class SchoolBell extends StatefulWidget {
 class _SchoolBellState extends State<SchoolBell> {
   final _appStateManager = AppStateManager();
   final _classManager = ClassManager();
+  final _settingManager = SettingManager();
 
   late AppRouter _appRouter;
 
@@ -40,6 +41,9 @@ class _SchoolBellState extends State<SchoolBell> {
         ),
         ChangeNotifierProvider(
           create: (context) => _classManager,
+        ),
+        ChangeNotifierProvider(
+          create: (context) => _settingManager,
         ),
       ],
       child: MaterialApp(

@@ -23,6 +23,11 @@ class SchoolBellTheme {
       fontWeight: FontWeight.w500,
       color: Colors.black,
     ),
+    headline6: TextStyle( // 비활성화 된 설정 이름
+      fontSize: 16.0,
+      fontWeight: FontWeight.w500,
+      color: SchoolBellColor.colorGray,
+    ),
     subtitle1: TextStyle( // 다이얼로그 일반
       fontSize: 16.0,
       fontWeight: FontWeight.w500,
@@ -38,6 +43,11 @@ class SchoolBellTheme {
       fontWeight: FontWeight.w300,
       color: Colors.black,
     ),
+    bodyText2: TextStyle( // 비활성화 된 설정 내용
+      fontSize: 14.0,
+      fontWeight: FontWeight.w300,
+      color: SchoolBellColor.colorGray,
+    ),
     button: TextStyle( // 버튼 텍스트
       fontSize: 160,
       color: Colors.white,
@@ -50,6 +60,7 @@ class SchoolBellTheme {
         foregroundColor: Colors.black,
         backgroundColor: Colors.white,
       ),
+      scaffoldBackgroundColor: Colors.white,
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         foregroundColor: Colors.white,
         backgroundColor: SchoolBellColor.colorMain,
