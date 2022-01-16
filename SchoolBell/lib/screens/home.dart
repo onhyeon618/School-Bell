@@ -47,10 +47,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     classManager = Provider.of<ClassManager>(context, listen: false);
 
     return Scaffold(
-      body: TabBarView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: _tabController,
-        children: pages,
+      body: SafeArea(
+        child: TabBarView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: _tabController,
+          children: pages,
+        ),
       ),
       extendBody: true,
       bottomNavigationBar: BottomAppBar(
