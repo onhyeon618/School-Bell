@@ -20,7 +20,7 @@ class SettingManager extends ChangeNotifier {
   String get classBell => '#$_classBell';
   String get restBell => '#$_restBell';
 
-  bool get isOnTime => _bellMode == BellMode.onTime? true : false;
+  bool get isOnTime => _bellMode == BellMode.onTime ? true : false;
 
   void setBellMode(int bellMode) {
     _bellMode = bellMode;

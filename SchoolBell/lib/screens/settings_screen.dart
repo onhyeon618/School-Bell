@@ -52,9 +52,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           const SettingCategory(title: '어플리케이션'),
-          SettingItem(
-            title: '어플리케이션 버전',
-            attribute: '버전',
+          SettingItemVersion(
             onTap: () {},
           ),
           SettingItem(
