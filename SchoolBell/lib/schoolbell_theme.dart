@@ -49,7 +49,8 @@ class SchoolBellTheme {
       color: SchoolBellColor.colorGray,
     ),
     button: TextStyle( // 버튼 텍스트
-      fontSize: 160,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w500,
       color: Colors.white,
     ),
   );

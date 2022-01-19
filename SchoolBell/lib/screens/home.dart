@@ -5,6 +5,7 @@ import '../models/models.dart';
 
 import 'class_screen.dart';
 import 'settings_screen.dart';
+import 'custom_dialog.dart';
 
 class Home extends StatefulWidget {
   static MaterialPage page() {
@@ -75,20 +76,40 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(classManager.isCounting? Icons.notifications_off_outlined : Icons.notifications),
-        onPressed: () => setState(() {
-          // 원래는 다이얼로그를 띄워야 하는 부분이나,
-          // 테스트를 위해 임의로 작동하도록 코드를 작성하였음
-
+        child: Icon(classManager.isCounting
+            ? Icons.notifications_off_outlined
+            : Icons.notifications),
+        onPressed: () async {
           if (!classManager.isCounting) {
-            classManager.startClass(2);
+            var result = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const CustomDialog(
+                    dialogType: CustomDialogType.startClass,
+                    title: '오늘 수업은 몇 교시?',
+                    positive: '시작',
+                    negative: '취소',
+                  );
+                });
+            if (result > 0) classManager.startClass(result);
+          } else {
+            var result = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CustomDialog(
+                    dialogType: CustomDialogType.endClass,
+                    title: '오늘 수업을 종료할까요?',
+                    content:
+                        '아직 ${classManager.totalClass - classManager.currentClass + 1}교시 남아있어요!',
+                    positive: '계속하기',
+                    negative: '수업 종료',
+                  );
+                });
+            if (result == -1) classManager.stopClass();
           }
-          else {
-            classManager.stopClass();
-          } }),
+        },
       ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
