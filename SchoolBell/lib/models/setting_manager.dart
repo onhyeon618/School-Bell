@@ -11,14 +11,24 @@ class SettingManager extends ChangeNotifier {
   int _restLength = 10;
   int _classBell = 1;
   int _restBell = 1;
+  String? _customClassBell;
+  String? _customRestBell;
 
   final List<String> _bellModeName = <String>['정각 모드', '커스텀 모드'];
 
-  String get bellMode => _bellModeName[_bellMode];
-  String get classLength => '$_classLength분';
-  String get restLength => '$_restLength분';
-  String get classBell => '#$_classBell';
-  String get restBell => '#$_restBell';
+  int get bellMode => _bellMode;
+  int get classLength => _classLength;
+  int get restLength => _restLength;
+  int get classBell => _classBell;
+  int get restBell => _restBell;
+
+  String get bellModeName => _bellModeName[_bellMode];
+  String get classLengthString => '$_classLength분';
+  String get restLengthString => '$_restLength분';
+  String get classBellString => '#$_classBell';
+  String get restBellString => '#$_restBell';
+  String? get customClassBell => _customClassBell;
+  String? get customRestBell => _customRestBell;
 
   bool get isOnTime => _bellMode == BellMode.onTime ? true : false;
 
@@ -44,6 +54,16 @@ class SettingManager extends ChangeNotifier {
 
   void setRestBell(int restBell) {
     _restBell = restBell;
+    notifyListeners();
+  }
+
+  void setCustomClassBell(String? customClassBell) {
+    _customClassBell = customClassBell;
+    notifyListeners();
+  }
+
+  void setCustomRestBell(String? customRestBell) {
+    _customRestBell = customRestBell;
     notifyListeners();
   }
 }

@@ -22,29 +22,31 @@ class SettingItem extends StatefulWidget {
 class _SettingItemState extends State<SettingItem> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: (widget.stateOnTime != null && widget.stateOnTime!)
-          ? SchoolBellColor.colorInvalid
-          : Colors.white,
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            widget.title,
-            style: (widget.stateOnTime != null && widget.stateOnTime!)
-                ? Theme.of(context).textTheme.headline6
-                : Theme.of(context).textTheme.headline5,
-          ),
-          Text(
-            widget.attribute,
-            style:  (widget.stateOnTime != null && widget.stateOnTime!)
-                ? Theme.of(context).textTheme.bodyText2
-                : Theme.of(context).textTheme.bodyText1,
-          ),
-        ],
-      )
+    return InkWell(
+      onTap: () => widget.onTap(),
+      child: Container(
+          color: (widget.stateOnTime != null && widget.stateOnTime!)
+              ? SchoolBellColor.colorInvalid
+              : Colors.transparent,
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                widget.title,
+                style: (widget.stateOnTime != null && widget.stateOnTime!)
+                    ? Theme.of(context).textTheme.headline6
+                    : Theme.of(context).textTheme.headline5,
+              ),
+              Text(
+                widget.attribute,
+                style: (widget.stateOnTime != null && widget.stateOnTime!)
+                    ? Theme.of(context).textTheme.bodyText2
+                    : Theme.of(context).textTheme.bodyText1,
+              ),
+            ],
+          )),
     );
   }
 }

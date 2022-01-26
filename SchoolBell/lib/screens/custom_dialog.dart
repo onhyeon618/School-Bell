@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:school_bell/schoolbell_colors.dart';
-import 'package:school_bell/schoolbell_theme.dart';
+import 'package:editable_number_picker/editable_number_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:school_bell/models/models.dart';
+import 'package:school_bell/widgets/radio_bell_mode.dart';
+import '../schoolbell_colors.dart';
+import '../schoolbell_theme.dart';
 
 class CustomDialogType {
   static const int startClass = 0;
@@ -16,6 +20,7 @@ class CustomDialog extends StatefulWidget {
   final String negative;
   final String? title;
   final String? content;
+  final bool? forClass;
 
   const CustomDialog({
     Key? key,
@@ -24,6 +29,7 @@ class CustomDialog extends StatefulWidget {
     required this.negative,
     this.title,
     this.content,
+    this.forClass,
   }) : super(key: key);
 
   @override
@@ -31,7 +37,44 @@ class CustomDialog extends StatefulWidget {
 }
 
 class _CustomDialogState extends State<CustomDialog> {
-  int returnValue = 0;
+  int _returnValue = 0;
+  String? _tempCustomBell;
+
+  @override
+  void initState() {
+    switch (widget.dialogType) {
+      case CustomDialogType.startClass:
+        _returnValue = 1;
+        break;
+      case CustomDialogType.setBellMode:
+        _returnValue =
+            Provider.of<SettingManager>(context, listen: false).bellMode;
+        break;
+      case CustomDialogType.setTimeLength:
+        if (widget.forClass!) {
+          _returnValue =
+              Provider.of<SettingManager>(context, listen: false).classLength;
+        } else {
+          _returnValue =
+              Provider.of<SettingManager>(context, listen: false).restLength;
+        }
+        break;
+      case CustomDialogType.setBellType:
+        if (widget.forClass!) {
+          _returnValue =
+              Provider.of<SettingManager>(context, listen: false).classBell;
+          _tempCustomBell = Provider.of<SettingManager>(context, listen: false)
+              .customClassBell;
+        } else {
+          _returnValue =
+              Provider.of<SettingManager>(context, listen: false).restBell;
+          _tempCustomBell = Provider.of<SettingManager>(context, listen: false)
+              .customRestBell;
+        }
+        break;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,89 +88,240 @@ class _CustomDialogState extends State<CustomDialog> {
   }
 
   dialogContent(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 28),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (widget.dialogType != 4 && widget.title != null)
-            Text(
-              widget.title!,
-              style: SchoolBellTheme.mainTextTheme.headline2,
-            ),
-          if (widget.dialogType != 4 && widget.title != null)
-            const SizedBox(height: 20),
-          // dialogType에 따라 아래 위젯을 바꿔 끼우는 형태
-          // 위젯 내용물은 아래에 있으며, 지금은 placeholder만 있어 추후 구현해야 함
-          if (widget.dialogType == 0) classSizePicker(),
-          if (widget.dialogType == 1 && widget.content != null)
-            Text(
-              widget.content!,
-              style: SchoolBellTheme.mainTextTheme.subtitle1,
-            ),
-          if (widget.dialogType == 2) bellModePicker(),
-          if (widget.dialogType == 3) timeLengthPicker(),
-          if (widget.dialogType == 4) bellTypePicker(),
-          const SizedBox(height: 24),
-          Row(
-            children: [
-              Expanded(
-                child: InkWell(
-                  onTap: () => Navigator.pop(context, -1),
-                  child: Container(
-                    height: 48,
-                    decoration: const BoxDecoration(
-                      color: SchoolBellColor.colorGray,
-                      borderRadius:
-                          BorderRadius.only(bottomLeft: Radius.circular(4)),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      widget.negative,
-                      style: SchoolBellTheme.mainTextTheme.button,
-                    ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flexible(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                if (widget.dialogType != 4) const SizedBox(height: 28),
+                if (widget.dialogType != 4 && widget.title != null)
+                  Text(
+                    widget.title!,
+                    style: SchoolBellTheme.mainTextTheme.headline2,
                   ),
-                ),
-              ),
-              Expanded(
-                child: InkWell(
-                  onTap: () => Navigator.pop(context, returnValue),
-                  child: Container(
-                    height: 48,
-                    decoration: const BoxDecoration(
-                      color: SchoolBellColor.colorMain,
-                      borderRadius:
-                          BorderRadius.only(bottomRight: Radius.circular(4)),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      widget.positive,
-                      style: SchoolBellTheme.mainTextTheme.button,
-                    ),
+                if (widget.dialogType != 4 && widget.title != null)
+                  const SizedBox(height: 20),
+                if (widget.dialogType == 0) classSizePicker(),
+                if (widget.dialogType == 1 && widget.content != null)
+                  Text(
+                    widget.content!,
+                    style: SchoolBellTheme.mainTextTheme.subtitle1,
                   ),
-                ),
-              ),
-            ],
+                if (widget.dialogType == 2) bellModePicker(),
+                if (widget.dialogType == 3) timeLengthPicker(),
+                if (widget.dialogType == 4) bellTypePicker(),
+                if (widget.dialogType != 4) const SizedBox(height: 24),
+              ],
+            ),
           ),
-        ],
-      ),
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: InkWell(
+                onTap: () => Navigator.pop(context, -1),
+                child: Container(
+                  height: 48,
+                  decoration: const BoxDecoration(
+                    color: SchoolBellColor.colorGray,
+                    borderRadius:
+                        BorderRadius.only(bottomLeft: Radius.circular(4)),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    widget.negative,
+                    style: SchoolBellTheme.mainTextTheme.button,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: InkWell(
+                onTap: () => Navigator.pop(context, _returnValue),
+                child: Container(
+                  height: 48,
+                  decoration: const BoxDecoration(
+                    color: SchoolBellColor.colorMain,
+                    borderRadius:
+                        BorderRadius.only(bottomRight: Radius.circular(4)),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    widget.positive,
+                    style: SchoolBellTheme.mainTextTheme.button,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
   classSizePicker() {
-    returnValue = 1;
-    return Text('Class Size Picker');
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          splashColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onPressed: () => setState(() {
+            if (_returnValue > 1) _returnValue--;
+          }),
+          icon: const Icon(
+            Icons.remove,
+            color: Colors.black,
+          ),
+        ),
+        Container(
+          width: 48.0,
+          height: 32.0,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(2)),
+            color: SchoolBellColor.colorSub,
+          ),
+          child: Text(
+            '$_returnValue',
+            style: SchoolBellTheme.mainTextTheme.subtitle1,
+          ),
+        ),
+        IconButton(
+          splashColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onPressed: () => setState(() {
+            if (_returnValue < 9) _returnValue++;
+          }),
+          icon: const Icon(
+            Icons.add,
+            color: Colors.black,
+          ),
+        ),
+      ],
+    );
   }
 
   bellModePicker() {
-    return Text('Bell Mode Picker');
+    return Column(
+      children: [
+        RadioBellMode(
+          value: BellMode.onTime,
+          groupValue: _returnValue,
+          radioName: '정각 모드',
+          radioCaption: '매 시 50분과 0분에 울려요.',
+          onChanged: (int newValue) {
+            setState(() {
+              _returnValue = newValue;
+            });
+          },
+        ),
+        RadioBellMode(
+          value: BellMode.byCustom,
+          groupValue: _returnValue,
+          radioName: '커스텀 모드',
+          radioCaption: '시작한 순간부터 시간을 재요.',
+          onChanged: (int newValue) {
+            setState(() {
+              _returnValue = newValue;
+            });
+          },
+        ),
+      ],
+    );
   }
 
   timeLengthPicker() {
-    return Text('Time Length Picker');
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        EditableNumberPicker(
+          value: _returnValue,
+          minValue: widget.forClass! ? 10 : 5,
+          maxValue: widget.forClass! ? 120 : 60,
+          step: 1,
+          itemHeight: 48,
+          textStyle: const TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey,
+          ),
+          selectedTextStyle: SchoolBellTheme.mainTextTheme.headline2,
+          haptics: true,
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(),
+              bottom: BorderSide(),
+            ),
+          ),
+          onChanged: (value) {
+            setState(() {
+              _returnValue = value;
+            });
+          },
+        ),
+        const SizedBox(width: 16),
+        Text(
+          '분',
+          style: SchoolBellTheme.mainTextTheme.subtitle1,
+        ),
+      ],
+    );
   }
 
   bellTypePicker() {
-    return Text('Bell Type Picker');
+    return Column(
+      children: [
+        const SizedBox(height: 8),
+        for (int i = 1; i <= 8; i++)
+          RadioListTile(
+            contentPadding: const EdgeInsets.fromLTRB(32, 0, 16, 0),
+            title: Text(
+              '#$i',
+              style: SchoolBellTheme.mainTextTheme.subtitle1,
+            ),
+            value: i,
+            groupValue: _returnValue,
+            controlAffinity: ListTileControlAffinity.trailing,
+            activeColor: SchoolBellColor.colorAccent,
+            onChanged: (int? newValue) {
+              setState(() {
+                _returnValue = newValue!;
+              });
+            },
+          ),
+        InkWell(
+          onTap: () {
+            setState(() {
+              _returnValue = 9;
+              _tempCustomBell = '커스텀 종소리';
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '기기에서 선택...',
+                  style: SchoolBellTheme.mainTextTheme.subtitle1,
+                ),
+                Text(
+                  _tempCustomBell ?? '',
+                  style: SchoolBellTheme.mainTextTheme.subtitle2,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+      ],
+    );
   }
 }

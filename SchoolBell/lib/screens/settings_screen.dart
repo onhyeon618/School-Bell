@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:school_bell/screens/custom_dialog.dart';
 
 import '../models/models.dart';
 import '../widgets/widgets.dart';
@@ -23,32 +24,131 @@ class SettingsScreen extends StatelessWidget {
           const SettingCategory(title: '기본 설정'),
           SettingItem(
             title: '종소리 모드',
-            attribute: settingManager.bellMode,
-            onTap: () {},
+            attribute: settingManager.bellModeName,
+            onTap: () async {
+              var result = await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const CustomDialog(
+                      dialogType: CustomDialogType.setBellMode,
+                      title: '종소리 모드',
+                      positive: '설정하기',
+                      negative: '취소',
+                    );
+                  });
+              if (result != null && result > -1) {
+                Provider.of<SettingManager>(context, listen: false)
+                    .setBellMode(result);
+              }
+            },
           ),
           SettingItem(
             title: '한 교시 길이',
-            attribute: settingManager.classLength,
+            attribute: settingManager.classLengthString,
             stateOnTime: settingManager.isOnTime,
-            onTap: () {},
+            onTap: () async {
+              if (!settingManager.isOnTime) {
+                var result = await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const CustomDialog(
+                        dialogType: CustomDialogType.setTimeLength,
+                        positive: '설정하기',
+                        negative: '취소',
+                        forClass: true,
+                      );
+                    });
+                if (result != null && result > -1) {
+                  Provider.of<SettingManager>(context, listen: false)
+                      .setClassLength(result);
+                }
+              }
+            },
           ),
           SettingItem(
             title: '쉬는 시간 길이',
-            attribute: settingManager.restLength,
+            attribute: settingManager.restLengthString,
             stateOnTime: settingManager.isOnTime,
-            onTap: () {},
+            onTap: () async {
+              if (!settingManager.isOnTime) {
+                var result = await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const CustomDialog(
+                        dialogType: CustomDialogType.setTimeLength,
+                        positive: '설정하기',
+                        negative: '취소',
+                        forClass: false,
+                      );
+                    });
+                if (result != null && result > -1) {
+                  Provider.of<SettingManager>(context, listen: false)
+                      .setRestLength(result);
+                }
+              }
+            },
           ),
           const SizedBox(height: 8),
           const SettingCategory(title: '종소리 설정'),
           SettingItem(
             title: '수업 시작 종',
-            attribute: settingManager.classBell,
-            onTap: () {},
+            attribute: settingManager.customClassBell ??
+                settingManager.classBellString,
+            onTap: () async {
+              var result = await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const CustomDialog(
+                      dialogType: CustomDialogType.setBellType,
+                      positive: '설정하기',
+                      negative: '취소',
+                      forClass: true,
+                    );
+                  });
+              if (result != null) {
+                Provider.of<SettingManager>(context, listen: false)
+                    .setClassBell(result);
+                if (result > -1 && result < 9) {
+                  Provider.of<SettingManager>(context, listen: false)
+                      .setClassBell(result);
+                  Provider.of<SettingManager>(context, listen: false)
+                      .setCustomClassBell(null);
+                } else if (result == 9) {
+                  Provider.of<SettingManager>(context, listen: false)
+                      .setCustomClassBell('커스텀 종소리');
+                }
+              }
+            },
           ),
           SettingItem(
             title: '수업 종료 종',
-            attribute: settingManager.restBell,
-            onTap: () {},
+            attribute:
+                settingManager.customRestBell ?? settingManager.restBellString,
+            onTap: () async {
+              var result = await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const CustomDialog(
+                      dialogType: CustomDialogType.setBellType,
+                      positive: '설정하기',
+                      negative: '취소',
+                      forClass: false,
+                    );
+                  });
+              if (result != null) {
+                Provider.of<SettingManager>(context, listen: false)
+                    .setClassBell(result);
+                if (result > -1 && result < 9) {
+                  Provider.of<SettingManager>(context, listen: false)
+                      .setClassBell(result);
+                  Provider.of<SettingManager>(context, listen: false)
+                      .setCustomClassBell(null);
+                } else if (result == 9) {
+                  Provider.of<SettingManager>(context, listen: false)
+                      .setCustomClassBell('커스텀 종소리');
+                }
+              }
+            },
           ),
           const SizedBox(height: 8),
           const SettingCategory(title: '어플리케이션'),

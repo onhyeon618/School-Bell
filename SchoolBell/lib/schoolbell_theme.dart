@@ -62,9 +62,11 @@ class SchoolBellTheme {
         backgroundColor: Colors.white,
       ),
       scaffoldBackgroundColor: Colors.white,
+      highlightColor: Colors.white12,
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         foregroundColor: Colors.white,
         backgroundColor: SchoolBellColor.colorMain,
+        splashColor: Colors.white24,
       ),
       bottomAppBarTheme: const BottomAppBarTheme(
         shape: CircularNotchedRectangle(),

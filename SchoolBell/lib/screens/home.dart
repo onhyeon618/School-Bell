@@ -91,7 +91,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     negative: '취소',
                   );
                 });
-            if (result > 0) classManager.startClass(result);
+            if (result != null && result > 0) classManager.startClass(result);
           } else {
             var result = await showDialog(
                 context: context,
