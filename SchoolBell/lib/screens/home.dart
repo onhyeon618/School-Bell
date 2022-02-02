@@ -30,6 +30,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    classManager = Provider.of<ClassManager>(context, listen: false);
+    classManager.initialize();
   }
 
   @override
@@ -45,8 +47,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    classManager = Provider.of<ClassManager>(context, listen: false);
-
     return Scaffold(
       body: SafeArea(
         child: TabBarView(
@@ -76,7 +76,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(classManager.isCounting
+        child: Icon(Provider.of<ClassManager>(context).isCounting
             ? Icons.notifications_off_outlined
             : Icons.notifications),
         onPressed: () async {

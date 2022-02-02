@@ -95,24 +95,33 @@ class _CustomDialogState extends State<CustomDialog> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                if (widget.dialogType != 4) const SizedBox(height: 28),
-                if (widget.dialogType != 4 && widget.title != null)
+                if (widget.dialogType != CustomDialogType.setBellType)
+                  const SizedBox(height: 28),
+                if (widget.dialogType != CustomDialogType.setBellType &&
+                    widget.title != null)
                   Text(
                     widget.title!,
                     style: SchoolBellTheme.mainTextTheme.headline2,
                   ),
-                if (widget.dialogType != 4 && widget.title != null)
+                if (widget.dialogType != CustomDialogType.setBellType &&
+                    widget.title != null)
                   const SizedBox(height: 20),
-                if (widget.dialogType == 0) classSizePicker(),
-                if (widget.dialogType == 1 && widget.content != null)
+                if (widget.dialogType == CustomDialogType.startClass)
+                  classSizePicker(),
+                if (widget.dialogType == CustomDialogType.endClass &&
+                    widget.content != null)
                   Text(
                     widget.content!,
                     style: SchoolBellTheme.mainTextTheme.subtitle1,
                   ),
-                if (widget.dialogType == 2) bellModePicker(),
-                if (widget.dialogType == 3) timeLengthPicker(),
-                if (widget.dialogType == 4) bellTypePicker(),
-                if (widget.dialogType != 4) const SizedBox(height: 24),
+                if (widget.dialogType == CustomDialogType.setBellMode)
+                  bellModePicker(),
+                if (widget.dialogType == CustomDialogType.setTimeLength)
+                  timeLengthPicker(),
+                if (widget.dialogType == CustomDialogType.setBellType)
+                  bellTypePicker(),
+                if (widget.dialogType != CustomDialogType.setBellType)
+                  const SizedBox(height: 24),
               ],
             ),
           ),

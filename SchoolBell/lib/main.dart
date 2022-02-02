@@ -1,11 +1,24 @@
+import 'dart:isolate';
+import 'dart:ui';
+
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/models.dart';
 import 'navigation/app_router.dart';
 import 'schoolbell_theme.dart';
 
-void main() {
+const String isolateName = 'SchoolBellIsolate';
+
+final ReceivePort port = ReceivePort();
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  AndroidAlarmManager.initialize();
+
   runApp(const SchoolBell());
 }
 
@@ -26,10 +39,35 @@ class _SchoolBellState extends State<SchoolBell> {
   @override
   void initState() {
     super.initState();
+
+    if (IsolateNameServer.lookupPortByName(isolateName) != null) {
+      IsolateNameServer.removePortNameMapping(isolateName);
+    }
+    IsolateNameServer.registerPortWithName(
+      port.sendPort,
+      isolateName,
+    );
+
     _appRouter = AppRouter(
       appStateManager: _appStateManager,
       classManager: _classManager,
     );
+
+    port.listen((_) async => await _changeMainImage());
+  }
+
+  Future<void> _changeMainImage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
+    final currentState = prefs.getInt('currentState');
+
+    if (currentState == CurrentState.inClass) {
+      _classManager.classTimeImage();
+    } else if (currentState == CurrentState.restTime) {
+      _classManager.restTimeImage();
+    } else {
+      _classManager.waitingTimeImage();
+    }
   }
 
   @override
