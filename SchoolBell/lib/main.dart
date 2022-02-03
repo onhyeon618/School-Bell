@@ -1,23 +1,35 @@
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'models/models.dart';
 import 'navigation/app_router.dart';
 import 'schoolbell_theme.dart';
 
+late SharedPreferences prefs;
+
 const String isolateName = 'SchoolBellIsolate';
 
 final ReceivePort port = ReceivePort();
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   AndroidAlarmManager.initialize();
+  await flutterLocalNotificationsPlugin.initialize(
+    const InitializationSettings(
+        android: AndroidInitializationSettings('sb_notice_icon')),
+  );
+
+  prefs = await SharedPreferences.getInstance();
 
   runApp(const SchoolBell());
 }
@@ -57,7 +69,6 @@ class _SchoolBellState extends State<SchoolBell> {
   }
 
   Future<void> _changeMainImage() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.reload();
     final currentState = prefs.getInt('currentState');
 

@@ -1,11 +1,14 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../models/models.dart';
+import 'screens.dart';
 
-import 'class_screen.dart';
-import 'settings_screen.dart';
-import 'custom_dialog.dart';
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 class Home extends StatefulWidget {
   static MaterialPage page() {
@@ -26,12 +29,30 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late ClassManager classManager;
 
+  late AndroidNotificationDetails _androidPlatformChannelSpecifics;
+  late NotificationDetails _platformChannelSpecifics;
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     classManager = Provider.of<ClassManager>(context, listen: false);
     classManager.initialize();
+
+    _androidPlatformChannelSpecifics = const AndroidNotificationDetails(
+      'school-bell-channel',
+      'school-bell-channel',
+      channelDescription: 'notification channel for school bell app',
+      importance: Importance.low,
+      priority: Priority.low,
+      playSound: false,
+      enableVibration: false,
+      ongoing: true,
+      autoCancel: false,
+      showWhen: false,
+    );
+    _platformChannelSpecifics =
+        NotificationDetails(android: _androidPlatformChannelSpecifics);
   }
 
   @override
@@ -91,7 +112,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     negative: '취소',
                   );
                 });
-            if (result != null && result > 0) classManager.startClass(result);
+            if (result != null && result > 0) {
+              await flutterLocalNotificationsPlugin.show(
+                Random().nextInt(pow(2, 31) as int),
+                null,
+                '열심히 수업 중~! 오늘도 힘내봐요!',
+                _platformChannelSpecifics,
+              );
+              classManager.startClass(result);
+            }
           } else {
             var result = await showDialog(
                 context: context,
@@ -105,7 +134,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     negative: '수업 종료',
                   );
                 });
-            if (result == -1) classManager.stopClass();
+            if (result == -1) {
+              await flutterLocalNotificationsPlugin.cancelAll();
+              classManager.stopClass();
+            }
           }
         },
       ),

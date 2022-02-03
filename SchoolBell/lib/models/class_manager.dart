@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:developer' as developer;
@@ -14,6 +15,9 @@ class CurrentState {
 }
 
 const String isolateName = 'SchoolBellIsolate';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 class ClassManager extends ChangeNotifier {
   bool _counting = false;
@@ -165,5 +169,7 @@ class ClassManager extends ChangeNotifier {
 
     uiSendPort ??= IsolateNameServer.lookupPortByName(isolateName);
     uiSendPort?.send(null);
+
+    await flutterLocalNotificationsPlugin.cancelAll();
   }
 }
