@@ -5,9 +5,7 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'notification_channel.dart';
-
-import 'dart:developer' as developer;
+import 'models.dart';
 
 class CurrentState {
   static const int waiting = 0;
@@ -23,7 +21,7 @@ class ClassManager extends ChangeNotifier {
   int _totalClass = -1;
   int _currentClass = -1;
 
-  // 나중에 실제 값 가지고 올 것
+  // TODO: 실제 설정 시간으로 지정하기
   int _firstLength = 10;
   int _classLength = 10;
   int _restLength = 5;
@@ -148,9 +146,7 @@ class ClassManager extends ChangeNotifier {
     await prefs.setInt('currentState', CurrentState.restTime);
     await prefs.setInt('currentClass', currentClass + 1);
 
-    // 추후 실제로 벨소리를 재생하는 코드로 대체할 예정
-    final DateTime now = DateTime.now();
-    developer.log('[$now] Rest bell ringing~');
+    BellSoundPlayer.playRestBell();
 
     uiSendPort ??= IsolateNameServer.lookupPortByName(isolateName);
     uiSendPort?.send(null);
@@ -170,8 +166,7 @@ class ClassManager extends ChangeNotifier {
 
     await prefs.setInt('currentState', CurrentState.inClass);
 
-    final DateTime now = DateTime.now();
-    developer.log('[$now] Class bell ringing~');
+    BellSoundPlayer.playClassBell();
 
     uiSendPort ??= IsolateNameServer.lookupPortByName(isolateName);
     uiSendPort?.send(null);
@@ -195,8 +190,7 @@ class ClassManager extends ChangeNotifier {
     await prefs.setInt('totalClass', -1);
     await prefs.setInt('currentClass', -1);
 
-    final DateTime now = DateTime.now();
-    developer.log('[$now] Last Rest bell ringing~');
+    BellSoundPlayer.playRestBell();
 
     uiSendPort ??= IsolateNameServer.lookupPortByName(isolateName);
     uiSendPort?.send(null);

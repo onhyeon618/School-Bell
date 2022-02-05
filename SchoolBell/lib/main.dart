@@ -60,6 +60,11 @@ class _SchoolBellState extends State<SchoolBell> {
       isolateName,
     );
 
+    // initialize는 추후 app_state_manager로 옮길 예정
+    _settingManager.initialize();
+    _classManager.initialize();
+    BellSoundPlayer().initialize();
+
     _appRouter = AppRouter(
       appStateManager: _appStateManager,
       classManager: _classManager,

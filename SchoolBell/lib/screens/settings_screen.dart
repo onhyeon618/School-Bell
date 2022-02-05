@@ -137,15 +137,15 @@ class SettingsScreen extends StatelessWidget {
                   });
               if (result != null) {
                 Provider.of<SettingManager>(context, listen: false)
-                    .setClassBell(result);
+                    .setRestBell(result);
                 if (result > -1 && result < 9) {
                   Provider.of<SettingManager>(context, listen: false)
-                      .setClassBell(result);
+                      .setRestBell(result);
                   Provider.of<SettingManager>(context, listen: false)
-                      .setCustomClassBell(null);
+                      .setCustomRestBell(null);
                 } else if (result == 9) {
                   Provider.of<SettingManager>(context, listen: false)
-                      .setCustomClassBell('커스텀 종소리');
+                      .setCustomRestBell('커스텀 종소리');
                 }
               }
             },
