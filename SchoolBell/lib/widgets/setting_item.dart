@@ -4,7 +4,7 @@ import 'package:school_bell/schoolbell_colors.dart';
 class SettingItem extends StatefulWidget {
   final String title;
   final String attribute;
-  final bool? stateOnTime;
+  final bool? isDisabled;
   final Function onTap;
 
   const SettingItem({
@@ -12,7 +12,7 @@ class SettingItem extends StatefulWidget {
     required this.title,
     required this.attribute,
     required this.onTap,
-    this.stateOnTime,
+    this.isDisabled,
   }) : super(key: key);
 
   @override
@@ -25,7 +25,7 @@ class _SettingItemState extends State<SettingItem> {
     return InkWell(
       onTap: () => widget.onTap(),
       child: Container(
-          color: (widget.stateOnTime != null && widget.stateOnTime!)
+          color: (widget.isDisabled != null && widget.isDisabled!)
               ? SchoolBellColor.colorInvalid
               : Colors.transparent,
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
@@ -35,13 +35,13 @@ class _SettingItemState extends State<SettingItem> {
             children: [
               Text(
                 widget.title,
-                style: (widget.stateOnTime != null && widget.stateOnTime!)
+                style: (widget.isDisabled != null && widget.isDisabled!)
                     ? Theme.of(context).textTheme.headline6
                     : Theme.of(context).textTheme.headline5,
               ),
               Text(
                 widget.attribute,
-                style: (widget.stateOnTime != null && widget.stateOnTime!)
+                style: (widget.isDisabled != null && widget.isDisabled!)
                     ? Theme.of(context).textTheme.bodyText2
                     : Theme.of(context).textTheme.bodyText1,
               ),

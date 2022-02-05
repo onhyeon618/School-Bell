@@ -12,6 +12,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SettingManager settingManager = Provider.of<SettingManager>(context);
+    ClassManager classManager = Provider.of<ClassManager>(context);
 
     return SingleChildScrollView(
       child: Column(
@@ -25,29 +26,32 @@ class SettingsScreen extends StatelessWidget {
           SettingItem(
             title: '종소리 모드',
             attribute: settingManager.bellModeName,
+            isDisabled: classManager.isCounting,
             onTap: () async {
-              var result = await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const CustomDialog(
-                      dialogType: CustomDialogType.setBellMode,
-                      title: '종소리 모드',
-                      positive: '설정하기',
-                      negative: '취소',
-                    );
-                  });
-              if (result != null && result['returnValue'] > -1) {
-                Provider.of<SettingManager>(context, listen: false)
-                    .setBellMode(result['returnValue']);
+              if (!classManager.isCounting) {
+                var result = await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const CustomDialog(
+                        dialogType: CustomDialogType.setBellMode,
+                        title: '종소리 모드',
+                        positive: '설정하기',
+                        negative: '취소',
+                      );
+                    });
+                if (result != null && result['returnValue'] > -1) {
+                  Provider.of<SettingManager>(context, listen: false)
+                      .setBellMode(result['returnValue']);
+                }
               }
             },
           ),
           SettingItem(
             title: '한 교시 길이',
             attribute: settingManager.classLengthString,
-            stateOnTime: settingManager.isOnTime,
+            isDisabled: settingManager.isOnTime || classManager.isCounting,
             onTap: () async {
-              if (!settingManager.isOnTime) {
+              if (!settingManager.isOnTime && !classManager.isCounting) {
                 var result = await showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -68,9 +72,9 @@ class SettingsScreen extends StatelessWidget {
           SettingItem(
             title: '쉬는 시간 길이',
             attribute: settingManager.restLengthString,
-            stateOnTime: settingManager.isOnTime,
+            isDisabled: settingManager.isOnTime || classManager.isCounting,
             onTap: () async {
-              if (!settingManager.isOnTime) {
+              if (!settingManager.isOnTime && !classManager.isCounting) {
                 var result = await showDialog(
                     context: context,
                     builder: (BuildContext context) {
