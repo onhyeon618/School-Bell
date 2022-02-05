@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:editable_number_picker/editable_number_picker.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +40,7 @@ class CustomDialog extends StatefulWidget {
 class _CustomDialogState extends State<CustomDialog> {
   int _returnValue = 0;
   String? _tempCustomBell;
+  String? _extra;
 
   @override
   void initState() {
@@ -130,7 +132,8 @@ class _CustomDialogState extends State<CustomDialog> {
           children: [
             Expanded(
               child: InkWell(
-                onTap: () => Navigator.pop(context, -1),
+                onTap: () => Navigator.pop(
+                    context, {"returnValue": -1, "extra": _extra}),
                 child: Container(
                   height: 48,
                   decoration: const BoxDecoration(
@@ -148,7 +151,8 @@ class _CustomDialogState extends State<CustomDialog> {
             ),
             Expanded(
               child: InkWell(
-                onTap: () => Navigator.pop(context, _returnValue),
+                onTap: () => Navigator.pop(
+                    context, {"returnValue": _returnValue, "extra": _extra}),
                 child: Container(
                   height: 48,
                   decoration: const BoxDecoration(
@@ -306,12 +310,16 @@ class _CustomDialogState extends State<CustomDialog> {
             },
           ),
         InkWell(
-          onTap: () {
-            // TODO: 기기에서 음원 선택하기
-            setState(() {
-              _returnValue = 9;
-              _tempCustomBell = '커스텀 종소리';
-            });
+          onTap: () async {
+            FilePickerResult? result =
+                await FilePicker.platform.pickFiles(type: FileType.audio);
+            if (result != null) {
+              _extra = result.files.single.path;
+              setState(() {
+                _returnValue = 9;
+                _tempCustomBell = result.files.single.name;
+              });
+            }
           },
           child: Padding(
             padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),

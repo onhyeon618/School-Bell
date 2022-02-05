@@ -36,9 +36,9 @@ class SettingsScreen extends StatelessWidget {
                       negative: '취소',
                     );
                   });
-              if (result != null && result > -1) {
+              if (result != null && result['returnValue'] > -1) {
                 Provider.of<SettingManager>(context, listen: false)
-                    .setBellMode(result);
+                    .setBellMode(result['returnValue']);
               }
             },
           ),
@@ -58,9 +58,9 @@ class SettingsScreen extends StatelessWidget {
                         forClass: true,
                       );
                     });
-                if (result != null && result > -1) {
+                if (result != null && result['returnValue'] > -1) {
                   Provider.of<SettingManager>(context, listen: false)
-                      .setClassLength(result);
+                      .setClassLength(result['returnValue']);
                 }
               }
             },
@@ -81,9 +81,9 @@ class SettingsScreen extends StatelessWidget {
                         forClass: false,
                       );
                     });
-                if (result != null && result > -1) {
+                if (result != null && result['returnValue'] > -1) {
                   Provider.of<SettingManager>(context, listen: false)
-                      .setRestLength(result);
+                      .setRestLength(result['returnValue']);
                 }
               }
             },
@@ -106,16 +106,16 @@ class SettingsScreen extends StatelessWidget {
                     );
                   });
               if (result != null) {
-                Provider.of<SettingManager>(context, listen: false)
-                    .setClassBell(result);
-                if (result > -1 && result < 9) {
+                if (result['returnValue'] > -1 && result['returnValue'] < 9) {
                   Provider.of<SettingManager>(context, listen: false)
-                      .setClassBell(result);
+                      .setClassBell(result['returnValue']);
                   Provider.of<SettingManager>(context, listen: false)
                       .setCustomClassBell(null);
-                } else if (result == 9) {
+                } else if (result['returnValue'] == 9) {
                   Provider.of<SettingManager>(context, listen: false)
-                      .setCustomClassBell('커스텀 종소리');
+                      .setClassBell(9);
+                  Provider.of<SettingManager>(context, listen: false)
+                      .setCustomClassBell(result['extra']);
                 }
               }
             },
@@ -136,16 +136,16 @@ class SettingsScreen extends StatelessWidget {
                     );
                   });
               if (result != null) {
-                Provider.of<SettingManager>(context, listen: false)
-                    .setRestBell(result);
-                if (result > -1 && result < 9) {
+                if (result['returnValue'] > -1 && result['returnValue'] < 9) {
                   Provider.of<SettingManager>(context, listen: false)
-                      .setRestBell(result);
+                      .setRestBell(result['returnValue']);
                   Provider.of<SettingManager>(context, listen: false)
                       .setCustomRestBell(null);
-                } else if (result == 9) {
+                } else if (result['returnValue'] == 9) {
                   Provider.of<SettingManager>(context, listen: false)
-                      .setCustomRestBell('커스텀 종소리');
+                      .setRestBell(9);
+                  Provider.of<SettingManager>(context, listen: false)
+                      .setCustomRestBell(result['extra']);
                 }
               }
             },

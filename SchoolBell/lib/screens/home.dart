@@ -93,8 +93,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       negative: '취소',
                     );
                   });
-              if (result != null && result > 0) {
-                classManager.startClass(result);
+              if (result != null && result['returnValue'] > 0) {
+                classManager.startClass(result['returnValue']);
               }
             } else {
               var result = await showDialog(
@@ -110,7 +110,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       negative: '수업 종료',
                     );
                   });
-              if (result == -1) {
+              if (result['returnValue'] == -1) {
                 classManager.stopClass();
               }
             }

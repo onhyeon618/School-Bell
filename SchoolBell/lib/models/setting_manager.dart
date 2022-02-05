@@ -42,8 +42,8 @@ class SettingManager extends ChangeNotifier {
     _restLength = prefs.getInt('restLength') ?? 10;
     _classBell = prefs.getInt('classBell') ?? 1;
     _restBell = prefs.getInt('restBell') ?? 1;
-    _customClassBell = prefs.getString('customClassBell');
-    _customRestBell = prefs.getString('customRestBell');
+    _customClassBell = prefs.getString('customClassBellName');
+    _customRestBell = prefs.getString('customRestBellName');
   }
 
   Future<void> setBellMode(int bellMode) async {
@@ -84,22 +84,30 @@ class SettingManager extends ChangeNotifier {
   Future<void> setCustomClassBell(String? customClassBell) async {
     prefs = await SharedPreferences.getInstance();
     if (customClassBell != null) {
-      await prefs.setString('customClassBell', customClassBell);
+      String fileName = customClassBell.split('/').last;
+      await prefs.setString('customClassBellPath', customClassBell);
+      await prefs.setString('customClassBellName', fileName);
+      _customClassBell = fileName;
     } else {
-      await prefs.remove('customClassBell');
+      await prefs.remove('customClassBellPath');
+      await prefs.remove('customClassBellName');
+      _customClassBell = null;
     }
-    _customClassBell = customClassBell;
     notifyListeners();
   }
 
   Future<void> setCustomRestBell(String? customRestBell) async {
     prefs = await SharedPreferences.getInstance();
     if (customRestBell != null) {
-      await prefs.setString('customRestBell', customRestBell);
+      String fileName = customRestBell.split('/').last;
+      await prefs.setString('customRestBellPath', customRestBell);
+      await prefs.setString('customRestBellName', fileName);
+      _customRestBell = fileName;
     } else {
-      await prefs.remove('customRestBell');
+      await prefs.remove('customRestBellPath');
+      await prefs.remove('customRestBellName');
+      _customRestBell = null;
     }
-    _customRestBell = customRestBell;
     notifyListeners();
   }
 }
