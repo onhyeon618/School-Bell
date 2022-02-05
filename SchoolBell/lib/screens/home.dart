@@ -1,15 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:move_to_background/move_to_background.dart';
 
 import '../models/models.dart';
 import 'screens.dart';
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
 
 class Home extends StatefulWidget {
   static MaterialPage page() {
@@ -30,30 +24,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late ClassManager classManager;
 
-  late AndroidNotificationDetails _androidPlatformChannelSpecifics;
-  late NotificationDetails _platformChannelSpecifics;
-
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     classManager = Provider.of<ClassManager>(context, listen: false);
     classManager.initialize();
-
-    _androidPlatformChannelSpecifics = const AndroidNotificationDetails(
-      'school-bell-channel',
-      'school-bell-channel',
-      channelDescription: 'notification channel for school bell app',
-      importance: Importance.low,
-      priority: Priority.low,
-      playSound: false,
-      enableVibration: false,
-      ongoing: true,
-      autoCancel: false,
-      showWhen: false,
-    );
-    _platformChannelSpecifics =
-        NotificationDetails(android: _androidPlatformChannelSpecifics);
   }
 
   @override
@@ -119,12 +95,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     );
                   });
               if (result != null && result > 0) {
-                await flutterLocalNotificationsPlugin.show(
-                  Random().nextInt(pow(2, 31) as int),
-                  null,
-                  '열심히 수업 중~! 오늘도 힘내봐요!',
-                  _platformChannelSpecifics,
-                );
                 classManager.startClass(result);
               }
             } else {
@@ -134,14 +104,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     return CustomDialog(
                       dialogType: CustomDialogType.endClass,
                       title: '오늘 수업을 종료할까요?',
-                      content:
-                          '아직 ${classManager.totalClass - classManager.currentClass + 1}교시 남아있어요!',
+                      content: classManager.currentState == CurrentState.inClass
+                          ? '아직 ${classManager.totalClass - classManager.currentClass + 1}교시 남아있어요!'
+                          : '아직 ${classManager.totalClass - classManager.currentClass}교시 남아있어요!',
                       positive: '계속하기',
                       negative: '수업 종료',
                     );
                   });
               if (result == -1) {
-                await flutterLocalNotificationsPlugin.cancelAll();
                 classManager.stopClass();
               }
             }

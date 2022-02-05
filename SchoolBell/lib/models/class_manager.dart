@@ -3,8 +3,9 @@ import 'dart:ui';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'notification_channel.dart';
 
 import 'dart:developer' as developer;
 
@@ -15,9 +16,6 @@ class CurrentState {
 }
 
 const String isolateName = 'SchoolBellIsolate';
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
 
 class ClassManager extends ChangeNotifier {
   bool _counting = false;
@@ -63,7 +61,7 @@ class ClassManager extends ChangeNotifier {
         AndroidAlarmManager.oneShot(
           Duration(seconds: timeSum),
           alarmId,
-          callbackClass,
+          callbackClassEnd,
           exact: true,
           wakeup: true,
         );
@@ -72,7 +70,7 @@ class ClassManager extends ChangeNotifier {
         AndroidAlarmManager.oneShot(
           Duration(seconds: timeSum),
           alarmId,
-          callbackRest,
+          callbackRestEnd,
           exact: true,
           wakeup: true,
         );
@@ -82,9 +80,16 @@ class ClassManager extends ChangeNotifier {
     AndroidAlarmManager.oneShot(
       Duration(seconds: timeSum),
       (totalClass - 1) * 2,
-      callbackLast,
+      callbackLastClassEnd,
       exact: true,
       wakeup: true,
+    );
+
+    await NotificationChannel.flutterLocalNotificationsPlugin.show(
+      NotificationChannel.notificationId,
+      null,
+      '1교시 수업 중~! 오늘도 힘내봐요!',
+      NotificationChannel.platformChannelSpecifics,
     );
 
     notifyListeners();
@@ -105,6 +110,8 @@ class ClassManager extends ChangeNotifier {
     _currentState = CurrentState.waiting;
     _totalClass = -1;
     _currentClass = -1;
+
+    await NotificationChannel.flutterLocalNotificationsPlugin.cancelAll();
 
     notifyListeners();
   }
@@ -131,12 +138,15 @@ class ClassManager extends ChangeNotifier {
 
   static SendPort? uiSendPort;
 
-  static Future<void> callbackClass() async {
+  static Future<void> callbackClassEnd() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final currentClass = prefs.getInt('currentClass');
+    await prefs.reload();
+
+    final currentClass = prefs.getInt('currentClass')!;
+    final totalClass = prefs.getInt('totalClass');
 
     await prefs.setInt('currentState', CurrentState.restTime);
-    await prefs.setInt('currentClass', currentClass! + 1);
+    await prefs.setInt('currentClass', currentClass + 1);
 
     // 추후 실제로 벨소리를 재생하는 코드로 대체할 예정
     final DateTime now = DateTime.now();
@@ -144,10 +154,20 @@ class ClassManager extends ChangeNotifier {
 
     uiSendPort ??= IsolateNameServer.lookupPortByName(isolateName);
     uiSendPort?.send(null);
+
+    await NotificationChannel.flutterLocalNotificationsPlugin.show(
+      NotificationChannel.notificationId,
+      null,
+      '$currentClass교시 쉬는 시간! 이제 ${totalClass! - currentClass}교시 남았어요.',
+      NotificationChannel.platformChannelSpecifics,
+    );
   }
 
-  static Future<void> callbackRest() async {
+  static Future<void> callbackRestEnd() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    final currentClass = prefs.getInt('currentClass');
+    final totalClass = prefs.getInt('totalClass');
+
     await prefs.setInt('currentState', CurrentState.inClass);
 
     final DateTime now = DateTime.now();
@@ -155,9 +175,20 @@ class ClassManager extends ChangeNotifier {
 
     uiSendPort ??= IsolateNameServer.lookupPortByName(isolateName);
     uiSendPort?.send(null);
+
+    String noticeMessage = totalClass == currentClass
+        ? '$currentClass교시 수업 중~ 오늘의 마지막 수업이에요. 화이팅!'
+        : '지금은 $currentClass교시 수업 중!';
+
+    await NotificationChannel.flutterLocalNotificationsPlugin.show(
+      NotificationChannel.notificationId,
+      null,
+      noticeMessage,
+      NotificationChannel.platformChannelSpecifics,
+    );
   }
 
-  static Future<void> callbackLast() async {
+  static Future<void> callbackLastClassEnd() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('counting', false);
     await prefs.setInt('currentState', CurrentState.waiting);
@@ -170,6 +201,6 @@ class ClassManager extends ChangeNotifier {
     uiSendPort ??= IsolateNameServer.lookupPortByName(isolateName);
     uiSendPort?.send(null);
 
-    await flutterLocalNotificationsPlugin.cancelAll();
+    await NotificationChannel.flutterLocalNotificationsPlugin.cancelAll();
   }
 }
