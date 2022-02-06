@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:school_bell/models/app_update_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -49,6 +50,7 @@ class _SchoolBellState extends State<SchoolBell> {
   final _appStateManager = AppStateManager();
   final _classManager = ClassManager();
   final _settingManager = SettingManager();
+  final _appUpdateChecker = AppUpdateChecker();
 
   late AppRouter _appRouter;
 
@@ -68,6 +70,7 @@ class _SchoolBellState extends State<SchoolBell> {
     _settingManager.initialize();
     _classManager.initialize();
     BellSoundPlayer().initialize();
+    _appUpdateChecker.checkForUpdate();
 
     _appRouter = AppRouter(
       appStateManager: _appStateManager,
@@ -110,6 +113,9 @@ class _SchoolBellState extends State<SchoolBell> {
         ),
         ChangeNotifierProvider(
           create: (context) => _settingManager,
+        ),
+        ChangeNotifierProvider(
+          create: (context) => _appUpdateChecker,
         ),
       ],
       child: MaterialApp(

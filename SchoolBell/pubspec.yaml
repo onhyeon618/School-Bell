@@ -28,6 +28,7 @@ dependencies:
   file_picker: ^4.3.3
   google_mobile_ads: ^1.0.1
   in_app_update: ^2.0.0
+  store_redirect: ^2.0.1
 
 dev_dependencies:
   flutter_test:

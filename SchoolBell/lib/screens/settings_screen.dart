@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:school_bell/models/app_update_checker.dart';
 import 'package:school_bell/screens/custom_dialog.dart';
 
 import '../models/models.dart';
@@ -13,6 +15,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SettingManager settingManager = Provider.of<SettingManager>(context);
     ClassManager classManager = Provider.of<ClassManager>(context);
+    AppUpdateChecker appUpdateChecker = Provider.of<AppUpdateChecker>(context);
 
     final AdWidget nativeAdWidget = AdWidget(ad: SbNativeAd.customNativeAd);
 
@@ -159,7 +162,30 @@ class SettingsScreen extends StatelessWidget {
           const SizedBox(height: 8),
           const SettingCategory(title: '어플리케이션'),
           SettingItemVersion(
-            onTap: () {},
+            onTap: () async {
+              if (appUpdateChecker.isUpdateAvailable) {
+                var result = await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const CustomDialog(
+                        dialogType: CustomDialogType.normalDialog,
+                        title: '업데이트가 가능합니다',
+                        content: '어플의 새 버전이 출시되었어요.\n지금 바로 업데이트 하러 가시겠어요?',
+                        positive: '스토어 가기',
+                        negative: '나중에',
+                      );
+                    });
+                if (result != null && result['returnValue'] > -1) {
+                  appUpdateChecker.redirectToStore();
+                }
+              } else {
+                Fluttertoast.showToast(
+                  msg: "현재 최신 버전이에요.",
+                  toastLength: Toast.LENGTH_SHORT,
+                );
+              }
+            },
+            isUpdateAvailable: appUpdateChecker.isUpdateAvailable,
           ),
           SettingItem(
             title: '오픈소스 라이선스',
