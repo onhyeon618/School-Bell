@@ -31,10 +31,14 @@ class AppRouter extends RouterDelegate
       key: navigatorKey,
       onPopPage: _handlePopPage,
       pages: [
-        if (!appStateManager.isInitialized && !classManager.isCounting)
-          SplashScreen.page(),
-        if (appStateManager.isInitialized || classManager.isCounting)
-          Home.page(),
+        if (!appStateManager.isInitialized) SplashScreen.page(),
+        if (appStateManager.isInitialized) Home.page(),
+        if (appStateManager.showOssLicenses) LicensesScreen.page(),
+        if (appStateManager.showLicenseDetail)
+          LicenseDetail.page(
+            name: appStateManager.licenseKey,
+            json: appStateManager.licenseJson,
+          ),
       ],
     );
   }
@@ -42,6 +46,12 @@ class AppRouter extends RouterDelegate
   bool _handlePopPage(Route<dynamic> route, result) {
     if (!route.didPop(result)) {
       return false;
+    }
+    if (route.settings.name == SchoolbellPages.licensesPath) {
+      appStateManager.closeLicensesPage();
+    }
+    if (route.settings.name == SchoolbellPages.licenseDetailPath) {
+      appStateManager.closeLicenseDetail();
     }
     return true;
   }

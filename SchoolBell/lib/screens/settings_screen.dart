@@ -164,7 +164,10 @@ class SettingsScreen extends StatelessWidget {
           SettingItem(
             title: '오픈소스 라이선스',
             attribute: '',
-            onTap: () {},
+            onTap: () {
+              Provider.of<AppStateManager>(context, listen: false)
+                  .openLicensesPage();
+            },
           ),
         ],
       ),
