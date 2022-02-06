@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:school_bell/screens/custom_dialog.dart';
 
 import '../models/models.dart';
 import '../widgets/widgets.dart';
-import '../schoolbell_colors.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -14,13 +14,15 @@ class SettingsScreen extends StatelessWidget {
     SettingManager settingManager = Provider.of<SettingManager>(context);
     ClassManager classManager = Provider.of<ClassManager>(context);
 
+    final AdWidget nativeAdWidget = AdWidget(ad: SbNativeAd.customNativeAd);
+
     return SingleChildScrollView(
       child: Column(
         children: [
           Container(
             margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-            height: 72,
-            color: SchoolBellColor.colorSub,
+            height: 80,
+            child: nativeAdWidget,
           ),
           const SettingCategory(title: '기본 설정'),
           SettingItem(

@@ -6,9 +6,11 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'models/models.dart';
 import 'navigation/app_router.dart';
+import 'widgets/sb_native_ad.dart';
 import 'schoolbell_theme.dart';
 
 late SharedPreferences prefs;
@@ -30,6 +32,8 @@ Future<void> main() async {
   );
 
   prefs = await SharedPreferences.getInstance();
+
+  MobileAds.instance.initialize();
 
   runApp(const SchoolBell());
 }
@@ -70,7 +74,15 @@ class _SchoolBellState extends State<SchoolBell> {
       classManager: _classManager,
     );
 
+    SbNativeAd.customNativeAd.load();
+
     port.listen((_) async => await _changeMainImage());
+  }
+
+  @override
+  void dispose() {
+    SbNativeAd.customNativeAd.dispose();
+    super.dispose();
   }
 
   Future<void> _changeMainImage() async {

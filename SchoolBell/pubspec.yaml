@@ -21,11 +21,12 @@ dependencies:
   editable_number_picker:
     path: ../editable_number_picker/
   android_alarm_manager_plus: ^2.0.4
-  shared_preferences: ^2.0.12
+  shared_preferences: ^2.0.13
   flutter_local_notifications: ^9.2.0
   move_to_background: ^1.0.2
   audioplayers: ^0.20.1
   file_picker: ^4.3.3
+  google_mobile_ads: ^1.0.1
 
 dev_dependencies:
   flutter_test:
