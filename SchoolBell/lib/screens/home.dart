@@ -38,8 +38,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   static List<Widget> pages = <Widget>[
-    ClassScreen(),
-    SettingsScreen(),
+    const ClassScreen(),
+    const SettingsScreen(),
   ];
 
   @override

@@ -16,7 +16,6 @@ import 'schoolbell_theme.dart';
 late SharedPreferences prefs;
 
 const String isolateName = 'SchoolBellIsolate';
-
 final ReceivePort port = ReceivePort();
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -32,7 +31,6 @@ Future<void> main() async {
   );
 
   prefs = await SharedPreferences.getInstance();
-
   MobileAds.instance.initialize();
 
   runApp(const SchoolBell());
@@ -64,14 +62,12 @@ class _SchoolBellState extends State<SchoolBell> {
       isolateName,
     );
 
-    // initialize는 추후 app_state_manager로 옮길 예정
     _settingManager.initialize();
     _classManager.initialize();
     BellSoundPlayer().initialize();
 
     _appRouter = AppRouter(
       appStateManager: _appStateManager,
-      classManager: _classManager,
     );
 
     SbNativeAd.customNativeAd.load();

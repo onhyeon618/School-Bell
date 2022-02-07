@@ -8,20 +8,15 @@ class AppRouter extends RouterDelegate
   final GlobalKey<NavigatorState> navigatorKey;
 
   final AppStateManager appStateManager;
-  final ClassManager classManager;
 
-  AppRouter({
-    required this.appStateManager,
-    required this.classManager
-  }) : navigatorKey = GlobalKey<NavigatorState>() {
+  AppRouter({required this.appStateManager})
+      : navigatorKey = GlobalKey<NavigatorState>() {
     appStateManager.addListener(notifyListeners);
-    classManager.addListener(notifyListeners);
   }
 
   @override
   void dispose() {
     appStateManager.removeListener(notifyListeners);
-    classManager.removeListener(notifyListeners);
     super.dispose();
   }
 
@@ -31,8 +26,7 @@ class AppRouter extends RouterDelegate
       key: navigatorKey,
       onPopPage: _handlePopPage,
       pages: [
-        if (!appStateManager.isInitialized) SplashScreen.page(),
-        if (appStateManager.isInitialized) Home.page(),
+        Home.page(),
         if (appStateManager.showOssLicenses) LicensesScreen.page(),
         if (appStateManager.showLicenseDetail)
           LicenseDetail.page(
