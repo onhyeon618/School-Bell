@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class BellSoundPlayer {
   static final AudioPlayer _audioPlayer = AudioPlayer(
-    mode: PlayerMode.LOW_LATENCY,
     playerId: 'school_bell_player',
   );
   static final AudioCache _audioCachePlayer = AudioCache(
@@ -12,8 +11,16 @@ class BellSoundPlayer {
     fixedPlayer: _audioPlayer,
   );
 
-  // TODO: 실제 음원파일 적용
-  static final List<String> _assetAudios = ['sample1.wav', 'sample2.wav'];
+  static final List<String> _assetAudios = [
+    'bellsound1.mp3',
+    'bellsound2.mp3',
+    'bellsound3.mp3',
+    'bellsound4.mp3',
+    'bellsound5.mp3',
+    'bellsound6.mp3',
+    'bellsound7.mp3',
+    'bellsound8.mp3',
+  ];
 
   Future<void> initialize() async {
     _audioCachePlayer.loadAll(_assetAudios);
