@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:school_bell/schoolbell_colors.dart';
 import '../models/models.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -27,14 +28,25 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(242, 233, 255, 1),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Image(
-              height: 200,
-              image: AssetImage('assets/sb_icon.png'),
+            const Center(
+              child: SizedBox(
+                width: 40,
+                height: 40,
+                child: CircularProgressIndicator(
+                  strokeWidth: 5.0,
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(SchoolBellColor.colorMain),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24.0),
+            Text(
+              "학교 가는 중...",
+              style: Theme.of(context).textTheme.headline5,
             ),
           ],
         ),
