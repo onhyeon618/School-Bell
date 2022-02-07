@@ -100,28 +100,31 @@ class SettingsScreen extends StatelessWidget {
             title: '수업 시작 종',
             attribute: settingManager.customClassBell ??
                 settingManager.classBellString,
+            isDisabled: classManager.isCounting,
             onTap: () async {
-              var result = await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const CustomDialog(
-                      dialogType: CustomDialogType.setBellType,
-                      positive: '설정하기',
-                      negative: '취소',
-                      forClass: true,
-                    );
-                  });
-              if (result != null) {
-                if (result['returnValue'] > -1 && result['returnValue'] < 9) {
-                  Provider.of<SettingManager>(context, listen: false)
-                      .setClassBell(result['returnValue']);
-                  Provider.of<SettingManager>(context, listen: false)
-                      .setCustomClassBell(null);
-                } else if (result['returnValue'] == 9) {
-                  Provider.of<SettingManager>(context, listen: false)
-                      .setClassBell(9);
-                  Provider.of<SettingManager>(context, listen: false)
-                      .setCustomClassBell(result['extra']);
+              if (!classManager.isCounting) {
+                var result = await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const CustomDialog(
+                        dialogType: CustomDialogType.setBellType,
+                        positive: '설정하기',
+                        negative: '취소',
+                        forClass: true,
+                      );
+                    });
+                if (result != null) {
+                  if (result['returnValue'] > -1 && result['returnValue'] < 9) {
+                    Provider.of<SettingManager>(context, listen: false)
+                        .setClassBell(result['returnValue']);
+                    Provider.of<SettingManager>(context, listen: false)
+                        .setCustomClassBell(null);
+                  } else if (result['returnValue'] == 9) {
+                    Provider.of<SettingManager>(context, listen: false)
+                        .setClassBell(9);
+                    Provider.of<SettingManager>(context, listen: false)
+                        .setCustomClassBell(result['extra']);
+                  }
                 }
               }
             },
@@ -130,28 +133,31 @@ class SettingsScreen extends StatelessWidget {
             title: '수업 종료 종',
             attribute:
                 settingManager.customRestBell ?? settingManager.restBellString,
+            isDisabled: classManager.isCounting,
             onTap: () async {
-              var result = await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const CustomDialog(
-                      dialogType: CustomDialogType.setBellType,
-                      positive: '설정하기',
-                      negative: '취소',
-                      forClass: false,
-                    );
-                  });
-              if (result != null) {
-                if (result['returnValue'] > -1 && result['returnValue'] < 9) {
-                  Provider.of<SettingManager>(context, listen: false)
-                      .setRestBell(result['returnValue']);
-                  Provider.of<SettingManager>(context, listen: false)
-                      .setCustomRestBell(null);
-                } else if (result['returnValue'] == 9) {
-                  Provider.of<SettingManager>(context, listen: false)
-                      .setRestBell(9);
-                  Provider.of<SettingManager>(context, listen: false)
-                      .setCustomRestBell(result['extra']);
+              if (!classManager.isCounting) {
+                var result = await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const CustomDialog(
+                        dialogType: CustomDialogType.setBellType,
+                        positive: '설정하기',
+                        negative: '취소',
+                        forClass: false,
+                      );
+                    });
+                if (result != null) {
+                  if (result['returnValue'] > -1 && result['returnValue'] < 9) {
+                    Provider.of<SettingManager>(context, listen: false)
+                        .setRestBell(result['returnValue']);
+                    Provider.of<SettingManager>(context, listen: false)
+                        .setCustomRestBell(null);
+                  } else if (result['returnValue'] == 9) {
+                    Provider.of<SettingManager>(context, listen: false)
+                        .setRestBell(9);
+                    Provider.of<SettingManager>(context, listen: false)
+                        .setCustomRestBell(result['extra']);
+                  }
                 }
               }
             },
