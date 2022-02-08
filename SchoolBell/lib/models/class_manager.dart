@@ -16,15 +16,16 @@ class CurrentState {
 const String isolateName = 'SchoolBellIsolate';
 
 class ClassManager extends ChangeNotifier {
+  late SharedPreferences _prefs;
+
   bool _counting = false;
   int _currentState = CurrentState.waiting;
   int _totalClass = -1;
   int _currentClass = -1;
 
-  // TODO: 실제 설정 시간으로 지정하기
-  int _firstLength = 10;
-  int _classLength = 10;
-  int _restLength = 5;
+  int _firstLengthSeconds = 0;
+  int _classLengthSeconds = 0;
+  int _restLengthSeconds = 0;
 
   bool get isCounting => _counting;
   int get currentState => _currentState;
@@ -32,27 +33,52 @@ class ClassManager extends ChangeNotifier {
   int get currentClass => _currentClass;
 
   Future<void> initialize() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _counting = prefs.getBool('counting') ?? false;
-    _currentState = prefs.getInt('currentState') ?? CurrentState.waiting;
-    _totalClass = prefs.getInt('totalClass') ?? -1;
-    _currentClass = prefs.getInt('currentClass') ?? -1;
+    _prefs = await SharedPreferences.getInstance();
+    await _prefs.reload();
+
+    _counting = _prefs.getBool('counting') ?? false;
+    _currentState = _prefs.getInt('currentState') ?? CurrentState.waiting;
+    _totalClass = _prefs.getInt('totalClass') ?? -1;
+    _currentClass = _prefs.getInt('currentClass') ?? -1;
+  }
+
+  Future<void> calculateTimeLength() async {
+    await _prefs.reload();
+
+    int _bellMode = _prefs.getInt('bellMode') ?? BellMode.onTime;
+
+    if (_bellMode != BellMode.onTime) {
+      _classLengthSeconds = (_prefs.getInt('classLength') ?? 50) * 60;
+      _restLengthSeconds = (_prefs.getInt('restLength') ?? 10) * 60;
+      _firstLengthSeconds = _classLengthSeconds;
+    } else {
+      _classLengthSeconds = 3000;
+      _restLengthSeconds = 600;
+
+      DateTime current = DateTime.now();
+      if (current.minute < 50) {
+        _firstLengthSeconds = (50 - current.minute) * 60 - current.second;
+      } else {
+        _firstLengthSeconds = (110 - current.minute) * 60 - current.second;
+      }
+    }
   }
 
   Future<void> startClass(int totalClass) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('counting', true);
-    await prefs.setInt('currentState', CurrentState.inClass);
-    await prefs.setInt('totalClass', totalClass);
-    await prefs.setInt('currentClass', 1);
+    await _prefs.setBool('counting', true);
+    await _prefs.setInt('currentState', CurrentState.inClass);
+    await _prefs.setInt('totalClass', totalClass);
+    await _prefs.setInt('currentClass', 1);
 
     _counting = true;
     _currentState = CurrentState.inClass;
     _totalClass = totalClass;
     _currentClass = 1;
 
+    await calculateTimeLength();
+
     int alarmId;
-    int timeSum = _firstLength;
+    int timeSum = _firstLengthSeconds;
 
     for (alarmId = 0; alarmId < (totalClass - 1) * 2; alarmId++) {
       if (alarmId % 2 == 0) {
@@ -63,7 +89,7 @@ class ClassManager extends ChangeNotifier {
           exact: true,
           wakeup: true,
         );
-        timeSum += _restLength;
+        timeSum += _restLengthSeconds;
       } else {
         AndroidAlarmManager.oneShot(
           Duration(seconds: timeSum),
@@ -72,7 +98,7 @@ class ClassManager extends ChangeNotifier {
           exact: true,
           wakeup: true,
         );
-        timeSum += _classLength;
+        timeSum += _classLengthSeconds;
       }
     }
     AndroidAlarmManager.oneShot(
@@ -98,11 +124,10 @@ class ClassManager extends ChangeNotifier {
       AndroidAlarmManager.cancel(i);
     }
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('counting', false);
-    await prefs.setInt('currentState', CurrentState.waiting);
-    await prefs.setInt('totalClass', -1);
-    await prefs.setInt('currentClass', -1);
+    await _prefs.setBool('counting', false);
+    await _prefs.setInt('currentState', CurrentState.waiting);
+    await _prefs.setInt('totalClass', -1);
+    await _prefs.setInt('currentClass', -1);
 
     _counting = false;
     _currentState = CurrentState.waiting;
@@ -161,6 +186,8 @@ class ClassManager extends ChangeNotifier {
 
   static Future<void> callbackRestEnd() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
+
     final currentClass = prefs.getInt('currentClass');
     final totalClass = prefs.getInt('totalClass');
 
