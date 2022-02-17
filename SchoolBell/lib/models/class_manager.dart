@@ -86,6 +86,7 @@ class ClassManager extends ChangeNotifier {
           Duration(seconds: timeSum),
           alarmId,
           callbackClassEnd,
+          alarmClock: true,
           exact: true,
           wakeup: true,
         );
@@ -95,6 +96,7 @@ class ClassManager extends ChangeNotifier {
           Duration(seconds: timeSum),
           alarmId,
           callbackRestEnd,
+          alarmClock: true,
           exact: true,
           wakeup: true,
         );
@@ -105,6 +107,7 @@ class ClassManager extends ChangeNotifier {
       Duration(seconds: timeSum),
       (totalClass - 1) * 2,
       callbackLastClassEnd,
+      alarmClock: true,
       exact: true,
       wakeup: true,
     );
