@@ -8,46 +8,79 @@ class ClassScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ClassManager classManager = Provider.of<ClassManager>(context);
-
-    int currentClass = classManager.currentClass;
-    int currentState = classManager.currentState;
-    String title;
-    String imageUrl;
-
-    switch(currentState) {
-      case CurrentState.waiting:
-        title = '지금은 쉬는 중♡';
-        imageUrl = 'assets/character/character_play.png';
-        break;
-      case CurrentState.inClass:
-        title = '$currentClass교시 수업 중…';
-        imageUrl = 'assets/character/character_study.png';
-        break;
-      case CurrentState.restTime:
-        title = '$currentClass교시 쉬는 시간';
-        imageUrl = 'assets/character/character_rest.png';
-        break;
-      default:
-        title = '지금은 쉬는 중♡';
-        imageUrl = 'assets/character/character_play.png';
-        break;
-    }
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          title,
-          style: Theme.of(context).textTheme.headline1,
-        ),
-        const SizedBox(height: 46),
-        Image.asset(
-          imageUrl,
-          width: MediaQuery.of(context).size.width - 40,
-          height: MediaQuery.of(context).size.width - 40,
-        ),
-      ],
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          titleText(context),
+          const SizedBox(height: 46),
+          mainImage(context),
+        ],
+      ),
     );
+  }
+
+  Widget titleText(BuildContext context) {
+    final int currentState =
+        context.select<ClassManager, int>((ClassManager cm) => cm.currentState);
+    final int currentClass = context.read<ClassManager>().currentClass;
+
+    switch (currentState) {
+      case CurrentState.waiting:
+        return Text(
+          '지금은 쉬는 중♡',
+          style: Theme.of(context).textTheme.headline1,
+        );
+      case CurrentState.inClass:
+        return Text(
+          '$currentClass교시 수업 중…',
+          style: Theme.of(context).textTheme.headline1,
+        );
+      case CurrentState.restTime:
+        return Text(
+          '$currentClass교시 쉬는 시간',
+          style: Theme.of(context).textTheme.headline1,
+        );
+      default:
+        return Text(
+          '지금은 쉬는 중♡',
+          style: Theme.of(context).textTheme.headline1,
+        );
+    }
+  }
+
+  Widget mainImage(BuildContext context) {
+    final int currentState =
+        context.select<ClassManager, int>((ClassManager cm) => cm.currentState);
+
+    final width = MediaQuery.of(context).size.width - 40;
+    final height = MediaQuery.of(context).size.width - 40;
+
+    switch (currentState) {
+      case CurrentState.waiting:
+        return Image.asset(
+          'assets/character/character_play.png',
+          width: width,
+          height: height,
+        );
+      case CurrentState.inClass:
+        return Image.asset(
+          'assets/character/character_study.png',
+          width: width,
+          height: height,
+        );
+      case CurrentState.restTime:
+        return Image.asset(
+          'assets/character/character_rest.png',
+          width: width,
+          height: height,
+        );
+      default:
+        return Image.asset(
+          'assets/character/character_play.png',
+          width: width,
+          height: height,
+        );
+    }
   }
 }

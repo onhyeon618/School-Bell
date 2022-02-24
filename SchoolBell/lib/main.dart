@@ -10,7 +10,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'models/models.dart';
 import 'navigation/app_router.dart';
-import 'widgets/sb_native_ad.dart';
 import 'schoolbell_theme.dart';
 
 late SharedPreferences prefs;
@@ -31,7 +30,7 @@ Future<void> main() async {
   );
 
   prefs = await SharedPreferences.getInstance();
-  MobileAds.instance.initialize();
+  await MobileAds.instance.initialize();
 
   runApp(const SchoolBell());
 }
@@ -70,15 +69,7 @@ class _SchoolBellState extends State<SchoolBell> {
       appStateManager: _appStateManager,
     );
 
-    SbNativeAd.customNativeAd.load();
-
     port.listen((_) async => await _changeMainImage());
-  }
-
-  @override
-  void dispose() {
-    SbNativeAd.customNativeAd.dispose();
-    super.dispose();
   }
 
   Future<void> _changeMainImage() async {
@@ -96,6 +87,7 @@ class _SchoolBellState extends State<SchoolBell> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = SchoolBellTheme.mainTheme();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -110,7 +102,7 @@ class _SchoolBellState extends State<SchoolBell> {
       ],
       child: MaterialApp(
         title: 'SchoolBell',
-        theme: SchoolBellTheme.mainTheme(),
+        theme: theme,
         home: Router(
           routerDelegate: _appRouter,
           backButtonDispatcher: RootBackButtonDispatcher(), // 물리버튼 처리

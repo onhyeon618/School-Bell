@@ -20,7 +20,7 @@ class RadioBellMode<int> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         if (value != groupValue) {
           onChanged(value);

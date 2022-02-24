@@ -43,39 +43,32 @@ class _CustomDialogState extends State<CustomDialog> {
   String? _extra;
 
   @override
-  void initState() {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    SettingManager settingManager =
+        Provider.of<SettingManager>(context, listen: false);
+
     switch (widget.dialogType) {
       case CustomDialogType.startClass:
         _returnValue = 1;
         break;
       case CustomDialogType.setBellMode:
-        _returnValue =
-            Provider.of<SettingManager>(context, listen: false).bellMode;
+        _returnValue = settingManager.bellMode;
         break;
       case CustomDialogType.setTimeLength:
-        if (widget.forClass!) {
-          _returnValue =
-              Provider.of<SettingManager>(context, listen: false).classLength;
-        } else {
-          _returnValue =
-              Provider.of<SettingManager>(context, listen: false).restLength;
-        }
+        _returnValue = widget.forClass!
+            ? settingManager.classLength
+            : settingManager.restLength;
         break;
       case CustomDialogType.setBellType:
-        if (widget.forClass!) {
-          _returnValue =
-              Provider.of<SettingManager>(context, listen: false).classBell;
-          _tempCustomBell = Provider.of<SettingManager>(context, listen: false)
-              .customClassBell;
-        } else {
-          _returnValue =
-              Provider.of<SettingManager>(context, listen: false).restBell;
-          _tempCustomBell = Provider.of<SettingManager>(context, listen: false)
-              .customRestBell;
-        }
+        _returnValue = widget.forClass!
+            ? settingManager.classBell
+            : settingManager.restBell;
+        _tempCustomBell = widget.forClass!
+            ? settingManager.customClassBell
+            : settingManager.customRestBell;
         break;
     }
-    super.initState();
   }
 
   @override
@@ -131,7 +124,7 @@ class _CustomDialogState extends State<CustomDialog> {
         Row(
           children: [
             Expanded(
-              child: InkWell(
+              child: GestureDetector(
                 onTap: () => Navigator.pop(
                     context, {"returnValue": -1, "extra": _extra}),
                 child: Container(
@@ -150,7 +143,7 @@ class _CustomDialogState extends State<CustomDialog> {
               ),
             ),
             Expanded(
-              child: InkWell(
+              child: GestureDetector(
                 onTap: () => Navigator.pop(
                     context, {"returnValue": _returnValue, "extra": _extra}),
                 child: Container(
@@ -174,7 +167,7 @@ class _CustomDialogState extends State<CustomDialog> {
     );
   }
 
-  classSizePicker() {
+  Widget classSizePicker() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -221,7 +214,7 @@ class _CustomDialogState extends State<CustomDialog> {
     );
   }
 
-  bellModePicker() {
+  Widget bellModePicker() {
     return Column(
       children: [
         RadioBellMode(
@@ -250,7 +243,7 @@ class _CustomDialogState extends State<CustomDialog> {
     );
   }
 
-  timeLengthPicker() {
+  Widget timeLengthPicker() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -288,7 +281,7 @@ class _CustomDialogState extends State<CustomDialog> {
     );
   }
 
-  bellTypePicker() {
+  Widget bellTypePicker() {
     return Column(
       children: [
         const SizedBox(height: 8),
@@ -309,7 +302,7 @@ class _CustomDialogState extends State<CustomDialog> {
               });
             },
           ),
-        InkWell(
+        GestureDetector(
           onTap: () async {
             FilePickerResult? result =
                 await FilePicker.platform.pickFiles(type: FileType.audio);
