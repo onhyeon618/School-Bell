@@ -26,6 +26,14 @@ class BellSoundPlayer {
     _audioCachePlayer.loadAll(_assetAudios);
   }
 
+  void playSampleSound(int index) {
+    _audioCachePlayer.play(_assetAudios[index - 1]);
+  }
+
+  void stopSampleSound() {
+    _audioPlayer.stop();
+  }
+
   static Future<void> playClassBell() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.reload();

@@ -118,7 +118,6 @@ class _HomeState extends State<Home> {
   void startClass(BuildContext context) async {
     final result = await showDialog(
         context: context,
-        barrierDismissible: false,
         builder: (BuildContext context) {
           return const CustomDialog(
             dialogType: CustomDialogType.startClass,
@@ -135,7 +134,6 @@ class _HomeState extends State<Home> {
   void stopClass(BuildContext context) async {
     final result = await showDialog(
         context: context,
-        barrierDismissible: false,
         builder: (BuildContext context) {
           return CustomDialog(
             dialogType: CustomDialogType.endClass,

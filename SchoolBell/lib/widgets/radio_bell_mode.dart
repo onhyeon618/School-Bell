@@ -21,6 +21,7 @@ class RadioBellMode<int> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: () {
         if (value != groupValue) {
           onChanged(value);

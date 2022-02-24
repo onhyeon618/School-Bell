@@ -110,7 +110,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         if (!_isCounting) {
           var result = await showDialog(
               context: context,
-              barrierDismissible: false,
               builder: (BuildContext context) {
                 return const CustomDialog(
                   dialogType: CustomDialogType.setBellMode,

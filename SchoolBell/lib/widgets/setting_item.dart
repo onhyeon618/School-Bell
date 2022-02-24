@@ -18,6 +18,7 @@ class SettingItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: () => onTap(),
       child: Container(
           color: isDisabled ? SchoolBellColor.colorInvalid : Colors.transparent,

@@ -38,6 +38,8 @@ class CustomDialog extends StatefulWidget {
 }
 
 class _CustomDialogState extends State<CustomDialog> {
+  late BellSoundPlayer _player;
+
   int _returnValue = 0;
   String? _tempCustomBell;
   String? _extra;
@@ -67,6 +69,7 @@ class _CustomDialogState extends State<CustomDialog> {
         _tempCustomBell = widget.forClass!
             ? settingManager.customClassBell
             : settingManager.customRestBell;
+        _player = BellSoundPlayer();
         break;
     }
   }
@@ -125,8 +128,13 @@ class _CustomDialogState extends State<CustomDialog> {
           children: [
             Expanded(
               child: GestureDetector(
-                onTap: () => Navigator.pop(
-                    context, {"returnValue": -1, "extra": _extra}),
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  if (widget.dialogType == CustomDialogType.setBellType) {
+                    _player.stopSampleSound();
+                  }
+                  Navigator.pop(context, {"returnValue": -1, "extra": _extra});
+                },
                 child: Container(
                   height: 48,
                   decoration: const BoxDecoration(
@@ -144,8 +152,14 @@ class _CustomDialogState extends State<CustomDialog> {
             ),
             Expanded(
               child: GestureDetector(
-                onTap: () => Navigator.pop(
-                    context, {"returnValue": _returnValue, "extra": _extra}),
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  if (widget.dialogType == CustomDialogType.setBellType) {
+                    _player.stopSampleSound();
+                  }
+                  Navigator.pop(
+                      context, {"returnValue": _returnValue, "extra": _extra});
+                },
                 child: Container(
                   height: 48,
                   decoration: const BoxDecoration(
@@ -297,12 +311,14 @@ class _CustomDialogState extends State<CustomDialog> {
             controlAffinity: ListTileControlAffinity.trailing,
             activeColor: SchoolBellColor.colorAccent,
             onChanged: (int? newValue) {
+              _player.playSampleSound(i);
               setState(() {
                 _returnValue = newValue!;
               });
             },
           ),
         GestureDetector(
+          behavior: HitTestBehavior.translucent,
           onTap: () async {
             FilePickerResult? result =
                 await FilePicker.platform.pickFiles(type: FileType.audio);
