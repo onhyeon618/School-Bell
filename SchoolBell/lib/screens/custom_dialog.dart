@@ -330,6 +330,7 @@ class _CustomDialogState extends State<CustomDialog> {
         GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () async {
+            _player.stopSampleSound();
             FilePickerResult? result =
                 await FilePicker.platform.pickFiles(type: FileType.audio);
             if (result != null) {
