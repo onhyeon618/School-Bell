@@ -13,6 +13,7 @@ class CustomDialogType {
   static const int setBellMode = 2;
   static const int setTimeLength = 3;
   static const int setBellType = 4;
+  static const int normalDialog = 5;
 }
 
 class CustomDialog extends StatefulWidget {
@@ -97,20 +98,29 @@ class _CustomDialogState extends State<CustomDialog> {
                   const SizedBox(height: 28),
                 if (widget.dialogType != CustomDialogType.setBellType &&
                     widget.title != null)
-                  Text(
-                    widget.title!,
-                    style: SchoolBellTheme.mainTextTheme.headline2,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text(
+                      widget.title!,
+                      style: SchoolBellTheme.mainTextTheme.headline2,
+                    ),
                   ),
                 if (widget.dialogType != CustomDialogType.setBellType &&
                     widget.title != null)
                   const SizedBox(height: 20),
                 if (widget.dialogType == CustomDialogType.startClass)
                   classSizePicker(),
-                if (widget.dialogType == CustomDialogType.endClass &&
+                if ((widget.dialogType == CustomDialogType.endClass ||
+                        widget.dialogType == CustomDialogType.normalDialog) &&
                     widget.content != null)
-                  Text(
-                    widget.content!,
-                    style: SchoolBellTheme.mainTextTheme.subtitle1,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text(
+                      widget.content!,
+                      style: SchoolBellTheme.mainTextTheme.subtitle1!
+                          .copyWith(height: 1.5),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 if (widget.dialogType == CustomDialogType.setBellMode)
                   bellModePicker(),

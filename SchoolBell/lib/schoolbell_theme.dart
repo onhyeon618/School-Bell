@@ -62,6 +62,7 @@ class SchoolBellTheme {
         backgroundColor: Colors.white,
       ),
       scaffoldBackgroundColor: Colors.white,
+      splashColor: Colors.transparent,
       highlightColor: Colors.white12,
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         foregroundColor: Colors.white,

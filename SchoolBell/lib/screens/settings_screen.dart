@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:school_bell/models/app_update_checker.dart';
 import 'package:school_bell/screens/custom_dialog.dart';
 
 import '../models/models.dart';
@@ -14,10 +16,12 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  // TODO: change it to real ID
   static const _adUnitId = 'ca-app-pub-3940256099942544/2247696110';
   static const _factoryId = 'sbNativeAdFactory';
 
   late SettingManager settingManager;
+  late AppUpdateChecker appUpdateChecker;
   late NativeAd _nativeAdWidget;
 
   bool _isAdLoaded = false;
@@ -50,6 +54,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     settingManager = Provider.of<SettingManager>(context, listen: false);
+    appUpdateChecker = Provider.of<AppUpdateChecker>(context, listen: false);
   }
 
   @override
@@ -80,9 +85,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           buildRestBellItem(context),
           const SizedBox(height: 8),
           const SettingCategory(title: '어플리케이션'),
-          SettingItemVersion(
-            onTap: () {},
-          ),
+          buildAppVersionItem(context),
           SettingItem(
             title: '오픈소스 라이선스',
             attribute: '',
@@ -259,6 +262,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
           }
         }
       },
+    );
+  }
+
+  Widget buildAppVersionItem(BuildContext context) {
+    return SettingItemVersion(
+      onTap: () async {
+        if (appUpdateChecker.isUpdateAvailable) {
+          var result = await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return const CustomDialog(
+                  dialogType: CustomDialogType.normalDialog,
+                  title: '업데이트가 가능합니다',
+                  content: '어플의 새 버전이 출시되었어요.\n지금 바로 업데이트 하러 가시겠어요?',
+                  positive: '스토어 가기',
+                  negative: '나중에',
+                );
+              });
+          if (result != null && result['returnValue'] > -1) {
+            appUpdateChecker.redirectToStore();
+          }
+        } else {
+          Fluttertoast.showToast(
+            msg: "현재 최신 버전이에요.",
+            toastLength: Toast.LENGTH_SHORT,
+          );
+        }
+      },
+      isUpdateAvailable: appUpdateChecker.isUpdateAvailable,
     );
   }
 }
