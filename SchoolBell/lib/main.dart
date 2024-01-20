@@ -12,7 +12,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'models/models.dart';
 import 'navigation/app_router.dart';
-import 'schoolbell_theme.dart';
+import 'presentation/schoolbell_theme.dart';
 
 late SharedPreferences prefs;
 

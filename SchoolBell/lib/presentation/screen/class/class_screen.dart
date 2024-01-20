@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../models/models.dart';
+import 'package:school_bell/models/models.dart';
 
 class ClassScreen extends StatelessWidget {
   const ClassScreen({Key? key}) : super(key: key);

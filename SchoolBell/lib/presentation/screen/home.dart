@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:move_to_background/move_to_background.dart';
-
-import '../models/models.dart';
-import 'screens.dart';
+import 'package:provider/provider.dart';
+import 'package:school_bell/models/models.dart';
+import 'package:school_bell/presentation/screens.dart';
 
 class Home extends StatefulWidget {
   static MaterialPage page() {

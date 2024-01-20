@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:school_bell/models/models.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../models/models.dart';
 
 class LicenseDetail extends StatelessWidget {
   static MaterialPage page({

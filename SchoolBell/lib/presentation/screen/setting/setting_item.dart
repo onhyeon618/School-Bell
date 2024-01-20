@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:school_bell/schoolbell_colors.dart';
+import 'package:school_bell/presentation/schoolbell_colors.dart';
 
 class SettingItem extends StatelessWidget {
   final String title;

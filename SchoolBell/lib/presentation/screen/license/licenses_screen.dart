@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../models/models.dart';
-import '../oss_licenses.dart';
+import 'package:school_bell/models/models.dart';
+import 'package:school_bell/oss_licenses.dart';
 
 class LicensesScreen extends StatelessWidget {
   static MaterialPage page() {

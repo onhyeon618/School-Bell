@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:editable_number_picker/editable_number_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:school_bell/models/models.dart';
-import 'package:school_bell/widgets/radio_bell_mode.dart';
-import '../schoolbell_colors.dart';
-import '../schoolbell_theme.dart';
+import 'package:school_bell/presentation/schoolbell_colors.dart';
+import 'package:school_bell/presentation/schoolbell_theme.dart';
+import 'package:school_bell/presentation/widget/radio_bell_mode.dart';
+
 
 class CustomDialogType {
   static const int startClass = 0;

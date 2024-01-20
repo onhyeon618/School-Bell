@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:school_bell/schoolbell_colors.dart';
-import 'package:school_bell/schoolbell_theme.dart';
+import 'package:school_bell/presentation/schoolbell_colors.dart';
+import 'package:school_bell/presentation/schoolbell_theme.dart';
 
 class RadioBellMode<int> extends StatelessWidget {
   final int value;
