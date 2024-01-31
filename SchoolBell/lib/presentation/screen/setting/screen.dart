@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:school_bell/domain/app_update_checker.dart';
 import 'package:school_bell/domain/class_manager.dart';
@@ -19,39 +18,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  // TODO: change it to real ID
-  static const _adUnitId = 'ca-app-pub-3940256099942544/2247696110';
-  static const _factoryId = 'sbNativeAdFactory';
-
   late SettingManager settingManager;
   late AppUpdateChecker appUpdateChecker;
-  late NativeAd _nativeAdWidget;
-
-  bool _isAdLoaded = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _nativeAdWidget = NativeAd(
-      adUnitId: _adUnitId,
-      factoryId: _factoryId,
-      request: AdRequest(),
-      listener: NativeAdListener(
-        onAdLoaded: (_) {
-          setState(() {
-            _isAdLoaded = true;
-          });
-        },
-        onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-          print('Ad load failed (code=${error.code} message=${error.message})');
-        },
-      ),
-    );
-
-    _nativeAdWidget.load();
-  }
 
   @override
   void didChangeDependencies() {
@@ -60,23 +28,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     appUpdateChecker = Provider.of<AppUpdateChecker>(context, listen: false);
   }
 
-  @override
-  void dispose() {
-    _nativeAdWidget.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          if (_isAdLoaded)
-            Container(
-              margin: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-              height: 80,
-              child: AdWidget(ad: _nativeAdWidget),
-            ),
           const SizedBox(height: 16),
           const SettingCategory(title: '기본 설정'),
           buildBellModeItem(context),

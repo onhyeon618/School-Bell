@@ -12,7 +12,6 @@ import 'package:school_bell/navigation/app_state_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'navigation/app_router.dart';
 import 'presentation/schoolbell_theme.dart';
@@ -38,7 +37,6 @@ Future<void> main() async {
   );
 
   prefs = await SharedPreferences.getInstance();
-  await MobileAds.instance.initialize();
 
   runApp(const SchoolBell());
 }
