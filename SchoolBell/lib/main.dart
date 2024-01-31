@@ -4,13 +4,16 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:school_bell/models/app_update_checker.dart';
+import 'package:school_bell/domain/app_update_checker.dart';
+import 'package:school_bell/domain/bell_sound_player.dart';
+import 'package:school_bell/domain/class_manager.dart';
+import 'package:school_bell/domain/setting_manager.dart';
+import 'package:school_bell/navigation/app_state_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import 'models/models.dart';
 import 'navigation/app_router.dart';
 import 'presentation/schoolbell_theme.dart';
 

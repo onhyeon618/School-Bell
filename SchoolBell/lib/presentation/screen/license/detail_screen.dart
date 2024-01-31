@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:school_bell/models/models.dart';
+import 'package:school_bell/navigation/schoolbell_pages.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LicenseDetail extends StatelessWidget {

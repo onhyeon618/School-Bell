@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:move_to_background/move_to_background.dart';
 import 'package:provider/provider.dart';
-import 'package:school_bell/models/models.dart';
+import 'package:school_bell/domain/class_manager.dart';
+import 'package:school_bell/navigation/app_state_manager.dart';
+import 'package:school_bell/navigation/schoolbell_pages.dart';
 import 'package:school_bell/presentation/screens.dart';
 
 class Home extends StatefulWidget {

@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:school_bell/models/models.dart';
+import 'package:school_bell/navigation/app_state_manager.dart';
+import 'package:school_bell/navigation/schoolbell_pages.dart';
 import 'package:school_bell/oss_licenses.dart';
 
 class LicensesScreen extends StatelessWidget {

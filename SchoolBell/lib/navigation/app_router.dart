@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/models.dart';
+import 'package:school_bell/navigation/app_state_manager.dart';
+import 'package:school_bell/navigation/schoolbell_pages.dart';
 import '../presentation/screens.dart';
 
 class AppRouter extends RouterDelegate

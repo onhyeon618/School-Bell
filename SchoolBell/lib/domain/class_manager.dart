@@ -3,9 +3,10 @@ import 'dart:ui';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:school_bell/channel/notification.dart';
+import 'package:school_bell/domain/bell_sound_player.dart';
+import 'package:school_bell/domain/setting_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'models.dart';
 
 class CurrentState {
   static const int waiting = 0;
