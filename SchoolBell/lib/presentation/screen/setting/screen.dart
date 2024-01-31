@@ -4,9 +4,9 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:school_bell/models/app_update_checker.dart';
 import 'package:school_bell/models/models.dart';
-import 'package:school_bell/presentation/screen/setting/setting_category.dart';
-import 'package:school_bell/presentation/screen/setting/setting_item.dart';
-import 'package:school_bell/presentation/screen/setting/setting_item_version.dart';
+import 'package:school_bell/presentation/screen/setting/widget/category.dart';
+import 'package:school_bell/presentation/screen/setting/widget/item.dart';
+import 'package:school_bell/presentation/screen/setting/widget/item_version.dart';
 import 'package:school_bell/presentation/widget/custom_dialog.dart';
 
 class SettingsScreen extends StatefulWidget {
