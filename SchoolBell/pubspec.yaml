@@ -9,7 +9,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: 2.17.6
+  flutter: 3.0.5
 
 # Dependencies specify other packages that your package needs in order to work.
 dependencies:
@@ -27,7 +28,7 @@ dependencies:
   audioplayers: 0.20.1
   file_picker: 4.3.3
   url_launcher: 6.0.18
-  in_app_update: 2.0.0
+  in_app_update: 3.0.0
   store_redirect: 2.0.1
 
 dev_dependencies:

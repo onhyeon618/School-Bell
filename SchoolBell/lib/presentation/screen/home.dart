@@ -27,8 +27,8 @@ class _HomeState extends State<Home> {
   late int _selectedTab;
 
   static List<Widget> pages = <Widget>[
-    ClassScreen(),
-    SettingsScreen(),
+    const ClassScreen(),
+    const SettingsScreen(),
   ];
 
   @override
