@@ -30,7 +30,7 @@ class SettingItemVersion extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: Theme.of(context).textTheme.headline5,
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const Spacer(),
                     Visibility(
@@ -47,7 +47,7 @@ class SettingItemVersion extends StatelessWidget {
                     ),
                     Text(
                       versionName,
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ],
                 )),
@@ -58,7 +58,7 @@ class SettingItemVersion extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
             child: Text(
               title,
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
           );
         }

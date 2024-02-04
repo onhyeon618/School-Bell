@@ -37,7 +37,7 @@ class RadioBellMode<int> extends StatelessWidget {
               children: [
                 Text(
                   radioName,
-                  style: SchoolBellTheme.mainTextTheme.subtitle1,
+                  style: SchoolBellTheme.mainTextTheme.titleMedium,
                 ),
                 const SizedBox(height: 8),
                 Text(

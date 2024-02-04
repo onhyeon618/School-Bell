@@ -15,7 +15,7 @@ class SettingCategory extends StatelessWidget {
       width: double.infinity,
       child: Text(
         title,
-        style: Theme.of(context).textTheme.headline4,
+        style: Theme.of(context).textTheme.headlineMedium,
       )
     );
   }

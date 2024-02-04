@@ -56,15 +56,12 @@ class _CustomDialogState extends State<CustomDialog> {
     switch (widget.dialogType) {
       case CustomDialogType.startClass:
         _returnValue = 1;
-        break;
       case CustomDialogType.setBellMode:
         _returnValue = settingManager.bellMode;
-        break;
       case CustomDialogType.setTimeLength:
         _returnValue = widget.forClass!
             ? settingManager.classLength
             : settingManager.restLength;
-        break;
       case CustomDialogType.setBellType:
         _returnValue = widget.forClass!
             ? settingManager.classBell
@@ -73,7 +70,6 @@ class _CustomDialogState extends State<CustomDialog> {
             ? settingManager.customClassBell
             : settingManager.customRestBell;
         _player = BellSoundPlayer();
-        break;
     }
   }
 
@@ -104,7 +100,7 @@ class _CustomDialogState extends State<CustomDialog> {
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
                       widget.title!,
-                      style: SchoolBellTheme.mainTextTheme.headline2,
+                      style: SchoolBellTheme.mainTextTheme.displayMedium,
                     ),
                   ),
                 if (widget.dialogType != CustomDialogType.setBellType &&
@@ -119,7 +115,7 @@ class _CustomDialogState extends State<CustomDialog> {
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
                       widget.content!,
-                      style: SchoolBellTheme.mainTextTheme.subtitle1!
+                      style: SchoolBellTheme.mainTextTheme.titleMedium!
                           .copyWith(height: 1.5),
                       textAlign: TextAlign.center,
                     ),
@@ -157,7 +153,7 @@ class _CustomDialogState extends State<CustomDialog> {
                   alignment: Alignment.center,
                   child: Text(
                     widget.negative,
-                    style: SchoolBellTheme.mainTextTheme.button,
+                    style: SchoolBellTheme.mainTextTheme.labelLarge,
                   ),
                 ),
               ),
@@ -182,7 +178,7 @@ class _CustomDialogState extends State<CustomDialog> {
                   alignment: Alignment.center,
                   child: Text(
                     widget.positive,
-                    style: SchoolBellTheme.mainTextTheme.button,
+                    style: SchoolBellTheme.mainTextTheme.labelLarge,
                   ),
                 ),
               ),
@@ -220,7 +216,7 @@ class _CustomDialogState extends State<CustomDialog> {
           ),
           child: Text(
             '$_returnValue',
-            style: SchoolBellTheme.mainTextTheme.subtitle1,
+            style: SchoolBellTheme.mainTextTheme.titleMedium,
           ),
         ),
         IconButton(
@@ -284,7 +280,7 @@ class _CustomDialogState extends State<CustomDialog> {
             fontWeight: FontWeight.w500,
             color: Colors.grey,
           ),
-          selectedTextStyle: SchoolBellTheme.mainTextTheme.headline2,
+          selectedTextStyle: SchoolBellTheme.mainTextTheme.displayMedium,
           haptics: true,
           decoration: const BoxDecoration(
             border: Border(
@@ -301,7 +297,7 @@ class _CustomDialogState extends State<CustomDialog> {
         const SizedBox(width: 16),
         Text(
           '분',
-          style: SchoolBellTheme.mainTextTheme.subtitle1,
+          style: SchoolBellTheme.mainTextTheme.titleMedium,
         ),
       ],
     );
@@ -316,7 +312,7 @@ class _CustomDialogState extends State<CustomDialog> {
             contentPadding: const EdgeInsets.fromLTRB(32, 0, 16, 0),
             title: Text(
               '#$i',
-              style: SchoolBellTheme.mainTextTheme.subtitle1,
+              style: SchoolBellTheme.mainTextTheme.titleMedium,
             ),
             value: i,
             groupValue: _returnValue,
@@ -350,11 +346,11 @@ class _CustomDialogState extends State<CustomDialog> {
               children: [
                 Text(
                   '기기에서 선택...',
-                  style: SchoolBellTheme.mainTextTheme.subtitle1,
+                  style: SchoolBellTheme.mainTextTheme.titleMedium,
                 ),
                 Text(
                   _tempCustomBell ?? '',
-                  style: SchoolBellTheme.mainTextTheme.subtitle2,
+                  style: SchoolBellTheme.mainTextTheme.titleSmall,
                 ),
               ],
             ),

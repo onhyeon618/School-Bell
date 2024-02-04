@@ -30,14 +30,14 @@ class SettingItem extends StatelessWidget {
               Text(
                 title,
                 style: isDisabled
-                    ? Theme.of(context).textTheme.headline6
-                    : Theme.of(context).textTheme.headline5,
+                    ? Theme.of(context).textTheme.titleLarge
+                    : Theme.of(context).textTheme.headlineSmall,
               ),
               Text(
                 attribute,
                 style: isDisabled
-                    ? Theme.of(context).textTheme.bodyText2
-                    : Theme.of(context).textTheme.bodyText1,
+                    ? Theme.of(context).textTheme.bodyMedium
+                    : Theme.of(context).textTheme.bodyLarge,
               ),
             ],
           )),

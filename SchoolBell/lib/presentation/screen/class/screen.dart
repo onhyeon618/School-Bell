@@ -28,22 +28,22 @@ class ClassScreen extends StatelessWidget {
       case CurrentState.waiting:
         return Text(
           '지금은 쉬는 중♡',
-          style: Theme.of(context).textTheme.headline1,
+          style: Theme.of(context).textTheme.displayLarge,
         );
       case CurrentState.inClass:
         return Text(
           '$currentClass교시 수업 중…',
-          style: Theme.of(context).textTheme.headline1,
+          style: Theme.of(context).textTheme.displayLarge,
         );
       case CurrentState.restTime:
         return Text(
           '$currentClass교시 쉬는 시간',
-          style: Theme.of(context).textTheme.headline1,
+          style: Theme.of(context).textTheme.displayLarge,
         );
       default:
         return Text(
           '지금은 쉬는 중♡',
-          style: Theme.of(context).textTheme.headline1,
+          style: Theme.of(context).textTheme.displayLarge,
         );
     }
   }

@@ -53,7 +53,7 @@ class LicenseDetail extends StatelessWidget {
                     const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
                 child: Text(
                   description!,
-                  style: Theme.of(context).textTheme.subtitle1,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
             if (homepage != null)
@@ -63,7 +63,7 @@ class LicenseDetail extends StatelessWidget {
                   child: InkWell(
                     child: Text(
                       homepage!,
-                      style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
                           color: Colors.blue,
                           decoration: TextDecoration.underline),
                     ),
@@ -75,7 +75,7 @@ class LicenseDetail extends StatelessWidget {
                   const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
               child: Text(
                 _bodyText() ?? '',
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
           ])),
