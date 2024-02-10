@@ -10,13 +10,13 @@ class RadioBellMode<int> extends StatelessWidget {
   final ValueChanged<int> onChanged;
 
   const RadioBellMode({
-    Key? key,
+    super.key,
     required this.value,
     required this.groupValue,
     required this.radioName,
     required this.radioCaption,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class RadioBellMode<int> extends StatelessWidget {
                 Text(
                   radioCaption,
                   style: const TextStyle(fontSize: 16.0, color: Colors.black),
-                )
+                ),
               ],
             ),
             Radio<int>(
@@ -51,7 +51,7 @@ class RadioBellMode<int> extends StatelessWidget {
               value: value,
               activeColor: SchoolBellColor.colorAccent,
               onChanged: (int? newValue) {
-                onChanged(newValue!);
+                if (newValue != null) onChanged(newValue);
               },
             ),
           ],

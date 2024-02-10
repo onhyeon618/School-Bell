@@ -8,12 +8,12 @@ class SettingItem extends StatelessWidget {
   final Function onTap;
 
   const SettingItem({
-    Key? key,
+    super.key,
     required this.title,
     required this.attribute,
     required this.onTap,
     this.isDisabled = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,26 +21,23 @@ class SettingItem extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       onTap: () => onTap(),
       child: Container(
-          color: isDisabled ? SchoolBellColor.colorInvalid : Colors.transparent,
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                style: isDisabled
-                    ? Theme.of(context).textTheme.titleLarge
-                    : Theme.of(context).textTheme.headlineSmall,
-              ),
-              Text(
-                attribute,
-                style: isDisabled
-                    ? Theme.of(context).textTheme.bodyMedium
-                    : Theme.of(context).textTheme.bodyLarge,
-              ),
-            ],
-          )),
+        color: isDisabled ? SchoolBellColor.colorInvalid : Colors.transparent,
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: isDisabled ? Theme.of(context).textTheme.titleLarge : Theme.of(context).textTheme.headlineSmall,
+            ),
+            Text(
+              attribute,
+              style: isDisabled ? Theme.of(context).textTheme.bodyMedium : Theme.of(context).textTheme.bodyLarge,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

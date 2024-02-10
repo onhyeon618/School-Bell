@@ -29,8 +29,11 @@ class ClassManager extends ChangeNotifier {
   int _restLengthSeconds = 0;
 
   bool get isCounting => _counting;
+
   int get currentState => _currentState;
+
   int get totalClass => _totalClass;
+
   int get currentClass => _currentClass;
 
   Future<void> initialize() async {
@@ -46,9 +49,9 @@ class ClassManager extends ChangeNotifier {
   Future<void> calculateTimeLength() async {
     await _prefs.reload();
 
-    int _bellMode = _prefs.getInt('bellMode') ?? BellMode.onTime;
+    int bellMode = _prefs.getInt('bellMode') ?? BellMode.onTime;
 
-    if (_bellMode != BellMode.onTime) {
+    if (bellMode != BellMode.onTime) {
       _classLengthSeconds = (_prefs.getInt('classLength') ?? 50) * 60;
       _restLengthSeconds = (_prefs.getInt('restLength') ?? 10) * 60;
       _firstLengthSeconds = _classLengthSeconds;
@@ -202,9 +205,8 @@ class ClassManager extends ChangeNotifier {
     uiSendPort ??= IsolateNameServer.lookupPortByName(isolateName);
     uiSendPort?.send(null);
 
-    String noticeMessage = totalClass == currentClass
-        ? '$currentClass교시 수업 중~ 오늘의 마지막 수업이에요. 화이팅!'
-        : '지금은 $currentClass교시 수업 중!';
+    String noticeMessage =
+        totalClass == currentClass ? '$currentClass교시 수업 중~ 오늘의 마지막 수업이에요. 화이팅!' : '지금은 $currentClass교시 수업 중!';
 
     await NotificationChannel.flutterLocalNotificationsPlugin.show(
       NotificationChannel.notificationId,

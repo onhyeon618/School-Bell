@@ -7,10 +7,10 @@ class SettingItemVersion extends StatelessWidget {
   final bool isUpdateAvailable;
 
   const SettingItemVersion({
-    Key? key,
+    super.key,
     required this.onTap,
     required this.isUpdateAvailable,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,34 +23,34 @@ class SettingItemVersion extends StatelessWidget {
             behavior: HitTestBehavior.translucent,
             onTap: () => onTap(),
             child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    const Spacer(),
-                    Visibility(
-                      child: Container(
-                        width: 5,
-                        height: 5,
-                        margin: const EdgeInsets.fromLTRB(0.0, 0.0, 4.0, 8.0),
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.red,
-                        ),
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  const Spacer(),
+                  Visibility(
+                    visible: isUpdateAvailable,
+                    child: Container(
+                      width: 5,
+                      height: 5,
+                      margin: const EdgeInsets.fromLTRB(0.0, 0.0, 4.0, 8.0),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.red,
                       ),
-                      visible: isUpdateAvailable,
                     ),
-                    Text(
-                      versionName,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ],
-                )),
+                  ),
+                  Text(
+                    versionName,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ],
+              ),
+            ),
           );
         } else {
           return Container(

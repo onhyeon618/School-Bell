@@ -20,19 +20,16 @@ late SharedPreferences prefs;
 const String isolateName = 'SchoolBellIsolate';
 final ReceivePort port = ReceivePort();
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   AndroidAlarmManager.initialize();
   await flutterLocalNotificationsPlugin.initialize(
-    const InitializationSettings(
-        android: AndroidInitializationSettings('sb_notice_icon')),
+    const InitializationSettings(android: AndroidInitializationSettings('sb_notice_icon')),
   );
 
   prefs = await SharedPreferences.getInstance();
@@ -41,10 +38,10 @@ Future<void> main() async {
 }
 
 class SchoolBell extends StatefulWidget {
-  const SchoolBell({Key? key}) : super(key: key);
+  const SchoolBell({super.key});
 
   @override
-  _SchoolBellState createState() => _SchoolBellState();
+  State<SchoolBell> createState() => _SchoolBellState();
 }
 
 class _SchoolBellState extends State<SchoolBell> {

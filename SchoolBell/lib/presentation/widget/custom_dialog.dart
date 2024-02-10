@@ -8,7 +8,6 @@ import 'package:school_bell/presentation/schoolbell_colors.dart';
 import 'package:school_bell/presentation/schoolbell_theme.dart';
 import 'package:school_bell/presentation/widget/radio_bell_mode.dart';
 
-
 class CustomDialogType {
   static const int startClass = 0;
   static const int endClass = 1;
@@ -27,17 +26,17 @@ class CustomDialog extends StatefulWidget {
   final bool? forClass;
 
   const CustomDialog({
-    Key? key,
+    super.key,
     required this.dialogType,
     required this.positive,
     required this.negative,
     this.title,
     this.content,
     this.forClass,
-  }) : super(key: key);
+  });
 
   @override
-  _CustomDialogState createState() => _CustomDialogState();
+  State<CustomDialog> createState() => _CustomDialogState();
 }
 
 class _CustomDialogState extends State<CustomDialog> {
@@ -50,8 +49,7 @@ class _CustomDialogState extends State<CustomDialog> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    SettingManager settingManager =
-        Provider.of<SettingManager>(context, listen: false);
+    SettingManager settingManager = Provider.of<SettingManager>(context, listen: false);
 
     switch (widget.dialogType) {
       case CustomDialogType.startClass:
@@ -59,16 +57,10 @@ class _CustomDialogState extends State<CustomDialog> {
       case CustomDialogType.setBellMode:
         _returnValue = settingManager.bellMode;
       case CustomDialogType.setTimeLength:
-        _returnValue = widget.forClass!
-            ? settingManager.classLength
-            : settingManager.restLength;
+        _returnValue = widget.forClass! ? settingManager.classLength : settingManager.restLength;
       case CustomDialogType.setBellType:
-        _returnValue = widget.forClass!
-            ? settingManager.classBell
-            : settingManager.restBell;
-        _tempCustomBell = widget.forClass!
-            ? settingManager.customClassBell
-            : settingManager.customRestBell;
+        _returnValue = widget.forClass! ? settingManager.classBell : settingManager.restBell;
+        _tempCustomBell = widget.forClass! ? settingManager.customClassBell : settingManager.customRestBell;
         _player = BellSoundPlayer();
     }
   }
@@ -92,10 +84,8 @@ class _CustomDialogState extends State<CustomDialog> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                if (widget.dialogType != CustomDialogType.setBellType)
-                  const SizedBox(height: 28),
-                if (widget.dialogType != CustomDialogType.setBellType &&
-                    widget.title != null)
+                if (widget.dialogType != CustomDialogType.setBellType) const SizedBox(height: 28),
+                if (widget.dialogType != CustomDialogType.setBellType && widget.title != null)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
@@ -103,11 +93,9 @@ class _CustomDialogState extends State<CustomDialog> {
                       style: SchoolBellTheme.mainTextTheme.displayMedium,
                     ),
                   ),
-                if (widget.dialogType != CustomDialogType.setBellType &&
-                    widget.title != null)
+                if (widget.dialogType != CustomDialogType.setBellType && widget.title != null)
                   const SizedBox(height: 20),
-                if (widget.dialogType == CustomDialogType.startClass)
-                  classSizePicker(),
+                if (widget.dialogType == CustomDialogType.startClass) classSizePicker(),
                 if ((widget.dialogType == CustomDialogType.endClass ||
                         widget.dialogType == CustomDialogType.normalDialog) &&
                     widget.content != null)
@@ -115,19 +103,14 @@ class _CustomDialogState extends State<CustomDialog> {
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
                       widget.content!,
-                      style: SchoolBellTheme.mainTextTheme.titleMedium!
-                          .copyWith(height: 1.5),
+                      style: SchoolBellTheme.mainTextTheme.titleMedium!.copyWith(height: 1.5),
                       textAlign: TextAlign.center,
                     ),
                   ),
-                if (widget.dialogType == CustomDialogType.setBellMode)
-                  bellModePicker(),
-                if (widget.dialogType == CustomDialogType.setTimeLength)
-                  timeLengthPicker(),
-                if (widget.dialogType == CustomDialogType.setBellType)
-                  bellTypePicker(),
-                if (widget.dialogType != CustomDialogType.setBellType)
-                  const SizedBox(height: 24),
+                if (widget.dialogType == CustomDialogType.setBellMode) bellModePicker(),
+                if (widget.dialogType == CustomDialogType.setTimeLength) timeLengthPicker(),
+                if (widget.dialogType == CustomDialogType.setBellType) bellTypePicker(),
+                if (widget.dialogType != CustomDialogType.setBellType) const SizedBox(height: 24),
               ],
             ),
           ),
@@ -141,14 +124,13 @@ class _CustomDialogState extends State<CustomDialog> {
                   if (widget.dialogType == CustomDialogType.setBellType) {
                     _player.stopSampleSound();
                   }
-                  Navigator.pop(context, {"returnValue": -1, "extra": _extra});
+                  Navigator.pop(context, {'returnValue': -1, 'extra': _extra});
                 },
                 child: Container(
                   height: 48,
                   decoration: const BoxDecoration(
                     color: SchoolBellColor.colorGray,
-                    borderRadius:
-                        BorderRadius.only(bottomLeft: Radius.circular(4)),
+                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(4)),
                   ),
                   alignment: Alignment.center,
                   child: Text(
@@ -165,15 +147,13 @@ class _CustomDialogState extends State<CustomDialog> {
                   if (widget.dialogType == CustomDialogType.setBellType) {
                     _player.stopSampleSound();
                   }
-                  Navigator.pop(
-                      context, {"returnValue": _returnValue, "extra": _extra});
+                  Navigator.pop(context, {'returnValue': _returnValue, 'extra': _extra});
                 },
                 child: Container(
                   height: 48,
                   decoration: const BoxDecoration(
                     color: SchoolBellColor.colorMain,
-                    borderRadius:
-                        BorderRadius.only(bottomRight: Radius.circular(4)),
+                    borderRadius: BorderRadius.only(bottomRight: Radius.circular(4)),
                   ),
                   alignment: Alignment.center,
                   child: Text(
@@ -271,7 +251,7 @@ class _CustomDialogState extends State<CustomDialog> {
       children: [
         EditableNumberPicker(
           value: _returnValue,
-          minValue: widget.forClass! ? 10 : 5,
+          minValue: widget.forClass! ? 2 : 5,
           maxValue: widget.forClass! ? 120 : 60,
           step: 1,
           itemHeight: 48,
@@ -329,8 +309,7 @@ class _CustomDialogState extends State<CustomDialog> {
           behavior: HitTestBehavior.translucent,
           onTap: () async {
             _player.stopSampleSound();
-            FilePickerResult? result =
-                await FilePicker.platform.pickFiles(type: FileType.audio);
+            FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.audio);
             if (result != null) {
               _extra = result.files.single.path;
               setState(() {

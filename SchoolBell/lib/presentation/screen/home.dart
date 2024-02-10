@@ -15,10 +15,10 @@ class Home extends StatefulWidget {
     );
   }
 
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
-  _HomeState createState() => _HomeState();
+  State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
@@ -39,10 +39,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    _isCounting =
-        context.select<ClassManager, bool>((ClassManager cm) => cm.isCounting);
-    _selectedTab = context
-        .select<AppStateManager, int>((AppStateManager am) => am.selectedTab);
+    _isCounting = context.select<ClassManager, bool>((ClassManager cm) => cm.isCounting);
+    _selectedTab = context.select<AppStateManager, int>((AppStateManager am) => am.selectedTab);
     return WillPopScope(
       onWillPop: () async {
         if (_selectedTab == 1) {
@@ -118,15 +116,16 @@ class _HomeState extends State<Home> {
 
   void startClass(BuildContext context) async {
     final result = await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return const CustomDialog(
-            dialogType: CustomDialogType.startClass,
-            title: '오늘 수업은 몇 교시?',
-            positive: '시작',
-            negative: '취소',
-          );
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return const CustomDialog(
+          dialogType: CustomDialogType.startClass,
+          title: '오늘 수업은 몇 교시?',
+          positive: '시작',
+          negative: '취소',
+        );
+      },
+    );
     if (result != null && result['returnValue'] > 0) {
       classManager.startClass(result['returnValue']);
     }
@@ -134,18 +133,19 @@ class _HomeState extends State<Home> {
 
   void stopClass(BuildContext context) async {
     final result = await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return CustomDialog(
-            dialogType: CustomDialogType.endClass,
-            title: '오늘 수업을 종료할까요?',
-            content: classManager.currentState == CurrentState.inClass
-                ? '아직 ${classManager.totalClass - classManager.currentClass + 1}교시 남아있어요!'
-                : '아직 ${classManager.totalClass - classManager.currentClass}교시 남아있어요!',
-            positive: '계속하기',
-            negative: '수업 종료',
-          );
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return CustomDialog(
+          dialogType: CustomDialogType.endClass,
+          title: '오늘 수업을 종료할까요?',
+          content: classManager.currentState == CurrentState.inClass
+              ? '아직 ${classManager.totalClass - classManager.currentClass + 1}교시 남아있어요!'
+              : '아직 ${classManager.totalClass - classManager.currentClass}교시 남아있어요!',
+          positive: '계속하기',
+          negative: '수업 종료',
+        );
+      },
+    );
     if (result['returnValue'] == -1) {
       classManager.stopClass();
     }

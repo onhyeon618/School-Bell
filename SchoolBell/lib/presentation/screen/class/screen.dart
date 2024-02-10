@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:school_bell/domain/class_manager.dart';
 
 class ClassScreen extends StatelessWidget {
-  const ClassScreen({Key? key}) : super(key: key);
+  const ClassScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +20,7 @@ class ClassScreen extends StatelessWidget {
   }
 
   Widget titleText(BuildContext context) {
-    final int currentState =
-        context.select<ClassManager, int>((ClassManager cm) => cm.currentState);
+    final int currentState = context.select<ClassManager, int>((ClassManager cm) => cm.currentState);
     final int currentClass = context.read<ClassManager>().currentClass;
 
     switch (currentState) {
@@ -49,8 +48,7 @@ class ClassScreen extends StatelessWidget {
   }
 
   Widget mainImage(BuildContext context) {
-    final int currentState =
-        context.select<ClassManager, int>((ClassManager cm) => cm.currentState);
+    final int currentState = context.select<ClassManager, int>((ClassManager cm) => cm.currentState);
 
     final width = MediaQuery.of(context).size.width - 40;
     final height = MediaQuery.of(context).size.width - 40;

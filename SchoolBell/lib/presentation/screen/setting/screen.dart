@@ -11,7 +11,7 @@ import 'package:school_bell/presentation/screen/setting/widget/item_version.dart
 import 'package:school_bell/presentation/widget/custom_dialog.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({super.key});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -27,7 +27,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     settingManager = Provider.of<SettingManager>(context, listen: false);
     appUpdateChecker = Provider.of<AppUpdateChecker>(context, listen: false);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: '오픈소스 라이선스',
             attribute: '',
             onTap: () {
-              Provider.of<AppStateManager>(context, listen: false)
-                  .openLicensesPage();
+              Provider.of<AppStateManager>(context, listen: false).openLicensesPage();
             },
           ),
         ],
@@ -60,27 +58,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget buildBellModeItem(BuildContext context) {
-    final bool _isCounting =
-        context.select<ClassManager, bool>((ClassManager cm) => cm.isCounting);
-    final String _bellModeValue = context
-        .select<SettingManager, String>((SettingManager sm) => sm.bellModeName);
+    final bool isCounting = context.select<ClassManager, bool>((ClassManager cm) => cm.isCounting);
+    final String bellModeValue = context.select<SettingManager, String>((SettingManager sm) => sm.bellModeName);
 
     return SettingItem(
       title: '종소리 모드',
-      attribute: _bellModeValue,
-      isDisabled: _isCounting,
+      attribute: bellModeValue,
+      isDisabled: isCounting,
       onTap: () async {
-        if (!_isCounting) {
+        if (!isCounting) {
           var result = await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return const CustomDialog(
-                  dialogType: CustomDialogType.setBellMode,
-                  title: '종소리 모드',
-                  positive: '설정하기',
-                  negative: '취소',
-                );
-              });
+            context: context,
+            builder: (BuildContext context) {
+              return const CustomDialog(
+                dialogType: CustomDialogType.setBellMode,
+                title: '종소리 모드',
+                positive: '설정하기',
+                negative: '취소',
+              );
+            },
+          );
           if (result != null && result['returnValue'] > -1) {
             settingManager.setBellMode(result['returnValue']);
           }
@@ -90,29 +87,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget buildClassLengthItem(BuildContext context) {
-    final bool _isCounting =
-        context.select<ClassManager, bool>((ClassManager cm) => cm.isCounting);
-    final bool _isOnTime = context
-        .select<SettingManager, bool>((SettingManager sm) => sm.isOnTime);
-    final String _classLengthValue = context.select<SettingManager, String>(
-        (SettingManager sm) => sm.classLengthString);
+    final bool isCounting = context.select<ClassManager, bool>((ClassManager cm) => cm.isCounting);
+    final bool isOnTime = context.select<SettingManager, bool>((SettingManager sm) => sm.isOnTime);
+    final String classLengthValue = context.select<SettingManager, String>((SettingManager sm) => sm.classLengthString);
 
     return SettingItem(
       title: '한 교시 길이',
-      attribute: _classLengthValue,
-      isDisabled: _isOnTime || _isCounting,
+      attribute: classLengthValue,
+      isDisabled: isOnTime || isCounting,
       onTap: () async {
-        if (!_isOnTime && !_isCounting) {
+        if (!isOnTime && !isCounting) {
           var result = await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return const CustomDialog(
-                  dialogType: CustomDialogType.setTimeLength,
-                  positive: '설정하기',
-                  negative: '취소',
-                  forClass: true,
-                );
-              });
+            context: context,
+            builder: (BuildContext context) {
+              return const CustomDialog(
+                dialogType: CustomDialogType.setTimeLength,
+                positive: '설정하기',
+                negative: '취소',
+                forClass: true,
+              );
+            },
+          );
           if (result != null && result['returnValue'] > -1) {
             settingManager.setClassLength(result['returnValue']);
           }
@@ -122,29 +117,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget buildRestLengthItem(BuildContext context) {
-    final bool _isCounting =
-        context.select<ClassManager, bool>((ClassManager cm) => cm.isCounting);
-    final bool _isOnTime = context
-        .select<SettingManager, bool>((SettingManager sm) => sm.isOnTime);
-    final String _restLengthValue = context.select<SettingManager, String>(
-        (SettingManager sm) => sm.restLengthString);
+    final bool isCounting = context.select<ClassManager, bool>((ClassManager cm) => cm.isCounting);
+    final bool isOnTime = context.select<SettingManager, bool>((SettingManager sm) => sm.isOnTime);
+    final String restLengthValue = context.select<SettingManager, String>((SettingManager sm) => sm.restLengthString);
 
     return SettingItem(
       title: '쉬는 시간 길이',
-      attribute: _restLengthValue,
-      isDisabled: _isOnTime || _isCounting,
+      attribute: restLengthValue,
+      isDisabled: isOnTime || isCounting,
       onTap: () async {
-        if (!_isOnTime && !_isCounting) {
+        if (!isOnTime && !isCounting) {
           var result = await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return const CustomDialog(
-                  dialogType: CustomDialogType.setTimeLength,
-                  positive: '설정하기',
-                  negative: '취소',
-                  forClass: false,
-                );
-              });
+            context: context,
+            builder: (BuildContext context) {
+              return const CustomDialog(
+                dialogType: CustomDialogType.setTimeLength,
+                positive: '설정하기',
+                negative: '취소',
+                forClass: false,
+              );
+            },
+          );
           if (result != null && result['returnValue'] > -1) {
             settingManager.setRestLength(result['returnValue']);
           }
@@ -154,27 +147,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget buildClassBellItem(BuildContext context) {
-    final bool _isCounting =
-        context.select<ClassManager, bool>((ClassManager cm) => cm.isCounting);
-    final String _classBellValue = context.select<SettingManager, String>(
-        (SettingManager sm) => sm.customClassBell ?? sm.classBellString);
+    final bool isCounting = context.select<ClassManager, bool>((ClassManager cm) => cm.isCounting);
+    final String classBellValue =
+        context.select<SettingManager, String>((SettingManager sm) => sm.customClassBell ?? sm.classBellString);
 
     return SettingItem(
       title: '수업 시작 종',
-      attribute: _classBellValue,
-      isDisabled: _isCounting,
+      attribute: classBellValue,
+      isDisabled: isCounting,
       onTap: () async {
-        if (!_isCounting) {
+        if (!isCounting) {
           var result = await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return const CustomDialog(
-                  dialogType: CustomDialogType.setBellType,
-                  positive: '설정하기',
-                  negative: '취소',
-                  forClass: true,
-                );
-              });
+            context: context,
+            builder: (BuildContext context) {
+              return const CustomDialog(
+                dialogType: CustomDialogType.setBellType,
+                positive: '설정하기',
+                negative: '취소',
+                forClass: true,
+              );
+            },
+          );
           if (result != null && result['returnValue'] > -1) {
             if (result['returnValue'] < 9) {
               settingManager.setClassBell(result['returnValue']);
@@ -190,27 +183,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget buildRestBellItem(BuildContext context) {
-    final bool _isCounting =
-        context.select<ClassManager, bool>((ClassManager cm) => cm.isCounting);
-    final String _restBellValue = context.select<SettingManager, String>(
-        (SettingManager sm) => sm.customRestBell ?? sm.restBellString);
+    final bool isCounting = context.select<ClassManager, bool>((ClassManager cm) => cm.isCounting);
+    final String restBellValue =
+        context.select<SettingManager, String>((SettingManager sm) => sm.customRestBell ?? sm.restBellString);
 
     return SettingItem(
       title: '수업 종료 종',
-      attribute: _restBellValue,
-      isDisabled: _isCounting,
+      attribute: restBellValue,
+      isDisabled: isCounting,
       onTap: () async {
-        if (!_isCounting) {
+        if (!isCounting) {
           var result = await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return const CustomDialog(
-                  dialogType: CustomDialogType.setBellType,
-                  positive: '설정하기',
-                  negative: '취소',
-                  forClass: false,
-                );
-              });
+            context: context,
+            builder: (BuildContext context) {
+              return const CustomDialog(
+                dialogType: CustomDialogType.setBellType,
+                positive: '설정하기',
+                negative: '취소',
+                forClass: false,
+              );
+            },
+          );
           if (result != null && result['returnValue'] > -1) {
             if (result['returnValue'] < 9) {
               settingManager.setRestBell(result['returnValue']);
@@ -230,22 +223,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
       onTap: () async {
         if (appUpdateChecker.isUpdateAvailable) {
           var result = await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return const CustomDialog(
-                  dialogType: CustomDialogType.normalDialog,
-                  title: '업데이트가 가능합니다',
-                  content: '어플의 새 버전이 출시되었어요.\n지금 바로 업데이트 하러 가시겠어요?',
-                  positive: '스토어 가기',
-                  negative: '나중에',
-                );
-              });
+            context: context,
+            builder: (BuildContext context) {
+              return const CustomDialog(
+                dialogType: CustomDialogType.normalDialog,
+                title: '업데이트가 가능합니다',
+                content: '어플의 새 버전이 출시되었어요.\n지금 바로 업데이트 하러 가시겠어요?',
+                positive: '스토어 가기',
+                negative: '나중에',
+              );
+            },
+          );
           if (result != null && result['returnValue'] > -1) {
             appUpdateChecker.redirectToStore();
           }
         } else {
           Fluttertoast.showToast(
-            msg: "현재 최신 버전이에요.",
+            msg: '현재 최신 버전이에요.',
             toastLength: Toast.LENGTH_SHORT,
           );
         }

@@ -22,14 +22,17 @@ class LicenseDetail extends StatelessWidget {
   final Map<String, dynamic> json;
 
   const LicenseDetail({
-    Key? key,
+    super.key,
     required this.name,
     required this.json,
-  }) : super(key: key);
+  });
 
   String? get version => json['version'];
+
   String? get description => json['description'];
+
   String? get licenseText => json['license'];
+
   String? get homepage => json['homepage'];
 
   String? _bodyText() {
@@ -45,12 +48,12 @@ class LicenseDetail extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('$name ${version ?? ''}')),
       body: Container(
-          color: Theme.of(context).canvasColor,
-          child: ListView(children: <Widget>[
+        color: Theme.of(context).canvasColor,
+        child: ListView(
+          children: <Widget>[
             if (description != null)
               Padding(
-                padding:
-                    const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
+                padding: const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
                 child: Text(
                   description!,
                   style: Theme.of(context).textTheme.titleMedium,
@@ -58,27 +61,29 @@ class LicenseDetail extends StatelessWidget {
               ),
             if (homepage != null)
               Padding(
-                  padding:
-                      const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
-                  child: InkWell(
-                    child: Text(
-                      homepage!,
-                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                          color: Colors.blue,
-                          decoration: TextDecoration.underline),
-                    ),
-                    onTap: () => launchUrl(Uri.parse(homepage!)),
-                  )),
+                padding: const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
+                child: InkWell(
+                  child: Text(
+                    homepage!,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall!
+                        .copyWith(color: Colors.blue, decoration: TextDecoration.underline),
+                  ),
+                  onTap: () => launchUrl(Uri.parse(homepage!)),
+                ),
+              ),
             if (description != null || homepage != null) const Divider(),
             Padding(
-              padding:
-                  const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
+              padding: const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
               child: Text(
                 _bodyText() ?? '',
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
-          ])),
+          ],
+        ),
+      ),
     );
   }
 }

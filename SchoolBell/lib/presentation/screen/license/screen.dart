@@ -14,7 +14,7 @@ class LicensesScreen extends StatelessWidget {
     );
   }
 
-  const LicensesScreen({Key? key}) : super(key: key);
+  const LicensesScreen({super.key});
 
   static Future<List<String>> loadLicenses() async {
     final ossKeys = ossLicenses.keys.toList();
@@ -39,30 +39,33 @@ class LicensesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('오픈소스 라이선스'),
-        ),
-        body: FutureBuilder<List<String>>(
-            future: _licenses,
-            builder: (context, snapshot) {
-              return ListView.separated(
-                  padding: const EdgeInsets.all(0),
-                  itemCount: snapshot.data?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    final key = snapshot.data![index];
-                    final licenseJson = ossLicenses[key];
-                    final version = licenseJson['version'];
-                    final desc = licenseJson['description'];
-                    return ListTile(
-                        title: Text('$key ${version ?? ''}'),
-                        subtitle: desc != null ? Text(desc) : null,
-                        trailing: const Icon(Icons.chevron_right),
-                        onTap: () {
-                          Provider.of<AppStateManager>(context, listen: false)
-                              .openLicenseDetail(key, licenseJson);
-                        });
-                  },
-                  separatorBuilder: (context, index) => const Divider());
-            }));
+      appBar: AppBar(
+        title: const Text('오픈소스 라이선스'),
+      ),
+      body: FutureBuilder<List<String>>(
+        future: _licenses,
+        builder: (context, snapshot) {
+          return ListView.separated(
+            padding: const EdgeInsets.all(0),
+            itemCount: snapshot.data?.length ?? 0,
+            itemBuilder: (context, index) {
+              final key = snapshot.data![index];
+              final licenseJson = ossLicenses[key];
+              final version = licenseJson['version'];
+              final desc = licenseJson['description'];
+              return ListTile(
+                title: Text('$key ${version ?? ''}'),
+                subtitle: desc != null ? Text(desc) : null,
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Provider.of<AppStateManager>(context, listen: false).openLicenseDetail(key, licenseJson);
+                },
+              );
+            },
+            separatorBuilder: (context, index) => const Divider(),
+          );
+        },
+      ),
+    );
   }
 }
