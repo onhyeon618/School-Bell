@@ -67,7 +67,7 @@ class LicenseDetail extends StatelessWidget {
                           color: Colors.blue,
                           decoration: TextDecoration.underline),
                     ),
-                    onTap: () => launch(homepage!),
+                    onTap: () => launchUrl(Uri.parse(homepage!)),
                   )),
             if (description != null || homepage != null) const Divider(),
             Padding(

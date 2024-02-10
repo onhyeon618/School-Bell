@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:school_bell/domain/app_update_checker.dart';
-import 'package:school_bell/domain/bell_sound_player.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/domain/setting_manager.dart';
 import 'package:school_bell/navigation/app_state_manager.dart';
@@ -70,7 +69,6 @@ class _SchoolBellState extends State<SchoolBell> {
 
     _settingManager.initialize();
     _classManager.initialize();
-    BellSoundPlayer().initialize();
     _appUpdateChecker.checkForUpdate();
 
     _appRouter = AppRouter(

@@ -50,7 +50,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.toyprojects.schoolbell.school_bell"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 33
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()

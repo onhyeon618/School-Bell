@@ -1,37 +1,29 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BellSoundPlayer {
   static final AudioPlayer _audioPlayer = AudioPlayer(
     playerId: 'school_bell_player',
   );
-  static final AudioCache _audioCachePlayer = AudioCache(
-    prefix: 'assets/audio/',
-    fixedPlayer: _audioPlayer,
-  );
 
   static final List<String> _assetAudios = [
-    'bellsound1.mp3',
-    'bellsound2.mp3',
-    'bellsound3.mp3',
-    'bellsound4.mp3',
-    'bellsound5.mp3',
-    'bellsound6.mp3',
-    'bellsound7.mp3',
-    'bellsound8.mp3',
+    'audio/bellsound1.mp3',
+    'audio/bellsound2.mp3',
+    'audio/bellsound3.mp3',
+    'audio/bellsound4.mp3',
+    'audio/bellsound5.mp3',
+    'audio/bellsound6.mp3',
+    'audio/bellsound7.mp3',
+    'audio/bellsound8.mp3',
   ];
 
-  Future<void> initialize() async {
-    _audioCachePlayer.loadAll(_assetAudios);
+  void playSampleSound(int index) async {
+    await _audioPlayer.play(AssetSource(_assetAudios[index - 1]));
   }
 
-  void playSampleSound(int index) {
-    _audioCachePlayer.play(_assetAudios[index - 1]);
-  }
-
-  void stopSampleSound() {
-    _audioPlayer.stop();
+  void stopSampleSound() async {
+    await _audioPlayer.stop();
   }
 
   static Future<void> playClassBell() async {
@@ -41,17 +33,19 @@ class BellSoundPlayer {
     String? customClassBell = prefs.getString('customClassBellPath');
 
     if (customClassBell == null) {
-      _audioCachePlayer.play(_assetAudios[assetClassBell - 1]);
+      await _audioPlayer.play(AssetSource(_assetAudios[assetClassBell - 1]));
     } else {
-      int result = await _audioPlayer.play(customClassBell, isLocal: true);
-      if (result != 1) {
-        _audioCachePlayer.play(_assetAudios[0]);
-        Fluttertoast.showToast(
-          msg: "파일에 오류가 있어 기본 종소리를 재생했어요.",
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 1,
-        );
-      }
+      // TODO: 재생 오류 핸들링
+      await _audioPlayer.play(DeviceFileSource(customClassBell));
+      // int result = await _audioPlayer.play(customClassBell, isLocal: true);
+      // if (result != 1) {
+      //   await _audioPlayer.play(AssetSource(_assetAudios[0]));
+      //   Fluttertoast.showToast(
+      //     msg: "파일에 오류가 있어 기본 종소리를 재생했어요.",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     timeInSecForIosWeb: 1,
+      //   );
+      // }
     }
   }
 
@@ -62,17 +56,18 @@ class BellSoundPlayer {
     String? customRestBell = prefs.getString('customRestBellPath');
 
     if (customRestBell == null) {
-      _audioCachePlayer.play(_assetAudios[assetRestBell - 1]);
+      await _audioPlayer.play(AssetSource(_assetAudios[assetRestBell - 1]));
     } else {
-      int result = await _audioPlayer.play(customRestBell, isLocal: true);
-      if (result != 1) {
-        _audioCachePlayer.play(_assetAudios[0]);
-        Fluttertoast.showToast(
-          msg: "파일에 오류가 있어 기본 종소리를 재생했어요.",
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 1,
-        );
-      }
+      await _audioPlayer.play(DeviceFileSource(customRestBell));
+      // int result = await _audioPlayer.play(customRestBell, isLocal: true);
+      // if (result != 1) {
+      //   await _audioPlayer.play(AssetSource(_assetAudios[0]));
+      //   Fluttertoast.showToast(
+      //     msg: "파일에 오류가 있어 기본 종소리를 재생했어요.",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     timeInSecForIosWeb: 1,
+      //   );
+      // }
     }
   }
 }
