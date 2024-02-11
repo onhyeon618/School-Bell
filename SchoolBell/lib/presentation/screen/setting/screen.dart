@@ -235,7 +235,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           );
           if (result != null && result['returnValue'] > -1) {
-            appUpdateChecker.redirectToStore();
+            // TODO
+            // appUpdateChecker.redirectToStore();
           }
         } else {
           Fluttertoast.showToast(

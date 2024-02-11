@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
-import 'package:store_redirect/store_redirect.dart';
 
 class AppUpdateChecker extends ChangeNotifier {
   bool _isUpdateAvailable = false;
@@ -11,12 +10,12 @@ class AppUpdateChecker extends ChangeNotifier {
 
   Future<void> checkForUpdate() async {
     AppUpdateInfo info = await InAppUpdate.checkForUpdate();
-    _isUpdateAvailable =
-        info.updateAvailability == UpdateAvailability.updateAvailable;
+    _isUpdateAvailable = info.updateAvailability == UpdateAvailability.updateAvailable;
     notifyListeners();
   }
 
-  void redirectToStore() {
-    StoreRedirect.redirect();
-  }
+  // TODO: 버전 이슈로 디펜던시 제거 - 대체 방안 구현 필요
+  // void redirectToStore() {
+  //   StoreRedirect.redirect();
+  // }
 }

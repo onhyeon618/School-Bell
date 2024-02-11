@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:move_to_background/move_to_background.dart';
 import 'package:provider/provider.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/navigation/app_state_manager.dart';
@@ -46,7 +45,8 @@ class _HomeState extends State<Home> {
         if (_selectedTab == 1) {
           context.read<AppStateManager>().goToClassTab();
         } else {
-          MoveToBackground.moveTaskToBack();
+          // TODO: 해당 코드 필요 여부 확인 - 버전 이슈로 디펜던시 제거한 상태
+          // MoveToBackground.moveTaskToBack();
         }
         return false;
       },
@@ -115,6 +115,7 @@ class _HomeState extends State<Home> {
   }
 
   void startClass(BuildContext context) async {
+    // TODO: SCHEDULE_EXACT_ALARM 권한 요청
     final result = await showDialog(
       context: context,
       builder: (BuildContext context) {

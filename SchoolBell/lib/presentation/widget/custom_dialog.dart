@@ -251,6 +251,7 @@ class _CustomDialogState extends State<CustomDialog> {
       children: [
         EditableNumberPicker(
           value: _returnValue,
+          // TODO: 시간 원복 (10 : 5)
           minValue: widget.forClass! ? 2 : 5,
           maxValue: widget.forClass! ? 120 : 60,
           step: 1,
