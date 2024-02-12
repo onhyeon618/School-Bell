@@ -74,7 +74,7 @@ class SchoolBellTheme {
         color: Colors.white,
       ),
       textTheme: mainTextTheme,
-      fontFamily: 'LevelTwo',
+      fontFamily: 'Pretendard',
       iconTheme: const IconThemeData(color: SchoolBellColor.colorMain),
     );
   }
