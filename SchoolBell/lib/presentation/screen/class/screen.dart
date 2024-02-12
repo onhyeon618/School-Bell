@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:school_bell/domain/class_manager.dart';
+import 'package:vector_graphics/vector_graphics.dart';
 
 class ClassScreen extends StatelessWidget {
   const ClassScreen({super.key});
@@ -55,26 +57,26 @@ class ClassScreen extends StatelessWidget {
 
     switch (currentState) {
       case CurrentState.waiting:
-        return Image.asset(
-          'assets/character/character_play.png',
+        return SvgPicture(
+          const AssetBytesLoader('assets/character/character_play.svg.vec'),
           width: width,
           height: height,
         );
       case CurrentState.inClass:
-        return Image.asset(
-          'assets/character/character_study.png',
+        return SvgPicture(
+          const AssetBytesLoader('assets/character/character_study.svg.vec'),
           width: width,
           height: height,
         );
       case CurrentState.restTime:
-        return Image.asset(
-          'assets/character/character_rest.png',
+        return SvgPicture(
+          const AssetBytesLoader('assets/character/character_rest.svg.vec'),
           width: width,
           height: height,
         );
       default:
-        return Image.asset(
-          'assets/character/character_play.png',
+        return SvgPicture(
+          const AssetBytesLoader('assets/character/character_play.svg.vec'),
           width: width,
           height: height,
         );

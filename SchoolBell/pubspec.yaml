@@ -16,12 +16,14 @@ dependencies:
     path: ../editable_number_picker/
   file_picker: 6.1.1
   flutter_local_notifications: 16.3.2
+  flutter_svg: 2.0.9
   fluttertoast: 8.2.4
   in_app_update: 4.2.2
   package_info_plus: 5.0.1
   provider: 6.1.1
   shared_preferences: 2.2.2
   url_launcher: 6.2.4
+  vector_graphics: 1.1.10+1
 
 dev_dependencies:
   flutter_test:
