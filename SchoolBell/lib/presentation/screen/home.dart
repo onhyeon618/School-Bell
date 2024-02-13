@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:school_bell/domain/class_manager.dart';
-import 'package:school_bell/navigation/app_state_manager.dart';
 import 'package:school_bell/navigation/schoolbell_pages.dart';
+import 'package:school_bell/presentation/schoolbell_colors.dart';
 import 'package:school_bell/presentation/screens.dart';
 
 class Home extends StatefulWidget {
@@ -21,14 +21,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  // TODO: state 다루는 방식 변경?
   late ClassManager classManager;
-  late bool _isCounting;
-  late int _selectedTab;
 
-  static List<Widget> pages = <Widget>[
-    const ClassScreen(),
-    const SettingsScreen(),
-  ];
+  bool _isCounting = false;
+
+  int _selectedTab = 0;
 
   @override
   void didChangeDependencies() {
@@ -39,79 +37,95 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     _isCounting = context.select<ClassManager, bool>((ClassManager cm) => cm.isCounting);
-    _selectedTab = context.select<AppStateManager, int>((AppStateManager am) => am.selectedTab);
-    return WillPopScope(
-      onWillPop: () async {
+
+    return PopScope(
+      canPop: !_isCounting,
+      onPopInvoked: (didPop) {
+        if (didPop) return;
+
         if (_selectedTab == 1) {
-          context.read<AppStateManager>().goToClassTab();
+          setState(() {
+            _selectedTab = 0;
+          });
         } else {
-          // TODO: 해당 코드 필요 여부 확인 - 버전 이슈로 디펜던시 제거한 상태
-          // MoveToBackground.moveTaskToBack();
+          // TODO: 백그라운드 전환
         }
-        return false;
       },
       child: Scaffold(
-        body: SafeArea(
-          child: IndexedStack(
-            index: _selectedTab,
-            children: pages,
-          ),
-        ),
-        extendBody: true,
-        bottomNavigationBar: BottomAppBar(
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    context.read<AppStateManager>().goToClassTab();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(12.0),
-                    child: Icon(Icons.access_time),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 40), // 40 == FAB diameter
-              Expanded(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    context.read<AppStateManager>().goToSettingTab();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(12.0),
-                    child: Icon(Icons.settings),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: fabIcon(),
-          onPressed: () async {
-            if (!_isCounting) {
-              startClass(context);
-            } else {
-              stopClass(context);
-            }
+        bottomNavigationBar: NavigationBar(
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+          onDestinationSelected: (index) {
+            setState(() {
+              _selectedTab = index;
+            });
           },
+          backgroundColor: Colors.white,
+          elevation: 8.0,
+          shadowColor: SchoolBellColor.colorMain,
+          surfaceTintColor: SchoolBellColor.colorSub,
+          indicatorColor: Colors.transparent,
+          selectedIndex: _selectedTab,
+          destinations: const [
+            Padding(
+              padding: EdgeInsets.only(right: 36.0),
+              child: NavigationDestination(
+                selectedIcon: Icon(
+                  Icons.access_time,
+                  color: SchoolBellColor.colorMain,
+                  size: 32,
+                ),
+                icon: Icon(
+                  Icons.access_time,
+                  color: SchoolBellColor.colorDarkGray,
+                  size: 32,
+                ),
+                label: '홈',
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 36.0),
+              child: NavigationDestination(
+                selectedIcon: Icon(
+                  Icons.settings,
+                  color: SchoolBellColor.colorMain,
+                  size: 32,
+                ),
+                icon: Icon(
+                  Icons.settings,
+                  color: SchoolBellColor.colorDarkGray,
+                  size: 32,
+                ),
+                label: '설정',
+              ),
+            ),
+          ],
+        ),
+        body: SafeArea(
+          child: [
+            const ClassScreen(),
+            const SettingsScreen(),
+          ][_selectedTab],
+        ),
+        floatingActionButton: SizedBox(
+          height: 72,
+          width: 72,
+          child: FittedBox(
+            child: FloatingActionButton(
+              onPressed: () {
+                if (!_isCounting) {
+                  startClass(context);
+                } else {
+                  stopClass(context);
+                }
+              },
+              shape: const CircleBorder(),
+              child: Icon(_isCounting ? Icons.notifications_off_outlined : Icons.notifications),
+            ),
+          ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
-  }
-
-  Widget fabIcon() {
-    if (!_isCounting) {
-      return const Icon(Icons.notifications);
-    } else {
-      return const Icon(Icons.notifications_off_outlined);
-    }
   }
 
   void startClass(BuildContext context) async {
