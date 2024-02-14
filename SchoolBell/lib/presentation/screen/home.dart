@@ -59,6 +59,7 @@ class _HomeState extends State<Home> {
               _selectedTab = index;
             });
           },
+          height: 64.0,
           backgroundColor: Colors.white,
           elevation: 8.0,
           shadowColor: SchoolBellColor.colorMain,
