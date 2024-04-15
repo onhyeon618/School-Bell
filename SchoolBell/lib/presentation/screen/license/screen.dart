@@ -16,6 +16,7 @@ class LicensesScreen extends StatelessWidget {
 
   const LicensesScreen({super.key});
 
+  // TODO: 로직 확인
   static Future<List<String>> loadLicenses() async {
     final ossKeys = ossLicenses.keys.toList();
     final lm = <String, List<String>>{};
@@ -46,7 +47,6 @@ class LicensesScreen extends StatelessWidget {
         future: _licenses,
         builder: (context, snapshot) {
           return ListView.separated(
-            padding: const EdgeInsets.all(0),
             itemCount: snapshot.data?.length ?? 0,
             itemBuilder: (context, index) {
               final key = snapshot.data![index];

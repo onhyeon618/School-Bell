@@ -27,16 +27,10 @@ class LicenseDetail extends StatelessWidget {
     required this.json,
   });
 
-  String? get version => json['version'];
+  String _parseLicenseText(String? text) {
+    if (text == null) return '';
 
-  String? get description => json['description'];
-
-  String? get licenseText => json['license'];
-
-  String? get homepage => json['homepage'];
-
-  String? _bodyText() {
-    return licenseText?.split('\n').map((line) {
+    return text.split('\n').map((line) {
       if (line.startsWith('//')) line = line.substring(2);
       line = line.trim();
       return line;
@@ -45,43 +39,47 @@ class LicenseDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String version = json['version'] ?? '';
+    final String? description = json['description'];
+    final String? licenseText = json['license'];
+    final String? homepage = json['homepage'];
+
     return Scaffold(
-      appBar: AppBar(title: Text('$name ${version ?? ''}')),
+      appBar: AppBar(title: Text('$name $version')),
       body: Container(
         color: Theme.of(context).canvasColor,
-        child: ListView(
-          children: <Widget>[
-            if (description != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
-                child: Text(
-                  description!,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12.0),
+          child: Column(
+            children: [
+              if (description != null) ...[
+                Text(
+                  description,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
-              ),
-            if (homepage != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
-                child: InkWell(
+                const SizedBox(height: 12),
+              ],
+              if (homepage != null) ...[
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () => launchUrl(Uri.parse(homepage)),
                   child: Text(
-                    homepage!,
+                    homepage,
                     style: Theme.of(context)
                         .textTheme
                         .titleSmall!
                         .copyWith(color: Colors.blue, decoration: TextDecoration.underline),
                   ),
-                  onTap: () => launchUrl(Uri.parse(homepage!)),
                 ),
-              ),
-            if (description != null || homepage != null) const Divider(),
-            Padding(
-              padding: const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
-              child: Text(
-                _bodyText() ?? '',
+                const SizedBox(height: 12),
+              ],
+              if (description != null || homepage != null) const Divider(),
+              Text(
+                _parseLicenseText(licenseText),
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
