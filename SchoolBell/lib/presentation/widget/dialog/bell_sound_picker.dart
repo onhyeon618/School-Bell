@@ -22,6 +22,7 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
   int _selected = 0;
   String? _customBellName;
 
+  // TODO: static 플레이어 활용
   final BellSoundPlayer _player = BellSoundPlayer();
 
   @override

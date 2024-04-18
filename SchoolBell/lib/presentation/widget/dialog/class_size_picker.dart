@@ -30,6 +30,7 @@ class ClassSizePicker extends StatelessWidget {
         Container(
           width: 48.0,
           height: MediaQuery.textScalerOf(context).scale(32.0),
+          margin: const EdgeInsets.symmetric(horizontal: 8),
           alignment: Alignment.center,
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(2)),

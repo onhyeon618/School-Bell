@@ -50,7 +50,7 @@ class BellModeRadio extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       onTap: () => onSelected(mode.index),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(32, 12, 16, 12),
+        padding: const EdgeInsets.only(left: 16, top: 12, bottom: 12),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -72,7 +72,9 @@ class BellModeRadio extends StatelessWidget {
               groupValue: selectedValue,
               value: mode,
               activeColor: SchoolBellColor.colorAccent,
-              onChanged: (_) {},
+              onChanged: (_) {
+                onSelected(mode.index);
+              },
             ),
           ],
         ),

@@ -5,15 +5,17 @@ import 'package:school_bell/presentation/schoolbell_colors.dart';
 import 'package:school_bell/presentation/schoolbell_theme.dart';
 import 'package:school_bell/presentation/widget/dialog/dialog_widgets.dart';
 
+typedef DialogCallback = Function(BuildContext context);
+
 class SBDialog extends StatefulWidget {
   final DialogType type;
-  final int initialValue;
+  final Object initialValue;
   final String? title;
   final Widget? content;
   final String positive;
   final String negative;
-  final VoidCallback? onPositive;
-  final VoidCallback? onNegative;
+  final DialogCallback? onPositive;
+  final DialogCallback? onNegative;
   final EdgeInsets padding;
 
   // setTimeLength 타입에서만 사용
@@ -41,8 +43,8 @@ class SBDialog extends StatefulWidget {
     String? content,
     String? positive,
     String? negative,
-    VoidCallback? onPositive,
-    VoidCallback? onNegative,
+    DialogCallback? onPositive,
+    DialogCallback? onNegative,
     EdgeInsets? padding,
   }) {
     return showBasic(
@@ -69,8 +71,8 @@ class SBDialog extends StatefulWidget {
     Widget? content,
     String? positive,
     String? negative,
-    VoidCallback? onPositive,
-    VoidCallback? onNegative,
+    DialogCallback? onPositive,
+    DialogCallback? onNegative,
     EdgeInsets? padding,
   }) {
     assert(title != null || content != null, 'title과 content를 모두 비울 수 없습니다.');
@@ -92,7 +94,7 @@ class SBDialog extends StatefulWidget {
   static Future<T?> showTyped<T>({
     required BuildContext context,
     required DialogType type,
-    required int initialValue,
+    required Object initialValue,
     String? title,
     EdgeInsets? padding,
     int? minValue,
@@ -118,20 +120,20 @@ class SBDialog extends StatefulWidget {
   static Future<T?> _show<T>({
     required BuildContext context,
     required DialogType type,
-    required int initialValue,
+    required Object initialValue,
     String? title,
     Widget? content,
     required String positive,
     required String negative,
-    VoidCallback? onPositive,
-    VoidCallback? onNegative,
+    DialogCallback? onPositive,
+    DialogCallback? onNegative,
     EdgeInsets? padding,
     int? minValue,
     int? maxValue,
   }) {
     return showDialog(
       context: context,
-      builder: (context) => SBDialog(
+      builder: (dialogContext) => SBDialog(
         type: type,
         initialValue: initialValue,
         title: title,
@@ -159,9 +161,11 @@ class _SBDialogState extends State<SBDialog> {
   @override
   void initState() {
     super.initState();
-
     _selectedValue = widget.initialValue;
+  }
 
+  @override
+  Widget build(BuildContext context) {
     switch (widget.type) {
       case DialogType.basic:
         dialogContent = widget.content;
@@ -174,10 +178,7 @@ class _SBDialogState extends State<SBDialog> {
       case DialogType.setBellSound:
         dialogContent = _buildBellSoundPicker();
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
@@ -216,7 +217,7 @@ class _SBDialogState extends State<SBDialog> {
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
                       if (widget.onNegative != null) {
-                        widget.onNegative!.call();
+                        widget.onNegative!.call(context);
                       } else {
                         Navigator.of(context).pop();
                       }
@@ -237,7 +238,7 @@ class _SBDialogState extends State<SBDialog> {
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
                       if (widget.onPositive != null) {
-                        widget.onPositive!.call();
+                        widget.onPositive!.call(context);
                       } else {
                         Navigator.of(context).pop(_selectedValue);
                       }
@@ -262,19 +263,18 @@ class _SBDialogState extends State<SBDialog> {
   }
 
   Widget _buildClassSizePicker() {
-    final int classSize = _selectedValue as int;
     return ClassSizePicker(
-      value: classSize,
+      value: _selectedValue as int,
       onPlus: () {
-        if (classSize == 9) return;
+        if (_selectedValue == 9) return;
         setState(() {
-          _selectedValue = classSize + 1;
+          _selectedValue = (_selectedValue as int) + 1;
         });
       },
       onMinus: () {
-        if (classSize == 1) return;
+        if (_selectedValue == 1) return;
         setState(() {
-          _selectedValue = classSize - 1;
+          _selectedValue = (_selectedValue as int) - 1;
         });
       },
     );

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:school_bell/domain/class_manager.dart';
+import 'package:school_bell/enum/dialog_type.dart';
 import 'package:school_bell/navigation/schoolbell_pages.dart';
 import 'package:school_bell/presentation/schoolbell_colors.dart';
 import 'package:school_bell/presentation/screens.dart';
+import 'package:school_bell/presentation/widget/sb_dialog.dart';
 
 class Home extends StatefulWidget {
   static MaterialPage page() {
@@ -131,39 +133,29 @@ class _HomeState extends State<Home> {
 
   void startClass(BuildContext context) async {
     // TODO: SCHEDULE_EXACT_ALARM 권한 요청
-    final result = await showDialog(
+    final int? result = await SBDialog.showTyped(
+      title: '오늘 수업은 몇 교시?',
       context: context,
-      builder: (BuildContext context) {
-        return const CustomDialog(
-          dialogType: CustomDialogType.startClass,
-          title: '오늘 수업은 몇 교시?',
-          positive: '시작',
-          negative: '취소',
-        );
-      },
+      type: DialogType.setClassSize,
+      initialValue: 1,
     );
-    if (result != null && result['returnValue'] > 0) {
-      classManager.startClass(result['returnValue']);
-    }
+
+    if (result != null) classManager.startClass(result);
   }
 
   void stopClass(BuildContext context) async {
-    final result = await showDialog(
+    SBDialog.showText(
       context: context,
-      builder: (BuildContext context) {
-        return CustomDialog(
-          dialogType: CustomDialogType.endClass,
-          title: '오늘 수업을 종료할까요?',
-          content: classManager.currentState == CurrentState.inClass
-              ? '아직 ${classManager.totalClass - classManager.currentClass + 1}교시 남아있어요!'
-              : '아직 ${classManager.totalClass - classManager.currentClass}교시 남아있어요!',
-          positive: '계속하기',
-          negative: '수업 종료',
-        );
+      title: '오늘 수업을 종료할까요?',
+      content: classManager.currentState == CurrentState.inClass
+          ? '아직 ${classManager.totalClass - classManager.currentClass + 1}교시 남아있어요!'
+          : '아직 ${classManager.totalClass - classManager.currentClass}교시 남아있어요!',
+      positive: '계속하기',
+      negative: '수업 종료',
+      onNegative: (dialogContext) {
+        classManager.stopClass();
+        Navigator.of(dialogContext).pop();
       },
     );
-    if (result['returnValue'] == -1) {
-      classManager.stopClass();
-    }
   }
 }

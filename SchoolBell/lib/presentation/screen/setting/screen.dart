@@ -4,11 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:school_bell/domain/app_update_checker.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/domain/setting_manager.dart';
+import 'package:school_bell/enum/dialog_type.dart';
 import 'package:school_bell/navigation/app_state_manager.dart';
 import 'package:school_bell/presentation/screen/setting/widget/category.dart';
 import 'package:school_bell/presentation/screen/setting/widget/setting_item.dart';
 import 'package:school_bell/presentation/screen/setting/widget/app_version_item.dart';
-import 'package:school_bell/presentation/widget/custom_dialog.dart';
+import 'package:school_bell/presentation/widget/sb_dialog.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -53,21 +54,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
             attribute: bellModeValue,
             isDisabled: isCounting,
             onTap: () async {
-              // TODO: dialog 개편
-              final result = await showDialog(
+              final int? result = await SBDialog.showTyped(
+                title: '종소리 모드',
                 context: context,
-                builder: (BuildContext context) {
-                  return const CustomDialog(
-                    dialogType: CustomDialogType.setBellMode,
-                    title: '종소리 모드',
-                    positive: '설정하기',
-                    negative: '취소',
-                  );
-                },
+                type: DialogType.setBellMode,
+                initialValue: settingManager.bellMode,
+                padding: const EdgeInsets.only(top: 28, bottom: 24, left: 10, right: 10),
               );
-              if (result != null && result['returnValue'] > -1) {
-                settingManager.setBellMode(result['returnValue']);
-              }
+
+              if (result != null) settingManager.setBellMode(result);
             },
           ),
           SettingItem(
@@ -75,20 +70,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
             attribute: classLengthValue,
             isDisabled: isOnTime || isCounting,
             onTap: () async {
-              final result = await showDialog(
+              final int? result = await SBDialog.showTyped(
                 context: context,
-                builder: (BuildContext context) {
-                  return const CustomDialog(
-                    dialogType: CustomDialogType.setTimeLength,
-                    positive: '설정하기',
-                    negative: '취소',
-                    forClass: true,
-                  );
-                },
+                type: DialogType.setTimeLength,
+                initialValue: settingManager.classLength,
+                maxValue: 120,
+                minValue: 10,
               );
-              if (result != null && result['returnValue'] > -1) {
-                settingManager.setClassLength(result['returnValue']);
-              }
+
+              if (result != null) settingManager.setClassLength(result);
             },
           ),
           SettingItem(
@@ -96,20 +86,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
             attribute: restLengthValue,
             isDisabled: isOnTime || isCounting,
             onTap: () async {
-              final result = await showDialog(
+              final int? result = await SBDialog.showTyped(
                 context: context,
-                builder: (BuildContext context) {
-                  return const CustomDialog(
-                    dialogType: CustomDialogType.setTimeLength,
-                    positive: '설정하기',
-                    negative: '취소',
-                    forClass: false,
-                  );
-                },
+                type: DialogType.setTimeLength,
+                initialValue: settingManager.restLength,
+                maxValue: 60,
+                minValue: 5,
               );
-              if (result != null && result['returnValue'] > -1) {
-                settingManager.setRestLength(result['returnValue']);
-              }
+
+              if (result != null) settingManager.setRestLength(result);
             },
           ),
           const SizedBox(height: 8),
@@ -121,25 +106,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
             attribute: classBellValue,
             isDisabled: isCounting,
             onTap: () async {
-              final result = await showDialog(
+              final initialValue = settingManager.customClassBell ?? settingManager.classBell;
+
+              final result = await SBDialog.showTyped(
                 context: context,
-                builder: (BuildContext context) {
-                  return const CustomDialog(
-                    dialogType: CustomDialogType.setBellType,
-                    positive: '설정하기',
-                    negative: '취소',
-                    forClass: true,
-                  );
-                },
+                type: DialogType.setBellSound,
+                initialValue: initialValue,
+                padding: EdgeInsets.zero,
               );
-              if (result != null && result['returnValue'] > -1) {
-                if (result['returnValue'] < 9) {
-                  settingManager.setClassBell(result['returnValue']);
-                  settingManager.setCustomClassBell(null);
-                } else {
-                  settingManager.setClassBell(9);
-                  settingManager.setCustomClassBell(result['extra']);
-                }
+
+              // TODO: 사운드 플레이 종료
+
+              if (result == null) return;
+
+              if (result is int) {
+                settingManager.setClassBell(result);
+                settingManager.setCustomClassBell(null);
+              } else {
+                settingManager.setCustomClassBell(result);
               }
             },
           ),
@@ -148,25 +132,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
             attribute: restBellValue,
             isDisabled: isCounting,
             onTap: () async {
-              final result = await showDialog(
+              final initialValue = settingManager.customRestBell ?? settingManager.restBell;
+
+              final result = await SBDialog.showTyped(
                 context: context,
-                builder: (BuildContext context) {
-                  return const CustomDialog(
-                    dialogType: CustomDialogType.setBellType,
-                    positive: '설정하기',
-                    negative: '취소',
-                    forClass: false,
-                  );
-                },
+                type: DialogType.setBellSound,
+                initialValue: initialValue,
+                padding: EdgeInsets.zero,
               );
-              if (result != null && result['returnValue'] > -1) {
-                if (result['returnValue'] < 9) {
-                  settingManager.setRestBell(result['returnValue']);
-                  settingManager.setCustomRestBell(null);
-                } else if (result['returnValue'] == 9) {
-                  settingManager.setRestBell(9);
-                  settingManager.setCustomRestBell(result['extra']);
-                }
+
+              // TODO: 사운드 플레이 종료
+
+              if (result == null) return;
+
+              if (result is int) {
+                settingManager.setRestBell(result);
+                settingManager.setCustomRestBell(null);
+              } else {
+                settingManager.setCustomRestBell(result);
               }
             },
           ),
@@ -178,22 +161,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
             isUpdateAvailable: appUpdateChecker.isUpdateAvailable,
             onTap: () async {
               if (appUpdateChecker.isUpdateAvailable) {
-                var result = await showDialog(
+                SBDialog.showText(
                   context: context,
-                  builder: (BuildContext context) {
-                    return const CustomDialog(
-                      dialogType: CustomDialogType.normalDialog,
-                      title: '업데이트가 가능합니다',
-                      content: '어플의 새 버전이 출시되었어요.\n지금 바로 업데이트 하러 가시겠어요?',
-                      positive: '스토어 가기',
-                      negative: '나중에',
-                    );
+                  title: '업데이트가 가능합니다',
+                  content: '어플의 새 버전이 출시되었어요.\n지금 바로 업데이트 하러 가시겠어요?',
+                  positive: '스토어 가기',
+                  negative: '나중에',
+                  onPositive: (dialogContext) {
+                    // TODO
+                    // appUpdateChecker.redirectToStore();
                   },
                 );
-                if (result != null && result['returnValue'] > -1) {
-                  // TODO
-                  // appUpdateChecker.redirectToStore();
-                }
               } else {
                 Fluttertoast.showToast(
                   msg: '현재 최신 버전이에요.',

@@ -28,8 +28,8 @@ class SettingManager extends ChangeNotifier {
   String get bellModeName => _bellModeName[_bellMode];
   String get classLengthString => '$_classLength분';
   String get restLengthString => '$_restLength분';
-  String get classBellString => '#$_classBell';
-  String get restBellString => '#$_restBell';
+  String get classBellString => '#${_classBell + 1}';
+  String get restBellString => '#${_restBell + 1}';
   String? get customClassBell => _customClassBell;
   String? get customRestBell => _customRestBell;
 
