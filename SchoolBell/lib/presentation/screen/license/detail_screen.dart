@@ -48,37 +48,39 @@ class LicenseDetail extends StatelessWidget {
       appBar: AppBar(title: Text('$name $version')),
       body: Container(
         color: Theme.of(context).canvasColor,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12.0),
-          child: Column(
-            children: [
-              if (description != null) ...[
-                Text(
-                  description,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 12),
-              ],
-              if (homepage != null) ...[
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () => launchUrl(Uri.parse(homepage)),
-                  child: Text(
-                    homepage,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: Colors.blue, decoration: TextDecoration.underline),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12.0),
+            child: Column(
+              children: [
+                if (description != null) ...[
+                  Text(
+                    description,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
+                  const SizedBox(height: 12),
+                ],
+                if (homepage != null) ...[
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => launchUrl(Uri.parse(homepage)),
+                    child: Text(
+                      homepage,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(color: Colors.blue, decoration: TextDecoration.underline),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                ],
+                if (description != null || homepage != null) const Divider(),
+                Text(
+                  _parseLicenseText(licenseText),
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
-                const SizedBox(height: 12),
               ],
-              if (description != null || homepage != null) const Divider(),
-              Text(
-                _parseLicenseText(licenseText),
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ],
+            ),
           ),
         ),
       ),
