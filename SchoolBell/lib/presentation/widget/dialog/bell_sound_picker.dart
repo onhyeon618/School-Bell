@@ -43,7 +43,7 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
             contentPadding: const EdgeInsets.only(left: 32, right: 16),
             title: Text(
               '#${index + 1}',
-              style: SchoolBellTheme.mainTextTheme.titleMedium,
+              style: SchoolBellTheme.mainTextTheme.bodyMedium,
             ),
             value: index,
             groupValue: _selected,
@@ -81,10 +81,10 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
                   const TextSpan(text: '기기에서 선택... '),
                   TextSpan(
                     text: _customBellName ?? '',
-                    style: SchoolBellTheme.mainTextTheme.titleSmall,
+                    style: SchoolBellTheme.mainTextTheme.bodySmall,
                   ),
                 ],
-                style: SchoolBellTheme.mainTextTheme.titleMedium,
+                style: SchoolBellTheme.mainTextTheme.bodyMedium,
               ),
               overflow: TextOverflow.ellipsis,
             ),

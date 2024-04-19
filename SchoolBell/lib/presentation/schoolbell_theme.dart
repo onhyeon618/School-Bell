@@ -3,55 +3,68 @@ import 'schoolbell_colors.dart';
 
 class SchoolBellTheme {
   static TextTheme mainTextTheme = const TextTheme(
-    displayLarge: TextStyle( // 메인화면 텍스트
+    /// 메인화면 텍스트
+    headlineLarge: TextStyle(
       fontSize: 32.0,
       fontWeight: FontWeight.w500,
       color: Colors.black,
+      letterSpacing: -0.5,
     ),
-    displayMedium: TextStyle( // 다이얼로그 제목
+
+    /// 설정 카테고리
+    labelSmall: TextStyle(
+      fontSize: 14.0,
+      fontWeight: FontWeight.normal,
+      color: SchoolBellColor.colorAccent,
+      letterSpacing: -0.5,
+    ),
+
+    /// 설정 이름
+    titleLarge: TextStyle(
+      fontSize: 16.0,
+      fontWeight: FontWeight.w500,
+      color: Colors.black,
+      letterSpacing: -0.5,
+    ),
+
+    /// 설정 내용
+    bodyLarge: TextStyle(
+      fontSize: 14.0,
+      fontWeight: FontWeight.w300,
+      color: Colors.black,
+      letterSpacing: -0.5,
+    ),
+
+    /// 제목 일반 (다이얼로그 포함)
+    titleMedium: TextStyle(
       fontSize: 20.0,
       fontWeight: FontWeight.w500,
       color: Colors.black,
+      letterSpacing: -0.5,
     ),
-    headlineMedium: TextStyle( // 설정 카테고리
-      fontSize: 14.0,
-      fontWeight: FontWeight.w500,
-      color: SchoolBellColor.colorAccent,
-    ),
-    headlineSmall: TextStyle( // 설정 이름
+
+    /// 본문 일반 (다이얼로그 포함)
+    bodyMedium: TextStyle(
       fontSize: 16.0,
       fontWeight: FontWeight.w500,
       color: Colors.black,
+      letterSpacing: -0.5,
     ),
-    titleLarge: TextStyle( // 비활성화 된 설정 이름
-      fontSize: 16.0,
-      fontWeight: FontWeight.w500,
-      color: SchoolBellColor.colorGray,
-    ),
-    titleMedium: TextStyle( // 다이얼로그 일반
-      fontSize: 16.0,
-      fontWeight: FontWeight.w500,
-      color: Colors.black,
-    ),
-    titleSmall: TextStyle( // 다이얼로그 미니
+
+    /// 본문 작은 텍스트
+    bodySmall: TextStyle(
       fontSize: 14.0,
       fontWeight: FontWeight.w300,
       color: Colors.black,
+      letterSpacing: -0.5,
     ),
-    bodyLarge: TextStyle( // 설정 내용
-      fontSize: 14.0,
-      fontWeight: FontWeight.w300,
-      color: Colors.black,
-    ),
-    bodyMedium: TextStyle( // 비활성화 된 설정 내용
-      fontSize: 14.0,
-      fontWeight: FontWeight.w300,
-      color: SchoolBellColor.colorGray,
-    ),
-    labelLarge: TextStyle( // 버튼 텍스트
+
+    /// 버튼
+    labelLarge: TextStyle(
       fontSize: 16.0,
       fontWeight: FontWeight.w500,
       color: Colors.white,
+      letterSpacing: -0.5,
     ),
   );
 

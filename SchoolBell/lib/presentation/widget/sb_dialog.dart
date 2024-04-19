@@ -53,7 +53,7 @@ class SBDialog extends StatefulWidget {
       content: content != null
           ? Text(
               content,
-              style: SchoolBellTheme.mainTextTheme.titleMedium!.copyWith(height: 1.5),
+              style: SchoolBellTheme.mainTextTheme.bodyMedium!.copyWith(height: 1.5),
               textAlign: TextAlign.center,
             )
           : null,
@@ -199,7 +199,7 @@ class _SBDialogState extends State<SBDialog> {
                     if (widget.title != null) ...[
                       Text(
                         widget.title!,
-                        style: SchoolBellTheme.mainTextTheme.displayMedium,
+                        style: SchoolBellTheme.mainTextTheme.titleMedium,
                       ),
                       const SizedBox(height: 16),
                     ],

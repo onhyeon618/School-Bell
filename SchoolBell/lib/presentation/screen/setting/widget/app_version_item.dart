@@ -22,7 +22,7 @@ class AppVersionItem extends StatelessWidget {
           children: [
             Text(
               '어플리케이션 버전',
-              style: Theme.of(context).textTheme.headlineSmall,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const Spacer(),
             Visibility(

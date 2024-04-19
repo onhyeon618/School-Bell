@@ -33,7 +33,7 @@ class TimeLengthPicker extends StatelessWidget {
             fontWeight: FontWeight.w500,
             color: Colors.grey,
           ),
-          selectedTextStyle: SchoolBellTheme.mainTextTheme.displayMedium,
+          selectedTextStyle: SchoolBellTheme.mainTextTheme.titleMedium,
           haptics: true,
           decoration: const BoxDecoration(
             border: Border(
@@ -46,7 +46,7 @@ class TimeLengthPicker extends StatelessWidget {
         const SizedBox(width: 16),
         Text(
           '분',
-          style: SchoolBellTheme.mainTextTheme.titleMedium,
+          style: SchoolBellTheme.mainTextTheme.bodyMedium,
         ),
       ],
     );

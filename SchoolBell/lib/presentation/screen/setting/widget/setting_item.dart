@@ -31,13 +31,18 @@ class SettingItem extends StatelessWidget {
           children: [
             Text(
               title,
-              // TODO: 스타일 제거 또는 정리 & 적용 방식 변경
-              style: isDisabled ? Theme.of(context).textTheme.titleLarge : Theme.of(context).textTheme.headlineSmall,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(color: isDisabled ? SchoolBellColor.colorGray : Colors.black),
             ),
             if (attribute != null)
               Text(
                 attribute!,
-                style: isDisabled ? Theme.of(context).textTheme.bodyMedium : Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(color: isDisabled ? SchoolBellColor.colorGray : Colors.black),
               ),
           ],
         ),

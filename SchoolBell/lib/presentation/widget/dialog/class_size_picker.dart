@@ -38,7 +38,7 @@ class ClassSizePicker extends StatelessWidget {
           ),
           child: Text(
             '$value',
-            style: SchoolBellTheme.mainTextTheme.titleMedium,
+            style: SchoolBellTheme.mainTextTheme.bodyMedium,
           ),
         ),
         GestureDetector(

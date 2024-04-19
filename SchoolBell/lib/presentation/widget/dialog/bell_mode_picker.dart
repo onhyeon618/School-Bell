@@ -59,12 +59,12 @@ class BellModeRadio extends StatelessWidget {
               children: [
                 Text(
                   mode.name,
-                  style: SchoolBellTheme.mainTextTheme.titleMedium,
+                  style: SchoolBellTheme.mainTextTheme.bodyMedium,
                 ),
                 const SizedBox(height: 8),
                 Text(
                   mode.description,
-                  style: const TextStyle(fontSize: 16.0, color: Colors.black),
+                  style: SchoolBellTheme.mainTextTheme.bodySmall,
                 ),
               ],
             ),

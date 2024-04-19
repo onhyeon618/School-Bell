@@ -25,7 +25,7 @@ class ClassScreen extends StatelessWidget {
           Text(
             // TODO: currentState 타입을 ClassState 으로 변경
             '$classStr${ClassState.values[currentState].description}',
-            style: Theme.of(context).textTheme.displayLarge,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
           const SizedBox(height: 46),
           SvgPicture(

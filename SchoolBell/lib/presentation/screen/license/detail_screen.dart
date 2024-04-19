@@ -55,7 +55,7 @@ class LicenseDetail extends StatelessWidget {
               if (description != null) ...[
                 Text(
                   description,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 12),
               ],
@@ -67,7 +67,7 @@ class LicenseDetail extends StatelessWidget {
                     homepage,
                     style: Theme.of(context)
                         .textTheme
-                        .titleSmall!
+                        .bodySmall!
                         .copyWith(color: Colors.blue, decoration: TextDecoration.underline),
                   ),
                 ),

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:school_bell/navigation/app_state_manager.dart';
 import 'package:school_bell/navigation/schoolbell_pages.dart';
 import 'package:school_bell/oss_licenses.dart';
+import 'package:school_bell/presentation/schoolbell_theme.dart';
 
 class LicensesScreen extends StatelessWidget {
   static MaterialPage page() {
@@ -52,10 +53,11 @@ class LicensesScreen extends StatelessWidget {
               final key = snapshot.data![index];
               final licenseJson = ossLicenses[key];
               final version = licenseJson['version'];
-              final desc = licenseJson['description'];
               return ListTile(
-                title: Text('$key ${version ?? ''}'),
-                subtitle: desc != null ? Text(desc) : null,
+                title: Text(
+                  '$key ${version ?? ''}',
+                  style: SchoolBellTheme.mainTextTheme.bodySmall,
+                ),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   Provider.of<AppStateManager>(context, listen: false).openLicenseDetail(key, licenseJson);
