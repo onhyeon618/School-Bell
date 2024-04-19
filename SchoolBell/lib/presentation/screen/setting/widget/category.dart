@@ -11,7 +11,7 @@ class SettingCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+      padding: const EdgeInsets.only(top: 8, bottom: 4, left: 20, right: 20),
       width: double.infinity,
       child: Text(
         title,

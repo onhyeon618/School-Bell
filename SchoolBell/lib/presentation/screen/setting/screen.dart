@@ -6,6 +6,8 @@ import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/domain/setting_manager.dart';
 import 'package:school_bell/enum/dialog_type.dart';
 import 'package:school_bell/navigation/app_state_manager.dart';
+import 'package:school_bell/presentation/schoolbell_colors.dart';
+import 'package:school_bell/presentation/schoolbell_theme.dart';
 import 'package:school_bell/presentation/screen/setting/widget/category.dart';
 import 'package:school_bell/presentation/screen/setting/widget/setting_item.dart';
 import 'package:school_bell/presentation/screen/setting/widget/app_version_item.dart';
@@ -45,7 +47,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const SizedBox(height: 16),
+          Container(
+            height: 64,
+            alignment: Alignment.center,
+            child: Text(
+              '설정',
+              style: SchoolBellTheme.mainTextTheme.titleMedium,
+            ),
+          ),
+          const SizedBox(height: 6),
 
           /// 기본 설정
           const SettingCategory(title: '기본 설정'),
@@ -97,7 +107,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               if (result != null) settingManager.setRestLength(result);
             },
           ),
-          const SizedBox(height: 8),
+          _buildDivider(8),
 
           /// 종소리 설정
           const SettingCategory(title: '종소리 설정'),
@@ -153,7 +163,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               }
             },
           ),
-          const SizedBox(height: 8),
+          _buildDivider(8),
 
           /// 서비스 정보
           const SettingCategory(title: '서비스 정보'),
@@ -187,6 +197,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDivider(double height) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: ColoredBox(
+        color: SchoolBellColor.colorSplash,
+        child: SizedBox(height: height, width: double.infinity),
       ),
     );
   }

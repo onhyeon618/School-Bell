@@ -25,7 +25,7 @@ class SettingItem extends StatelessWidget {
       },
       child: Container(
         color: isDisabled ? SchoolBellColor.colorInvalid : Colors.transparent,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
