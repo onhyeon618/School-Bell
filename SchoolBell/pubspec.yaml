@@ -14,7 +14,7 @@ dependencies:
   audioplayers: 6.0.0
   editable_number_picker:
     path: ../editable_number_picker/
-  file_picker: 8.0.5
+  file_picker: 8.0.4
   flutter_local_notifications: 17.2.1+2
   flutter_svg: 2.0.10+1
   fluttertoast: 8.2.6
