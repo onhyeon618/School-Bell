@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:school_bell/domain/app_update_checker.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/domain/setting_manager.dart';
+import 'package:school_bell/enum/class_state.dart';
 import 'package:school_bell/navigation/app_state_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
@@ -56,6 +57,7 @@ class _SchoolBellState extends State<SchoolBell> {
   void initState() {
     super.initState();
 
+    // TODO: alarm isolate 로직 체크
     if (IsolateNameServer.lookupPortByName(isolateName) != null) {
       IsolateNameServer.removePortNameMapping(isolateName);
     }
@@ -77,15 +79,10 @@ class _SchoolBellState extends State<SchoolBell> {
 
   Future<void> _changeMainImage() async {
     await prefs.reload();
-    final currentState = prefs.getInt('currentState');
+    final currentState = ClassState.fromInt(prefs.getInt('currentState') ?? 0);
+    final currentClass = prefs.getInt('currentClass') ?? 0;
 
-    if (currentState == CurrentState.inClass) {
-      _classManager.classTimeImage();
-    } else if (currentState == CurrentState.restTime) {
-      _classManager.restTimeImage();
-    } else {
-      _classManager.waitingTimeImage();
-    }
+    _classManager.setClassState(state: currentState, period: currentClass);
   }
 
   @override

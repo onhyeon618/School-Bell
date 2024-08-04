@@ -5,87 +5,94 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:school_bell/channel/notification.dart';
 import 'package:school_bell/domain/bell_sound_player.dart';
-import 'package:school_bell/domain/setting_manager.dart';
+import 'package:school_bell/enum/bell_mode.dart';
+import 'package:school_bell/enum/class_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-class CurrentState {
-  static const int waiting = 0;
-  static const int inClass = 1;
-  static const int restTime = 2;
-}
 
 const String isolateName = 'SchoolBellIsolate';
 
 class ClassManager extends ChangeNotifier {
-  late SharedPreferences _prefs;
+  late final SharedPreferences _prefs;
 
-  bool _counting = false;
-  int _currentState = CurrentState.waiting;
-  int _totalClass = -1;
-  int _currentClass = -1;
+  /// 현재 상태
+  ClassState _currentState = ClassState.idle;
 
-  int _firstLengthSeconds = 0;
-  int _classLengthSeconds = 0;
-  int _restLengthSeconds = 0;
+  /// 전체 수업 시수
+  int _totalPeriod = 0;
 
-  bool get isCounting => _counting;
+  /// 현재 교시
+  int _currentPeriod = 0;
 
-  int get currentState => _currentState;
+  ClassState get currentState => _currentState;
 
-  int get totalClass => _totalClass;
+  int get currentPeriod => _currentPeriod;
 
-  int get currentClass => _currentClass;
-
-  Future<void> initialize() async {
-    _prefs = await SharedPreferences.getInstance();
-    await _prefs.reload();
-
-    _counting = _prefs.getBool('counting') ?? false;
-    _currentState = _prefs.getInt('currentState') ?? CurrentState.waiting;
-    _totalClass = _prefs.getInt('totalClass') ?? -1;
-    _currentClass = _prefs.getInt('currentClass') ?? -1;
-  }
-
-  Future<void> calculateTimeLength() async {
-    await _prefs.reload();
-
-    int bellMode = _prefs.getInt('bellMode') ?? BellMode.onTime;
-
-    if (bellMode != BellMode.onTime) {
-      _classLengthSeconds = (_prefs.getInt('classLength') ?? 50) * 60;
-      _restLengthSeconds = (_prefs.getInt('restLength') ?? 10) * 60;
-      _firstLengthSeconds = _classLengthSeconds;
-    } else {
-      _classLengthSeconds = 3000;
-      _restLengthSeconds = 600;
-
-      DateTime current = DateTime.now();
-      if (current.minute < 50) {
-        _firstLengthSeconds = (50 - current.minute) * 60 - current.second;
-      } else {
-        _firstLengthSeconds = (110 - current.minute) * 60 - current.second;
-      }
+  int get remainingPeriod {
+    switch (_currentState) {
+      case ClassState.idle:
+        return 0;
+      case ClassState.inClass:
+        return _totalPeriod - _currentPeriod + 1;
+      case ClassState.restTime:
+        return _totalPeriod - _currentPeriod;
     }
   }
 
+  Future<void> initialize() async {
+    // TODO: 초기/최신값 fetch ... SharedPreference 이렇게 쓰는 게 맞는지 확인을 요함
+    _prefs = await SharedPreferences.getInstance();
+    await _prefs.reload();
+
+    _currentState = ClassState.fromInt(_prefs.getInt('currentState') ?? 0);
+    _totalPeriod = _prefs.getInt('totalClass') ?? -1;
+    _currentPeriod = _prefs.getInt('currentClass') ?? -1;
+  }
+
+  Future<void> setClassState({
+    required ClassState state,
+    required int period,
+    int? total,
+  }) async {
+    await _prefs.setInt('currentState', state.index);
+    await _prefs.setInt('currentPeriod', period);
+    if (total != null) await _prefs.setInt('totalPeriod', total);
+
+    _currentState = state;
+    _currentPeriod = period;
+    if (total != null) _totalPeriod = total;
+
+    notifyListeners();
+  }
+
   Future<void> startClass(int totalClass) async {
-    await _prefs.setBool('counting', true);
-    await _prefs.setInt('currentState', CurrentState.inClass);
-    await _prefs.setInt('totalClass', totalClass);
-    await _prefs.setInt('currentClass', 1);
+    await setClassState(state: ClassState.inClass, period: 1, total: totalClass);
 
-    _counting = true;
-    _currentState = CurrentState.inClass;
-    _totalClass = totalClass;
-    _currentClass = 1;
+    await _prefs.reload();
+    final bellMode = BellMode.fromInt(_prefs.getInt('bellMode') ?? 0);
 
-    await calculateTimeLength();
+    final classLength = _prefs.getInt('classLength') ?? 50 * 60;
+    final restLength = _prefs.getInt('restLength') ?? 10 * 60;
 
-    int alarmId;
-    int timeSum = _firstLengthSeconds;
+    final int firstClassLength;
+    if (bellMode == BellMode.onTime) {
+      final now = DateTime.now();
 
-    for (alarmId = 0; alarmId < (totalClass - 1) * 2; alarmId++) {
+      // onTime 모드인 경우 classLength, restLength는 각각 종이 울릴 분각을 의미함
+      if (now.minute < classLength) {
+        firstClassLength = classLength - now.minute * 60 - now.second;
+      } else {
+        firstClassLength = (60 - now.minute) * 60 + classLength - now.second;
+      }
+    } else {
+      firstClassLength = classLength;
+    }
+
+    int timeSum = firstClassLength;
+
+    // TODO: 알람 설정 로직 개편
+    for (int alarmId = 0; alarmId < (totalClass - 1) * 2; alarmId++) {
       if (alarmId % 2 == 0) {
+        // 수업 종료
         AndroidAlarmManager.oneShot(
           Duration(seconds: timeSum),
           alarmId,
@@ -94,8 +101,9 @@ class ClassManager extends ChangeNotifier {
           exact: true,
           wakeup: true,
         );
-        timeSum += _restLengthSeconds;
+        timeSum += restLength;
       } else {
+        // 쉬는시간 종료
         AndroidAlarmManager.oneShot(
           Duration(seconds: timeSum),
           alarmId,
@@ -104,7 +112,7 @@ class ClassManager extends ChangeNotifier {
           exact: true,
           wakeup: true,
         );
-        timeSum += _classLengthSeconds;
+        timeSum += classLength;
       }
     }
     AndroidAlarmManager.oneShot(
@@ -127,47 +135,19 @@ class ClassManager extends ChangeNotifier {
   }
 
   Future<void> stopClass() async {
-    for (int i = 0; i < _totalClass * 2 - 1; i++) {
+    // TODO: 알림 제거 로직 개편
+    for (int i = 0; i < _totalPeriod * 2 - 1; i++) {
       AndroidAlarmManager.cancel(i);
     }
 
-    await _prefs.setBool('counting', false);
-    await _prefs.setInt('currentState', CurrentState.waiting);
-    await _prefs.setInt('totalClass', -1);
-    await _prefs.setInt('currentClass', -1);
-
-    _counting = false;
-    _currentState = CurrentState.waiting;
-    _totalClass = -1;
-    _currentClass = -1;
+    await setClassState(state: ClassState.idle, period: -1, total: -1);
 
     await NotificationChannel.flutterLocalNotificationsPlugin.cancelAll();
-
-    notifyListeners();
-  }
-
-  // 아래 함수들은 class_screen의 화면을 바꾸기 위한 용도로만 구현되었음
-  void restTimeImage() {
-    _currentState = CurrentState.restTime;
-    notifyListeners();
-  }
-
-  void classTimeImage() {
-    _currentClass++;
-    _currentState = CurrentState.inClass;
-    notifyListeners();
-  }
-
-  void waitingTimeImage() {
-    _counting = false;
-    _currentState = CurrentState.waiting;
-    _totalClass = -1;
-    _currentClass = -1;
-    notifyListeners();
   }
 
   static SendPort? uiSendPort;
 
+  // TODO: static callback 위치 이동 및 로직 정리
   static Future<void> callbackClassEnd() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.reload();
@@ -175,7 +155,7 @@ class ClassManager extends ChangeNotifier {
     final currentClass = prefs.getInt('currentClass')!;
     final totalClass = prefs.getInt('totalClass');
 
-    await prefs.setInt('currentState', CurrentState.restTime);
+    await prefs.setInt('currentState', ClassState.restTime.index);
     await prefs.setInt('currentClass', currentClass + 1);
 
     BellSoundPlayer.playRestBell();
@@ -198,7 +178,7 @@ class ClassManager extends ChangeNotifier {
     final currentClass = prefs.getInt('currentClass');
     final totalClass = prefs.getInt('totalClass');
 
-    await prefs.setInt('currentState', CurrentState.inClass);
+    await prefs.setInt('currentState', ClassState.inClass.index);
 
     BellSoundPlayer.playClassBell();
 
@@ -219,7 +199,7 @@ class ClassManager extends ChangeNotifier {
   static Future<void> callbackLastClassEnd() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('counting', false);
-    await prefs.setInt('currentState', CurrentState.waiting);
+    await prefs.setInt('currentState', ClassState.idle.index);
     await prefs.setInt('totalClass', -1);
     await prefs.setInt('currentClass', -1);
 

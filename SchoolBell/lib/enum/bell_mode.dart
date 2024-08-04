@@ -9,4 +9,12 @@ enum BellMode {
 
   final String name;
   final String description;
+
+  factory BellMode.fromInt(int state) {
+    if (state == 0) {
+      return BellMode.onTime;
+    } else {
+      return BellMode.byCustom;
+    }
+  }
 }

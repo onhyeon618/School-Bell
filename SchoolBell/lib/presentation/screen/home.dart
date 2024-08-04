@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:school_bell/domain/class_manager.dart';
+import 'package:school_bell/enum/class_state.dart';
 import 'package:school_bell/enum/dialog_type.dart';
 import 'package:school_bell/navigation/schoolbell_pages.dart';
 import 'package:school_bell/presentation/schoolbell_colors.dart';
@@ -23,25 +24,15 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // TODO: state 다루는 방식 변경?
-  late ClassManager classManager;
-
-  bool _isCounting = false;
-
   int _selectedTab = 0;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    classManager = Provider.of<ClassManager>(context, listen: false);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    _isCounting = context.select<ClassManager, bool>((ClassManager cm) => cm.isCounting);
+    final classManager = context.watch<ClassManager>();
+    final isCounting = classManager.currentState != ClassState.idle;
 
     return PopScope(
-      canPop: !_isCounting,
+      canPop: !isCounting,
       onPopInvoked: (didPop) {
         if (didPop) return;
 
@@ -105,7 +96,10 @@ class _HomeState extends State<Home> {
         ),
         body: SafeArea(
           child: [
-            const ClassScreen(),
+            ClassScreen(
+              currentState: classManager.currentState,
+              currentPeriod: classManager.currentPeriod,
+            ),
             const SettingsScreen(),
           ][_selectedTab],
         ),
@@ -115,14 +109,14 @@ class _HomeState extends State<Home> {
           child: FittedBox(
             child: FloatingActionButton(
               onPressed: () {
-                if (!_isCounting) {
+                if (!isCounting) {
                   startClass(context);
                 } else {
                   stopClass(context);
                 }
               },
               shape: const CircleBorder(),
-              child: Icon(_isCounting ? Icons.notifications_off_outlined : Icons.notifications),
+              child: Icon(isCounting ? Icons.notifications_off_outlined : Icons.notifications),
             ),
           ),
         ),
@@ -139,21 +133,19 @@ class _HomeState extends State<Home> {
       type: DialogType.setClassSize,
       initialValue: 1,
     );
-
-    if (result != null) classManager.startClass(result);
+    if (!context.mounted || result == null) return;
+    context.read<ClassManager>().startClass(result);
   }
 
   void stopClass(BuildContext context) async {
     SBDialog.showText(
       context: context,
       title: '오늘 수업을 종료할까요?',
-      content: classManager.currentState == CurrentState.inClass
-          ? '아직 ${classManager.totalClass - classManager.currentClass + 1}교시 남아있어요!'
-          : '아직 ${classManager.totalClass - classManager.currentClass}교시 남아있어요!',
+      content: '아직 ${context.read<ClassManager>().remainingPeriod}교시 남아있어요!',
       positive: '계속하기',
       negative: '수업 종료',
       onNegative: (dialogContext) {
-        classManager.stopClass();
+        context.read<ClassManager>().stopClass();
         Navigator.of(dialogContext).pop();
       },
     );

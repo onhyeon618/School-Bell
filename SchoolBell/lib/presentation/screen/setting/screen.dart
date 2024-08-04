@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:school_bell/domain/app_update_checker.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/domain/setting_manager.dart';
+import 'package:school_bell/enum/class_state.dart';
 import 'package:school_bell/enum/dialog_type.dart';
 import 'package:school_bell/navigation/app_state_manager.dart';
 import 'package:school_bell/presentation/schoolbell_colors.dart';
@@ -34,7 +35,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: 상태 관리 방식 변경
-    final bool isCounting = context.select<ClassManager, bool>((ClassManager cm) => cm.isCounting);
+    final classState = context.select<ClassManager, ClassState>((ClassManager cm) => cm.currentState);
     final String bellModeValue = context.select<SettingManager, String>((SettingManager sm) => sm.bellModeName);
     final bool isOnTime = context.select<SettingManager, bool>((SettingManager sm) => sm.isOnTime);
     final String classLengthValue = context.select<SettingManager, String>((SettingManager sm) => sm.classLengthString);
@@ -43,6 +44,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         context.select<SettingManager, String>((SettingManager sm) => sm.customClassBell ?? sm.classBellString);
     final String restBellValue =
         context.select<SettingManager, String>((SettingManager sm) => sm.customRestBell ?? sm.restBellString);
+
+    final bool isCounting = classState != ClassState.idle;
 
     return SingleChildScrollView(
       child: Column(

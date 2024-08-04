@@ -10,4 +10,14 @@ enum ClassState {
 
   final String description;
   final String imagePath;
+
+  factory ClassState.fromInt(int state) {
+    if (state == 0) {
+      return ClassState.idle;
+    } else if (state == 1) {
+      return ClassState.inClass;
+    } else {
+      return ClassState.restTime;
+    }
+  }
 }
