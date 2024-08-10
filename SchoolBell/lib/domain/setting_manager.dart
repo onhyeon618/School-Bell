@@ -1,113 +1,117 @@
 import 'package:flutter/material.dart';
+import 'package:school_bell/enum/bell_mode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class BellMode {
-  static const int onTime = 0;
-  static const int byCustom = 1;
-}
-
 class SettingManager extends ChangeNotifier {
-  late SharedPreferences prefs;
+  late final SharedPreferences _prefs;
 
-  int _bellMode = BellMode.onTime;
+  /// 종소리 모드
+  BellMode _bellMode = BellMode.onTime;
+
+  /// 한 교시 길이
   int _classLength = 50;
+
+  /// 쉬는 시간 길이
   int _restLength = 10;
+
+  /// 수업 시작 종
   int _classBell = 1;
-  int _restBell = 1;
+
+  /// 수업 시작 종(커스텀): null이 아니면 커스텀 설정된 것으로 간주
   String? _customClassBell;
+
+  /// 수업 종료 종
+  int _restBell = 1;
+
+  /// 수업 종료 종(커스텀): null이 아니면 커스텀 설정된 것으로 간주
   String? _customRestBell;
 
-  final List<String> _bellModeName = <String>['정각 모드', '커스텀 모드'];
+  BellMode get bellMode => _bellMode;
 
-  int get bellMode => _bellMode;
   int get classLength => _classLength;
+
   int get restLength => _restLength;
+
   int get classBell => _classBell;
+
   int get restBell => _restBell;
 
-  String get bellModeName => _bellModeName[_bellMode];
-  String get classLengthString => '$_classLength분';
-  String get restLengthString => '$_restLength분';
-  String get classBellString => '#${_classBell + 1}';
-  String get restBellString => '#${_restBell + 1}';
-  String? get customClassBell => _customClassBell;
-  String? get customRestBell => _customRestBell;
+  String get classBellName => _customClassBell ?? '#${_classBell + 1}';
+
+  String get restBellName => _customRestBell ?? '#${_restBell + 1}';
 
   bool get isOnTime => _bellMode == BellMode.onTime ? true : false;
 
   Future<void> initialize() async {
-    prefs = await SharedPreferences.getInstance();
-    _bellMode = prefs.getInt('bellMode') ?? BellMode.onTime;
-    _classLength = prefs.getInt('classLength') ?? 50;
-    _restLength = prefs.getInt('restLength') ?? 10;
-    _classBell = prefs.getInt('classBell') ?? 1;
-    _restBell = prefs.getInt('restBell') ?? 1;
-    _customClassBell = prefs.getString('customClassBellName');
-    _customRestBell = prefs.getString('customRestBellName');
+    _prefs = await SharedPreferences.getInstance();
+    await _prefs.reload();
+
+    _bellMode = BellMode.fromInt(_prefs.getInt('bellMode') ?? 0);
+    _classLength = _prefs.getInt('classLength') ?? 50;
+    _restLength = _prefs.getInt('restLength') ?? 10;
+    _classBell = _prefs.getInt('classBell') ?? 0;
+    _restBell = _prefs.getInt('restBell') ?? 0;
+    _customClassBell = _prefs.getString('customClassBellName');
+    _customRestBell = _prefs.getString('customRestBellName');
   }
 
   Future<void> setBellMode(int bellMode) async {
-    prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('bellMode', bellMode);
-    _bellMode = bellMode;
+    await _prefs.setInt('bellMode', bellMode);
+    _bellMode = BellMode.fromInt(bellMode);
     notifyListeners();
   }
 
   Future<void> setClassLength(int classLength) async {
-    prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('classLength', classLength);
+    await _prefs.setInt('classLength', classLength);
     _classLength = classLength;
     notifyListeners();
   }
 
   Future<void> setRestLength(int restLength) async {
-    prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('restLength', restLength);
+    await _prefs.setInt('restLength', restLength);
     _restLength = restLength;
     notifyListeners();
   }
 
-  Future<void> setClassBell(int classBell) async {
-    prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('classBell', classBell);
-    _classBell = classBell;
-    notifyListeners();
-  }
+  Future<void> setClassBell(Object classBell) async {
+    if (classBell is int) {
+      await _prefs.setInt('classBell', classBell);
+      _classBell = classBell;
 
-  Future<void> setRestBell(int restBell) async {
-    prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('restBell', restBell);
-    _restBell = restBell;
-    notifyListeners();
-  }
-
-  Future<void> setCustomClassBell(String? customClassBell) async {
-    prefs = await SharedPreferences.getInstance();
-    if (customClassBell != null) {
-      String fileName = customClassBell.split('/').last;
-      await prefs.setString('customClassBellPath', customClassBell);
-      await prefs.setString('customClassBellName', fileName);
-      _customClassBell = fileName;
-    } else {
-      await prefs.remove('customClassBellPath');
-      await prefs.remove('customClassBellName');
+      await _prefs.remove('customClassBellPath');
+      await _prefs.remove('customClassBellName');
       _customClassBell = null;
+    } else {
+      await _prefs.setInt('classBell', 8);
+      _classBell = 8;
+
+      String fileName = classBell.toString().split('/').last;
+      await _prefs.setString('customClassBellPath', classBell.toString());
+      await _prefs.setString('customClassBellName', fileName);
+      _customClassBell = fileName;
     }
+
     notifyListeners();
   }
 
-  Future<void> setCustomRestBell(String? customRestBell) async {
-    prefs = await SharedPreferences.getInstance();
-    if (customRestBell != null) {
-      String fileName = customRestBell.split('/').last;
-      await prefs.setString('customRestBellPath', customRestBell);
-      await prefs.setString('customRestBellName', fileName);
-      _customRestBell = fileName;
-    } else {
-      await prefs.remove('customRestBellPath');
-      await prefs.remove('customRestBellName');
+  Future<void> setRestBell(Object restBell) async {
+    if (restBell is int) {
+      await _prefs.setInt('restBell', restBell);
+      _restBell = restBell;
+
+      await _prefs.remove('customRestBellPath');
+      await _prefs.remove('customRestBellName');
       _customRestBell = null;
+    } else {
+      await _prefs.setInt('restBell', 8);
+      _classBell = 8;
+
+      String fileName = restBell.toString().split('/').last;
+      await _prefs.setString('customRestBellPath', restBell.toString());
+      await _prefs.setString('customRestBellName', fileName);
+      _customClassBell = fileName;
     }
+
     notifyListeners();
   }
 }

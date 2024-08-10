@@ -307,7 +307,7 @@ class _SBDialogState extends State<SBDialog> {
   }
 
   Widget _buildBellSoundPicker() {
-    final int initial = _selectedValue is int ? _selectedValue as int : 8;
+    final int initial = _selectedValue as int;
     return BellSoundPicker(
       initialValue: initial,
       onSelected: (value) {

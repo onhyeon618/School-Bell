@@ -19,7 +19,7 @@ class BellSoundPlayer {
   ];
 
   void playSampleSound(int index) async {
-    await _audioPlayer.play(AssetSource(_assetAudios[index - 1]));
+    await _audioPlayer.play(AssetSource(_assetAudios[index]));
   }
 
   void stopSampleSound() async {
