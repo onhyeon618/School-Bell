@@ -14,6 +14,7 @@ import 'package:school_bell/presentation/screen/setting/widget/category.dart';
 import 'package:school_bell/presentation/screen/setting/widget/setting_item.dart';
 import 'package:school_bell/presentation/screen/setting/widget/app_version_item.dart';
 import 'package:school_bell/presentation/widget/sb_dialog.dart';
+import 'package:store_redirect/store_redirect.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -168,8 +169,7 @@ class SettingsScreen extends StatelessWidget {
                       positive: '스토어 가기',
                       negative: '나중에',
                       onPositive: (dialogContext) {
-                        // TODO
-                        // appUpdateChecker.redirectToStore();
+                        StoreRedirect.redirect();
                       },
                     );
                   } else {

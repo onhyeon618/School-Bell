@@ -46,6 +46,8 @@ class SchoolBell extends StatefulWidget {
 }
 
 class _SchoolBellState extends State<SchoolBell> {
+  late final AppLifecycleListener _listener;
+
   final _appStateManager = AppStateManager();
   final _classManager = ClassManager();
   final _settingManager = SettingManager();
@@ -56,6 +58,10 @@ class _SchoolBellState extends State<SchoolBell> {
   @override
   void initState() {
     super.initState();
+
+    _listener = AppLifecycleListener(
+      onResume: _onResume,
+    );
 
     // TODO: alarm isolate 로직 체크
     if (IsolateNameServer.lookupPortByName(isolateName) != null) {
@@ -77,12 +83,22 @@ class _SchoolBellState extends State<SchoolBell> {
     port.listen((_) async => await _changeMainImage());
   }
 
+  void _onResume() {
+    _appUpdateChecker.checkForUpdate();
+  }
+
   Future<void> _changeMainImage() async {
     await prefs.reload();
     final currentState = ClassState.fromInt(prefs.getInt('currentState') ?? 0);
     final currentClass = prefs.getInt('currentClass') ?? 0;
 
     _classManager.setClassState(state: currentState, period: currentClass);
+  }
+
+  @override
+  void dispose() {
+    _listener.dispose();
+    super.dispose();
   }
 
   @override

@@ -13,9 +13,4 @@ class AppUpdateChecker extends ChangeNotifier {
     _isUpdateAvailable = info.updateAvailability == UpdateAvailability.updateAvailable;
     notifyListeners();
   }
-
-  // TODO: 버전 이슈로 디펜던시 제거 - 대체 방안 구현 필요
-  // void redirectToStore() {
-  //   StoreRedirect.redirect();
-  // }
 }

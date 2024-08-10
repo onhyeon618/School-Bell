@@ -37,7 +37,6 @@ class AppVersionItem extends StatelessWidget {
                 ),
               ),
             ),
-            // TODO(onh): FutureBuilder 말고 다른 방식 없나?
             FutureBuilder(
               future: PackageInfo.fromPlatform(),
               builder: (context, AsyncSnapshot<PackageInfo> snapshot) {
