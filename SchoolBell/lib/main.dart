@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:school_bell/domain/app_update_checker.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/domain/setting_manager.dart';
-import 'package:school_bell/enum/class_state.dart';
 import 'package:school_bell/navigation/app_state_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
@@ -80,19 +79,12 @@ class _SchoolBellState extends State<SchoolBell> {
       appStateManager: _appStateManager,
     );
 
-    port.listen((_) async => await _changeMainImage());
+    port.listen((_) async => await _classManager.fetch());
   }
 
   void _onResume() {
     _appUpdateChecker.checkForUpdate();
-  }
-
-  Future<void> _changeMainImage() async {
-    await prefs.reload();
-    final currentState = ClassState.fromInt(prefs.getInt('currentState') ?? 0);
-    final currentClass = prefs.getInt('currentClass') ?? 0;
-
-    _classManager.setClassState(state: currentState, period: currentClass);
+    _classManager.fetch();
   }
 
   @override

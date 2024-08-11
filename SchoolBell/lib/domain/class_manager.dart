@@ -39,8 +39,11 @@ class ClassManager extends ChangeNotifier {
   }
 
   Future<void> initialize() async {
-    // TODO: 초기/최신값 fetch ... SharedPreference 이렇게 쓰는 게 맞는지 확인을 요함
     _prefs = await SharedPreferences.getInstance();
+    fetch();
+  }
+
+  Future<void> fetch() async {
     await _prefs.reload();
 
     _currentState = ClassState.fromInt(_prefs.getInt('currentState') ?? 0);
@@ -67,9 +70,7 @@ class ClassManager extends ChangeNotifier {
   Future<void> startClass(int totalClass) async {
     await setClassState(state: ClassState.inClass, period: 1, total: totalClass);
 
-    await _prefs.reload();
     final bellMode = BellMode.fromInt(_prefs.getInt('bellMode') ?? 0);
-
     final classLength = _prefs.getInt('classLength') ?? 50 * 60;
     final restLength = _prefs.getInt('restLength') ?? 10 * 60;
 
