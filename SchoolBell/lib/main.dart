@@ -1,36 +1,26 @@
-import 'dart:isolate';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:school_bell/alarm_service.dart';
 import 'package:school_bell/domain/app_update_checker.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/domain/setting_manager.dart';
+import 'package:school_bell/navigation/app_router.dart';
 import 'package:school_bell/navigation/app_state_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-import 'navigation/app_router.dart';
-import 'presentation/schoolbell_theme.dart';
-
-late SharedPreferences prefs;
-
-const String isolateName = 'SchoolBellIsolate';
-final ReceivePort port = ReceivePort();
+import 'package:school_bell/presentation/schoolbell_theme.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  AlarmService.instance.initializeIsolate();
   AndroidAlarmManager.initialize();
+
   await flutterLocalNotificationsPlugin.initialize(
     const InitializationSettings(android: AndroidInitializationSettings('sb_notice_icon')),
   );
-
-  prefs = await SharedPreferences.getInstance();
 
   runApp(const SchoolBell());
 }
@@ -58,15 +48,6 @@ class _SchoolBellState extends State<SchoolBell> {
 
     _listener = AppLifecycleListener(
       onResume: _onResume,
-    );
-
-    // TODO: alarm isolate 로직 체크
-    if (IsolateNameServer.lookupPortByName(isolateName) != null) {
-      IsolateNameServer.removePortNameMapping(isolateName);
-    }
-    IsolateNameServer.registerPortWithName(
-      port.sendPort,
-      isolateName,
     );
 
     _settingManager.initialize();
