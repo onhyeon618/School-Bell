@@ -25,8 +25,6 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterL
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-
   AndroidAlarmManager.initialize();
   await flutterLocalNotificationsPlugin.initialize(
     const InitializationSettings(android: AndroidInitializationSettings('sb_notice_icon')),
