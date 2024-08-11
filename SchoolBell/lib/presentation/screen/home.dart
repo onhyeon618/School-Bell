@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/enum/class_state.dart';
@@ -126,7 +127,18 @@ class _HomeState extends State<Home> {
   }
 
   void startClass(BuildContext context) async {
-    // TODO: SCHEDULE_EXACT_ALARM 권한 요청
+    final permission = await checkPermission(context);
+    if (!context.mounted) return;
+
+    if (!permission) {
+      // TODO: 일반 confirm 타입 다이얼로그 필요
+      await SBDialog.showText(
+        context: context,
+        content: '권한이 없어 수업을 설정할 수 없습니다.',
+      );
+      return;
+    }
+
     final int? result = await SBDialog.showTyped(
       title: '오늘 수업은 몇 교시?',
       context: context,
@@ -149,5 +161,23 @@ class _HomeState extends State<Home> {
         Navigator.of(dialogContext).pop();
       },
     );
+  }
+
+  Future<bool> checkPermission(BuildContext context) async {
+    final status = await Permission.scheduleExactAlarm.status;
+    if (!context.mounted) return false;
+
+    if (status.isGranted) return true;
+
+    final result = await SBDialog.showText(
+      context: context,
+      content: "수업종을 설정하려면 '알람 및 리마인더' 권한이 필요합니다.",
+      positive: '허용하기',
+      onPositive: (dialogContext) async {
+        final result = await Permission.scheduleExactAlarm.request();
+        if (dialogContext.mounted) Navigator.of(dialogContext).pop(result.isGranted);
+      },
+    );
+    return result ?? false;
   }
 }
