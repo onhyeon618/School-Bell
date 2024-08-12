@@ -45,8 +45,10 @@ class ClassManager extends ChangeNotifier {
     await _prefs.reload();
 
     _currentState = ClassState.fromInt(_prefs.getInt('currentState') ?? 0);
-    _totalPeriod = _prefs.getInt('totalClass') ?? -1;
-    _currentPeriod = _prefs.getInt('currentClass') ?? -1;
+    _totalPeriod = _prefs.getInt('totalPeriod') ?? -1;
+    _currentPeriod = _prefs.getInt('currentPeriod') ?? -1;
+
+    notifyListeners();
   }
 
   Future<void> setClassState({
@@ -69,8 +71,8 @@ class ClassManager extends ChangeNotifier {
     await setClassState(state: ClassState.inClass, period: 1, total: totalPeriod);
 
     final bellMode = BellMode.fromInt(_prefs.getInt('bellMode') ?? 0);
-    final classLength = _prefs.getInt('classLength') ?? 50 * 60;
-    final restLength = _prefs.getInt('restLength') ?? 10 * 60;
+    final classLength = (_prefs.getInt('classLength') ?? 50) * 60;
+    final restLength = (_prefs.getInt('restLength') ?? 10) * 60;
 
     final int firstClassLength;
     if (bellMode == BellMode.onTime) {

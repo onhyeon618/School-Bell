@@ -29,11 +29,11 @@ class BellSoundPlayer {
   static Future<void> playClassBell() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.reload();
-    int assetClassBell = prefs.getInt('classBell') ?? 1;
+    int assetClassBell = prefs.getInt('classBell') ?? 0;
     String? customClassBell = prefs.getString('customClassBellPath');
 
     if (customClassBell == null) {
-      await _audioPlayer.play(AssetSource(_assetAudios[assetClassBell - 1]));
+      await _audioPlayer.play(AssetSource(_assetAudios[assetClassBell]));
     } else {
       // TODO: 재생 오류 핸들링
       await _audioPlayer.play(DeviceFileSource(customClassBell));
@@ -52,11 +52,11 @@ class BellSoundPlayer {
   static Future<void> playRestBell() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.reload();
-    int assetRestBell = prefs.getInt('restBell') ?? 1;
+    int assetRestBell = prefs.getInt('restBell') ?? 0;
     String? customRestBell = prefs.getString('customRestBellPath');
 
     if (customRestBell == null) {
-      await _audioPlayer.play(AssetSource(_assetAudios[assetRestBell - 1]));
+      await _audioPlayer.play(AssetSource(_assetAudios[assetRestBell]));
     } else {
       await _audioPlayer.play(DeviceFileSource(customRestBell));
       // int result = await _audioPlayer.play(customRestBell, isLocal: true);
