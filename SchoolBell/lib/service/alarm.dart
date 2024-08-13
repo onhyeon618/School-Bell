@@ -1,9 +1,9 @@
 import 'dart:isolate';
 import 'dart:ui';
-import 'package:school_bell/channel/notification.dart';
 import 'package:school_bell/domain/bell_sound_player.dart';
 import 'package:school_bell/enum/alarm_type.dart';
 import 'package:school_bell/enum/class_state.dart';
+import 'package:school_bell/service/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String isolateName = 'SchoolBellIsolate';

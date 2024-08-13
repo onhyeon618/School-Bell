@@ -1,10 +1,10 @@
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:school_bell/alarm_service.dart';
-import 'package:school_bell/channel/notification.dart';
 import 'package:school_bell/enum/alarm_type.dart';
 import 'package:school_bell/enum/bell_mode.dart';
 import 'package:school_bell/enum/class_state.dart';
+import 'package:school_bell/service/alarm.dart';
+import 'package:school_bell/service/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String isolateName = 'SchoolBellIsolate';

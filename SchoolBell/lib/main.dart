@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:school_bell/alarm_service.dart';
-import 'package:school_bell/channel/notification.dart';
 import 'package:school_bell/domain/app_update_checker.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/domain/setting_manager.dart';
@@ -9,6 +7,8 @@ import 'package:school_bell/navigation/app_router.dart';
 import 'package:school_bell/navigation/app_state_manager.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:school_bell/presentation/schoolbell_theme.dart';
+import 'package:school_bell/service/alarm.dart';
+import 'package:school_bell/service/notification.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
