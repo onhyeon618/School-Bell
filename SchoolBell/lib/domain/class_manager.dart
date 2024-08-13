@@ -117,11 +117,8 @@ class ClassManager extends ChangeNotifier {
       params: {'alarmType': AlarmType.lastClassEnd.index},
     );
 
-    await NotificationChannel.flutterLocalNotificationsPlugin.show(
-      NotificationChannel.notificationId,
-      null,
+    await NotificationService.instance.showNotification(
       '1교시 수업 중~! 오늘도 힘내봐요!',
-      NotificationChannel.platformChannelSpecifics,
     );
 
     notifyListeners();
@@ -134,6 +131,6 @@ class ClassManager extends ChangeNotifier {
 
     await setClassState(state: ClassState.idle, period: -1, total: -1);
 
-    await NotificationChannel.flutterLocalNotificationsPlugin.cancelAll();
+    await NotificationService.instance.cancelNotifications();
   }
 }

@@ -25,7 +25,9 @@ class AlarmService {
   }
 
   @pragma('vm:entry-point')
-  static Future<void> callback(int id, Map<String,dynamic> params) async {
+  static Future<void> callback(int id, Map<String, dynamic> params) async {
+    await NotificationService.instance.initialize();
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.reload();
 
@@ -43,12 +45,8 @@ class AlarmService {
 
         BellSoundPlayer.playRestBell();
 
-        // TODO: Notification 동작 테스트
-        await NotificationChannel.flutterLocalNotificationsPlugin.show(
-          NotificationChannel.notificationId,
-          null,
+        await NotificationService.instance.showNotification(
           '$currentPeriod교시 쉬는 시간! 이제 ${totalPeriod - currentPeriod}교시 남았어요.',
-          NotificationChannel.platformChannelSpecifics,
         );
       case AlarmType.restEnd:
         await prefs.setInt('currentState', ClassState.inClass.index);
@@ -56,15 +54,10 @@ class AlarmService {
 
         BellSoundPlayer.playClassBell();
 
-        String noticeMessage = totalPeriod == currentPeriod + 1
-            ? '${currentPeriod + 1}교시 수업 중~ 오늘의 마지막 수업이에요. 화이팅!'
-            : '지금은 ${currentPeriod + 1}교시 수업 중!';
-
-        await NotificationChannel.flutterLocalNotificationsPlugin.show(
-          NotificationChannel.notificationId,
-          null,
-          noticeMessage,
-          NotificationChannel.platformChannelSpecifics,
+        await NotificationService.instance.showNotification(
+          totalPeriod == currentPeriod + 1
+              ? '${currentPeriod + 1}교시 수업 중~ 오늘의 마지막 수업이에요. 화이팅!'
+              : '지금은 ${currentPeriod + 1}교시 수업 중!',
         );
       case AlarmType.lastClassEnd:
         await prefs.setInt('currentState', ClassState.idle.index);
@@ -73,7 +66,7 @@ class AlarmService {
 
         BellSoundPlayer.playRestBell();
 
-        await NotificationChannel.flutterLocalNotificationsPlugin.cancelAll();
+        await NotificationService.instance.cancelNotifications();
     }
 
     uiSendPort ??= IsolateNameServer.lookupPortByName(isolateName);

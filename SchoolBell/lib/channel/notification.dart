@@ -1,36 +1,47 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class NotificationChannel {
-  static const _notificationId = 2003;
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  static final FlutterLocalNotificationsPlugin
-      _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+class NotificationService {
+  static final NotificationService instance = NotificationService._internal();
 
-  static const AndroidNotificationDetails _androidPlatformChannelSpecifics =
-      AndroidNotificationDetails(
-    'school-bell-channel',
-    'school-bell-channel',
-    channelDescription: 'notification channel for school bell app',
-    importance: Importance.low,
-    priority: Priority.low,
-    playSound: false,
-    enableVibration: false,
-    ongoing: true,
-    autoCancel: false,
-    showWhen: false,
+  NotificationService._internal();
+
+  Future<void> initialize() async {
+    await flutterLocalNotificationsPlugin.initialize(
+      const InitializationSettings(
+        android: AndroidInitializationSettings('sb_notice_icon'),
+      ),
+    );
+  }
+
+  final _notificationId = 2003;
+
+  final NotificationDetails _notificationDetails = const NotificationDetails(
+    android: AndroidNotificationDetails(
+      'school-bell-channel',
+      '상태 알림',
+      channelDescription: '학교종 앱이 실행 중일 때, 수업 상태를 표시하는 알림입니다.',
+      importance: Importance.low,
+      priority: Priority.low,
+      playSound: false,
+      enableVibration: false,
+      ongoing: true,
+      autoCancel: false,
+      showWhen: false,
+    ),
   );
 
-  static const NotificationDetails _platformChannelSpecifics =
-      NotificationDetails(android: _androidPlatformChannelSpecifics);
+  Future<void> showNotification(String content) {
+    return flutterLocalNotificationsPlugin.show(
+      _notificationId,
+      null,
+      content,
+      _notificationDetails,
+    );
+  }
 
-  static int get notificationId => _notificationId;
-
-  static FlutterLocalNotificationsPlugin get flutterLocalNotificationsPlugin =>
-      _flutterLocalNotificationsPlugin;
-
-  static AndroidNotificationDetails get androidPlatformChannelSpecifics =>
-      _androidPlatformChannelSpecifics;
-
-  static NotificationDetails get platformChannelSpecifics =>
-      _platformChannelSpecifics;
+  Future<void> cancelNotifications() {
+    return flutterLocalNotificationsPlugin.cancelAll();
+  }
 }

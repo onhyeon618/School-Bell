@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:school_bell/alarm_service.dart';
+import 'package:school_bell/channel/notification.dart';
 import 'package:school_bell/domain/app_update_checker.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/domain/setting_manager.dart';
 import 'package:school_bell/navigation/app_router.dart';
 import 'package:school_bell/navigation/app_state_manager.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:school_bell/presentation/schoolbell_theme.dart';
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,9 +16,7 @@ Future<void> main() async {
   AlarmService.instance.initializeIsolate();
   AndroidAlarmManager.initialize();
 
-  await flutterLocalNotificationsPlugin.initialize(
-    const InitializationSettings(android: AndroidInitializationSettings('sb_notice_icon')),
-  );
+  await NotificationService.instance.initialize();
 
   runApp(const SchoolBell());
 }
