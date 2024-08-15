@@ -10,6 +10,7 @@ typedef DialogCallback = Function(BuildContext context);
 class SBDialog extends StatefulWidget {
   final DialogType type;
   final Object initialValue;
+  final String? additional;
   final String? title;
   final Widget? content;
   final String positive;
@@ -26,6 +27,7 @@ class SBDialog extends StatefulWidget {
     super.key,
     required this.type,
     required this.initialValue,
+    this.additional,
     this.title,
     this.content,
     required this.positive,
@@ -123,6 +125,7 @@ class SBDialog extends StatefulWidget {
     required BuildContext context,
     required DialogType type,
     required Object initialValue,
+    String? additional,
     String? title,
     EdgeInsets? padding,
     int? minValue,
@@ -136,6 +139,7 @@ class SBDialog extends StatefulWidget {
       context: context,
       type: type,
       initialValue: initialValue,
+      additional: additional,
       title: title,
       positive: type.positive,
       negative: type.negative,
@@ -149,6 +153,7 @@ class SBDialog extends StatefulWidget {
     required BuildContext context,
     required DialogType type,
     required Object initialValue,
+    String? additional,
     String? title,
     Widget? content,
     required String positive,
@@ -164,6 +169,7 @@ class SBDialog extends StatefulWidget {
       builder: (dialogContext) => SBDialog(
         type: type,
         initialValue: initialValue,
+        additional: additional,
         title: title,
         content: content,
         positive: positive,
@@ -336,9 +342,9 @@ class _SBDialogState extends State<SBDialog> {
   }
 
   Widget _buildBellSoundPicker() {
-    final int initial = _selectedValue as int;
     return BellSoundPicker(
-      initialValue: initial,
+      initialValue: _selectedValue as int,
+      customBell: widget.additional,
       onSelected: (value) {
         _selectedValue = value;
       },

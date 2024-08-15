@@ -36,6 +36,10 @@ class SettingManager extends ChangeNotifier {
 
   int get restBell => _restBell;
 
+  String? get customClassBell => _customClassBell;
+
+  String? get customRestBell => _customRestBell;
+
   String get classBellName => _customClassBell ?? '#${_classBell + 1}';
 
   String get restBellName => _customRestBell ?? '#${_restBell + 1}';

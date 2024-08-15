@@ -121,6 +121,7 @@ class SettingsScreen extends StatelessWidget {
                     context: context,
                     type: DialogType.setBellSound,
                     initialValue: settingManager.classBell,
+                    additional: settingManager.customClassBell,
                     padding: EdgeInsets.zero,
                   );
 
@@ -143,6 +144,7 @@ class SettingsScreen extends StatelessWidget {
                     context: context,
                     type: DialogType.setBellSound,
                     initialValue: settingManager.restBell,
+                    additional: settingManager.customRestBell,
                     padding: EdgeInsets.zero,
                   );
 

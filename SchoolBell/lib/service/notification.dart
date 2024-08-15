@@ -19,7 +19,7 @@ class NotificationService {
 
   final NotificationDetails _notificationDetails = const NotificationDetails(
     android: AndroidNotificationDetails(
-      'school-bell-channel',
+      'schoolbell-channel',
       '상태 알림',
       channelDescription: '학교종 앱이 실행 중일 때, 수업 상태를 표시하는 알림입니다.',
       importance: Importance.low,
@@ -29,6 +29,7 @@ class NotificationService {
       ongoing: true,
       autoCancel: false,
       showWhen: false,
+      channelShowBadge: false,
     ),
   );
 

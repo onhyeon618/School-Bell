@@ -6,11 +6,13 @@ import 'package:school_bell/presentation/schoolbell_theme.dart';
 
 class BellSoundPicker extends StatefulWidget {
   final int initialValue;
+  final String? customBell;
   final ValueChanged onSelected;
 
   const BellSoundPicker({
     super.key,
     required this.initialValue,
+    this.customBell,
     required this.onSelected,
   });
 
@@ -26,6 +28,7 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
   void initState() {
     super.initState();
     _selected = widget.initialValue;
+    _customBellName = widget.customBell;
   }
 
   @override
@@ -63,8 +66,8 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
             BellSoundPlayer.instance.stopPlaying();
             FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.audio);
             if (result != null) {
-              final path = result.files.single.path;
-              if (path != null) BellSoundPlayer.instance.playDeviceFile(path);
+              final path = result.files.single.path!;
+              BellSoundPlayer.instance.playDeviceFile(path);
               widget.onSelected.call(path);
               setState(() {
                 _selected = 8;
@@ -74,18 +77,21 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  const TextSpan(text: '기기에서 선택... '),
-                  TextSpan(
-                    text: _customBellName ?? '',
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '기기에서 선택...  ',
+                  style: SchoolBellTheme.mainTextTheme.bodyMedium,
+                ),
+                Flexible(
+                  child: Text(
+                    _customBellName ?? '',
                     style: SchoolBellTheme.mainTextTheme.bodySmall,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ],
-                style: SchoolBellTheme.mainTextTheme.bodyMedium,
-              ),
-              overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
           ),
         ),
