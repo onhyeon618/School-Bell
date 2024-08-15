@@ -131,10 +131,9 @@ class _HomeState extends State<Home> {
     if (!context.mounted) return;
 
     if (!permission) {
-      // TODO: 일반 confirm 타입 다이얼로그 필요
-      await SBDialog.showText(
+      await SBDialog.showConfirm(
         context: context,
-        content: '권한이 없어 수업을 설정할 수 없습니다.',
+        content: '권한이 없어 수업을 시작할 수 없습니다.',
       );
       return;
     }

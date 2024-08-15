@@ -13,7 +13,7 @@ class SBDialog extends StatefulWidget {
   final String? title;
   final Widget? content;
   final String positive;
-  final String negative;
+  final String? negative;
   final DialogCallback? onPositive;
   final DialogCallback? onNegative;
   final EdgeInsets padding;
@@ -29,7 +29,7 @@ class SBDialog extends StatefulWidget {
     this.title,
     this.content,
     required this.positive,
-    required this.negative,
+    this.negative,
     this.onPositive,
     this.onNegative,
     EdgeInsets? padding,
@@ -91,6 +91,34 @@ class SBDialog extends StatefulWidget {
     );
   }
 
+  static Future<T?> showConfirm<T>({
+    required BuildContext context,
+    String? title,
+    String? content,
+    String? positive,
+    DialogCallback? onPositive,
+    EdgeInsets? padding,
+  }) {
+    assert(title != null || content != null, 'title과 content를 모두 비울 수 없습니다.');
+
+    return _show(
+      context: context,
+      type: DialogType.basic,
+      initialValue: 0,
+      title: title,
+      content: content != null
+          ? Text(
+              content,
+              style: SchoolBellTheme.mainTextTheme.bodyMedium!.copyWith(height: 1.5),
+              textAlign: TextAlign.center,
+            )
+          : null,
+      positive: positive ?? DialogType.basic.positive,
+      onPositive: onPositive,
+      padding: padding,
+    );
+  }
+
   static Future<T?> showTyped<T>({
     required BuildContext context,
     required DialogType type,
@@ -124,7 +152,7 @@ class SBDialog extends StatefulWidget {
     String? title,
     Widget? content,
     required String positive,
-    required String negative,
+    String? negative,
     DialogCallback? onPositive,
     DialogCallback? onNegative,
     EdgeInsets? padding,
@@ -212,27 +240,28 @@ class _SBDialogState extends State<SBDialog> {
             /// 버튼
             Row(
               children: [
-                Expanded(
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () {
-                      if (widget.onNegative != null) {
-                        widget.onNegative!.call(context);
-                      } else {
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    child: Container(
-                      height: 48,
-                      color: SchoolBellColor.colorGray,
-                      alignment: Alignment.center,
-                      child: Text(
-                        widget.negative,
-                        style: SchoolBellTheme.mainTextTheme.labelLarge,
+                if (widget.negative != null)
+                  Expanded(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        if (widget.onNegative != null) {
+                          widget.onNegative!.call(context);
+                        } else {
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      child: Container(
+                        height: 48,
+                        color: SchoolBellColor.colorGray,
+                        alignment: Alignment.center,
+                        child: Text(
+                          widget.negative!,
+                          style: SchoolBellTheme.mainTextTheme.labelLarge,
+                        ),
                       ),
                     ),
                   ),
-                ),
                 Expanded(
                   child: GestureDetector(
                     behavior: HitTestBehavior.translucent,
