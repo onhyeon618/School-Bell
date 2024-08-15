@@ -8,9 +8,9 @@ import 'package:school_bell/domain/setting_manager.dart';
 import 'package:school_bell/enum/bell_mode.dart';
 import 'package:school_bell/enum/class_state.dart';
 import 'package:school_bell/enum/dialog_type.dart';
-import 'package:school_bell/navigation/app_state_manager.dart';
 import 'package:school_bell/presentation/schoolbell_colors.dart';
 import 'package:school_bell/presentation/schoolbell_theme.dart';
+import 'package:school_bell/presentation/screen/license/screen.dart';
 import 'package:school_bell/presentation/screen/setting/widget/category.dart';
 import 'package:school_bell/presentation/screen/setting/widget/setting_item.dart';
 import 'package:school_bell/presentation/screen/setting/widget/app_version_item.dart';
@@ -186,7 +186,11 @@ class SettingsScreen extends StatelessWidget {
           SettingItem(
             title: '오픈소스 라이선스',
             onTap: () {
-              Provider.of<AppStateManager>(context, listen: false).openLicensesPage();
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const LicensesScreen(),
+                ),
+              );
             },
           ),
         ],

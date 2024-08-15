@@ -1,20 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:school_bell/navigation/app_state_manager.dart';
-import 'package:school_bell/navigation/schoolbell_pages.dart';
 import 'package:school_bell/oss_licenses.dart';
 import 'package:school_bell/presentation/schoolbell_theme.dart';
+import 'package:school_bell/presentation/screen/license/detail_screen.dart';
 
 class LicensesScreen extends StatelessWidget {
-  static MaterialPage page() {
-    return MaterialPage(
-      name: SchoolbellPages.licensesPath,
-      key: ValueKey(SchoolbellPages.licensesPath),
-      child: const LicensesScreen(),
-    );
-  }
-
   const LicensesScreen({super.key});
 
   // TODO: 로직 확인
@@ -60,7 +50,14 @@ class LicensesScreen extends StatelessWidget {
                 ),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
-                  Provider.of<AppStateManager>(context, listen: false).openLicenseDetail(key, licenseJson);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => LicenseDetail(
+                        name: key,
+                        json: licenseJson,
+                      ),
+                    ),
+                  );
                 },
               );
             },

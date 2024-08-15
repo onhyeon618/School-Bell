@@ -1,23 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:school_bell/navigation/schoolbell_pages.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LicenseDetail extends StatelessWidget {
-  static MaterialPage page({
-    Key? key,
-    required String name,
-    required Map<String, dynamic> json,
-  }) {
-    return MaterialPage(
-      name: SchoolbellPages.licenseDetailPath,
-      key: ValueKey(SchoolbellPages.licenseDetailPath),
-      child: LicenseDetail(
-        name: name,
-        json: json,
-      ),
-    );
-  }
-
   final String name;
   final Map<String, dynamic> json;
 

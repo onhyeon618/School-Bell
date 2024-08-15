@@ -3,10 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:school_bell/domain/app_update_checker.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/domain/setting_manager.dart';
-import 'package:school_bell/navigation/app_router.dart';
-import 'package:school_bell/navigation/app_state_manager.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:school_bell/presentation/schoolbell_theme.dart';
+import 'package:school_bell/presentation/screen/home.dart';
 import 'package:school_bell/service/alarm.dart';
 import 'package:school_bell/service/notification.dart';
 
@@ -31,12 +30,9 @@ class SchoolBell extends StatefulWidget {
 class _SchoolBellState extends State<SchoolBell> {
   late final AppLifecycleListener _listener;
 
-  final _appStateManager = AppStateManager();
   final _classManager = ClassManager();
   final _settingManager = SettingManager();
   final _appUpdateChecker = AppUpdateChecker();
-
-  late AppRouter _appRouter;
 
   @override
   void initState() {
@@ -49,10 +45,6 @@ class _SchoolBellState extends State<SchoolBell> {
     _settingManager.initialize();
     _classManager.initialize();
     _appUpdateChecker.checkForUpdate();
-
-    _appRouter = AppRouter(
-      appStateManager: _appStateManager,
-    );
 
     port.listen((_) async => await _classManager.fetch());
   }
@@ -74,9 +66,6 @@ class _SchoolBellState extends State<SchoolBell> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => _appStateManager,
-        ),
-        ChangeNotifierProvider(
           create: (context) => _classManager,
         ),
         ChangeNotifierProvider(
@@ -89,10 +78,7 @@ class _SchoolBellState extends State<SchoolBell> {
       child: MaterialApp(
         title: 'SchoolBell',
         theme: theme,
-        home: Router(
-          routerDelegate: _appRouter,
-          backButtonDispatcher: RootBackButtonDispatcher(), // 물리버튼 처리
-        ),
+        home: const Home(),
       ),
     );
   }

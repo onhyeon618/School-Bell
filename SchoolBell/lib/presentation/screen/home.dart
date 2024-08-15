@@ -4,20 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/enum/class_state.dart';
 import 'package:school_bell/enum/dialog_type.dart';
-import 'package:school_bell/navigation/schoolbell_pages.dart';
 import 'package:school_bell/presentation/schoolbell_colors.dart';
 import 'package:school_bell/presentation/screens.dart';
 import 'package:school_bell/presentation/widget/sb_dialog.dart';
 
 class Home extends StatefulWidget {
-  static MaterialPage page() {
-    return MaterialPage(
-      name: SchoolbellPages.home,
-      key: ValueKey(SchoolbellPages.home),
-      child: const Home(),
-    );
-  }
-
   const Home({super.key});
 
   @override
@@ -33,7 +24,7 @@ class _HomeState extends State<Home> {
     final isCounting = classManager.currentState != ClassState.idle;
 
     return PopScope(
-      canPop: !isCounting,
+      canPop: !isCounting && _selectedTab == 0,
       onPopInvoked: (didPop) {
         if (didPop) return;
 
