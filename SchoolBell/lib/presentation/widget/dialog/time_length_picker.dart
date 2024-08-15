@@ -1,5 +1,5 @@
-import 'package:editable_number_picker/editable_number_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:numberpicker/numberpicker.dart';
 import 'package:school_bell/presentation/schoolbell_theme.dart';
 
 class TimeLengthPicker extends StatelessWidget {
@@ -21,8 +21,7 @@ class TimeLengthPicker extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // TODO: 다른 오픈소스 위젯 알아보기
-        EditableNumberPicker(
+        NumberPicker(
           value: initialValue,
           minValue: minTime,
           maxValue: maxTime,
