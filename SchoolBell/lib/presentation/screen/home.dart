@@ -154,18 +154,28 @@ class _HomeState extends State<Home> {
   }
 
   Future<bool> checkPermission(BuildContext context) async {
-    final status = await Permission.scheduleExactAlarm.status;
+    final isGranted = await Permission.notification.isGranted && await Permission.scheduleExactAlarm.status.isGranted;
     if (!context.mounted) return false;
 
-    if (status.isGranted) return true;
+    if (isGranted) return true;
 
     final result = await SBDialog.showText(
       context: context,
-      content: "수업종을 설정하려면 '알람 및 리마인더' 권한이 필요합니다.",
+      title: '권한이 필요합니다',
+      content: '알림: 앱 실행 상태 표시\n알람 및 리마인더: 종소리 재생',
       positive: '허용하기',
       onPositive: (dialogContext) async {
-        final result = await Permission.scheduleExactAlarm.request();
-        if (dialogContext.mounted) Navigator.of(dialogContext).pop(result.isGranted);
+        // 순차적으로 진행, 하나라도 거부할 경우 요청 프로세스 종료
+        final notification = await Permission.notification.request();
+        if (!dialogContext.mounted) return;
+        if (!notification.isGranted) {
+          Navigator.of(dialogContext).pop(false);
+          return;
+        }
+
+        final alarm = await Permission.scheduleExactAlarm.request();
+        if (!dialogContext.mounted) return;
+        Navigator.of(dialogContext).pop(alarm.isGranted);
       },
     );
     return result ?? false;
