@@ -1,6 +1,6 @@
 import 'dart:isolate';
 import 'dart:ui';
-import 'package:school_bell/domain/bell_sound_player.dart';
+import 'package:school_bell/bell_sound_player.dart';
 import 'package:school_bell/enum/alarm_type.dart';
 import 'package:school_bell/enum/class_state.dart';
 import 'package:school_bell/service/notification.dart';
@@ -43,7 +43,7 @@ class AlarmService {
       case AlarmType.classEnd:
         await prefs.setInt('currentState', ClassState.restTime.index);
 
-        BellSoundPlayer.playRestBell();
+        BellSoundPlayer.instance.playRestBell();
 
         await NotificationService.instance.showNotification(
           '$currentPeriod교시 쉬는 시간! 이제 ${totalPeriod - currentPeriod}교시 남았어요.',
@@ -52,7 +52,7 @@ class AlarmService {
         await prefs.setInt('currentState', ClassState.inClass.index);
         await prefs.setInt('currentPeriod', currentPeriod + 1);
 
-        BellSoundPlayer.playClassBell();
+        BellSoundPlayer.instance.playClassBell();
 
         await NotificationService.instance.showNotification(
           totalPeriod == currentPeriod + 1
@@ -64,7 +64,7 @@ class AlarmService {
         await prefs.setInt('totalPeriod', -1);
         await prefs.setInt('currentPeriod', -1);
 
-        BellSoundPlayer.playRestBell();
+        BellSoundPlayer.instance.playRestBell();
 
         await NotificationService.instance.cancelNotifications();
     }

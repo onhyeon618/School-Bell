@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:school_bell/domain/app_update_checker.dart';
+import 'package:school_bell/bell_sound_player.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/domain/setting_manager.dart';
 import 'package:school_bell/enum/bell_mode.dart';
@@ -123,7 +124,7 @@ class SettingsScreen extends StatelessWidget {
                     padding: EdgeInsets.zero,
                   );
 
-                  // TODO: 사운드 플레이 종료
+                  BellSoundPlayer.instance.stopPlaying();
 
                   if (result != null) settingManager.setClassBell(result);
                 },
@@ -145,7 +146,7 @@ class SettingsScreen extends StatelessWidget {
                     padding: EdgeInsets.zero,
                   );
 
-                  // TODO: 사운드 플레이 종료
+                  BellSoundPlayer.instance.stopPlaying();
 
                   if (result != null) settingManager.setRestBell(result);
                 },

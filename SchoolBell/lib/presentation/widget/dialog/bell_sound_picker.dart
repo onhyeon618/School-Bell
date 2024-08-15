@@ -1,6 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:school_bell/domain/bell_sound_player.dart';
+import 'package:school_bell/bell_sound_player.dart';
 import 'package:school_bell/presentation/schoolbell_colors.dart';
 import 'package:school_bell/presentation/schoolbell_theme.dart';
 
@@ -21,9 +21,6 @@ class BellSoundPicker extends StatefulWidget {
 class _BellSoundPickerState extends State<BellSoundPicker> {
   int _selected = 0;
   String? _customBellName;
-
-  // TODO: static 플레이어 활용
-  final BellSoundPlayer _player = BellSoundPlayer();
 
   @override
   void initState() {
@@ -52,7 +49,7 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
             onChanged: (newValue) {
               if (newValue == null) return;
 
-              _player.playSampleSound(newValue);
+              BellSoundPlayer.instance.playAssetSource(newValue);
               widget.onSelected.call(newValue);
 
               setState(() {
@@ -63,10 +60,12 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
         GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () async {
-            _player.stopSampleSound();
+            BellSoundPlayer.instance.stopPlaying();
             FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.audio);
             if (result != null) {
-              widget.onSelected.call(result.files.single.path);
+              final path = result.files.single.path;
+              if (path != null) BellSoundPlayer.instance.playDeviceFile(path);
+              widget.onSelected.call(path);
               setState(() {
                 _selected = 8;
                 _customBellName = result.files.single.name;
