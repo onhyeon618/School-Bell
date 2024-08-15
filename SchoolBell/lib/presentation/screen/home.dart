@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:school_bell/channel/MoveTaskBack.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/enum/class_state.dart';
 import 'package:school_bell/enum/dialog_type.dart';
@@ -33,7 +34,7 @@ class _HomeState extends State<Home> {
             _selectedTab = 0;
           });
         } else {
-          // TODO: 백그라운드 전환
+          MoveTaskBack.moveTaskToBack();
         }
       },
       child: Scaffold(
