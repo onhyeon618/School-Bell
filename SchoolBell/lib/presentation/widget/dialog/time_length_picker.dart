@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:school_bell/presentation/schoolbell_theme.dart';
 
-class TimeLengthPicker extends StatelessWidget {
+class TimeLengthPicker extends StatefulWidget {
   final int initialValue;
   final int minTime;
   final int maxTime;
@@ -17,37 +18,164 @@ class TimeLengthPicker extends StatelessWidget {
   });
 
   @override
+  State<TimeLengthPicker> createState() => _TimeLengthPickerState();
+}
+
+class _TimeLengthPickerState extends State<TimeLengthPicker> {
+  final TextEditingController controller = TextEditingController();
+  final FocusNode focusNode = FocusNode();
+
+  bool showEditor = false;
+
+  @override
+  void initState() {
+    super.initState();
+    controller.text = widget.initialValue.toString();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        NumberPicker(
-          value: initialValue,
-          minValue: minTime,
-          maxValue: maxTime,
-          step: 1,
-          itemHeight: 48,
-          textStyle: const TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.w500,
-            color: Colors.grey,
-          ),
-          selectedTextStyle: SchoolBellTheme.mainTextTheme.titleMedium,
-          haptics: true,
-          decoration: const BoxDecoration(
-            border: Border(
-              top: BorderSide(),
-              bottom: BorderSide(),
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        setState(() {
+          showEditor = false;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                // 다이얼로그 크기 유지
+                const SizedBox(
+                  height: 144,
+                  width: 100,
+                ),
+                Visibility(
+                  visible: !showEditor,
+                  child: NumberPicker(
+                    value: widget.initialValue,
+                    minValue: widget.minTime,
+                    maxValue: widget.maxTime,
+                    step: 1,
+                    itemHeight: 48,
+                    textStyle: const TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey,
+                    ),
+                    selectedTextStyle: SchoolBellTheme.mainTextTheme.titleMedium,
+                    haptics: true,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        top: BorderSide(),
+                        bottom: BorderSide(),
+                      ),
+                    ),
+                    onChanged: (value) async {
+                      widget.onChanged.call(value);
+                      controller.text = value.toString();
+                    },
+                  ),
+                ),
+                Visibility(
+                  visible: showEditor,
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 48,
+                    width: 100,
+                    child: TextField(
+                      controller: controller,
+                      focusNode: focusNode,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        RangeFormatter(max: widget.maxTime, min: widget.minTime),
+                      ],
+                      decoration: null,
+                      keyboardType: TextInputType.number,
+                      style: SchoolBellTheme.mainTextTheme.titleMedium?.copyWith(height: 1.0),
+                      textAlign: TextAlign.center,
+                      showCursor: false,
+                      onTapOutside: (_) {
+                        widget.onChanged.call(int.parse(controller.text));
+                        setState(() {
+                          showEditor = false;
+                        });
+                      },
+                      onSubmitted: (value) {
+                        widget.onChanged.call(int.parse(value));
+                        setState(() {
+                          showEditor = false;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    setState(() {
+                      showEditor = true;
+                    });
+                    focusNode.requestFocus();
+                    controller.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: controller.text.length,
+                    );
+                  },
+                  child: const SizedBox(
+                    height: 48,
+                    width: 100,
+                  ),
+                ),
+              ],
             ),
-          ),
-          onChanged: onChanged,
+            const SizedBox(width: 16),
+            Text(
+              '분',
+              style: SchoolBellTheme.mainTextTheme.bodyMedium,
+            ),
+          ],
         ),
-        const SizedBox(width: 16),
-        Text(
-          '분',
-          style: SchoolBellTheme.mainTextTheme.bodyMedium,
-        ),
-      ],
+      ),
     );
+  }
+}
+
+class RangeFormatter extends TextInputFormatter {
+  final int min;
+  final int max;
+
+  RangeFormatter({
+    required this.min,
+    required this.max,
+  });
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (newValue.text == '') return newValue;
+
+    final input = int.parse(newValue.text);
+    if (input < min) {
+      return newValue.copyWith(text: min.toString());
+    } else if (input > max) {
+      return oldValue;
+    } else {
+      return newValue;
+    }
   }
 }

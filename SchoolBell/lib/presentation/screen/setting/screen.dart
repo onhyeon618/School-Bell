@@ -77,6 +77,7 @@ class SettingsScreen extends StatelessWidget {
                     initialValue: settingManager.classLength,
                     maxValue: 120,
                     minValue: 10,
+                    padding: EdgeInsets.zero,
                   );
 
                   if (result != null) settingManager.setClassLength(result);
@@ -98,6 +99,7 @@ class SettingsScreen extends StatelessWidget {
                     initialValue: settingManager.restLength,
                     maxValue: 60,
                     minValue: 5,
+                    padding: EdgeInsets.zero,
                   );
 
                   if (result != null) settingManager.setRestLength(result);
