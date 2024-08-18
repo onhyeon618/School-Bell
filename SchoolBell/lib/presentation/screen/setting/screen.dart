@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final settingManager = context.read<SettingManager>();
 
-    final classState = context.select<ClassManager, ClassState>((ClassManager cm) => cm.currentState);
+    final classState = context.select<ClassManager, ClassState>((manager) => manager.currentState);
     final bool isCounting = classState != ClassState.idle;
 
     return SingleChildScrollView(
@@ -58,7 +60,7 @@ class SettingsScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 28, bottom: 24, left: 10, right: 10),
                   );
 
-                  if (result != null) settingManager.setBellMode(result);
+                  if (result != null) await settingManager.setBellMode(result);
                 },
               );
             },
@@ -80,7 +82,7 @@ class SettingsScreen extends StatelessWidget {
                     padding: EdgeInsets.zero,
                   );
 
-                  if (result != null) settingManager.setClassLength(result);
+                  if (result != null) await settingManager.setClassLength(result);
                 },
               );
             },
@@ -102,7 +104,7 @@ class SettingsScreen extends StatelessWidget {
                     padding: EdgeInsets.zero,
                   );
 
-                  if (result != null) settingManager.setRestLength(result);
+                  if (result != null) await settingManager.setRestLength(result);
                 },
               );
             },
@@ -127,9 +129,9 @@ class SettingsScreen extends StatelessWidget {
                     padding: EdgeInsets.zero,
                   );
 
-                  BellSoundPlayer.instance.stopPlaying();
+                  unawaited(BellSoundPlayer.instance.stopPlaying());
 
-                  if (result != null) settingManager.setClassBell(result);
+                  if (result != null) await settingManager.setClassBell(result);
                 },
               );
             },
@@ -150,9 +152,9 @@ class SettingsScreen extends StatelessWidget {
                     padding: EdgeInsets.zero,
                   );
 
-                  BellSoundPlayer.instance.stopPlaying();
+                  unawaited(BellSoundPlayer.instance.stopPlaying());
 
-                  if (result != null) settingManager.setRestBell(result);
+                  if (result != null) await settingManager.setRestBell(result);
                 },
               );
             },
@@ -165,9 +167,9 @@ class SettingsScreen extends StatelessWidget {
             builder: (_, checker, __) {
               return AppVersionItem(
                 isUpdateAvailable: checker.isUpdateAvailable,
-                onTap: () {
+                onTap: () async {
                   if (checker.isUpdateAvailable) {
-                    SBDialog.showText(
+                    await SBDialog.showText(
                       context: context,
                       title: '업데이트가 가능합니다',
                       content: '어플의 새 버전이 출시되었어요.\n지금 바로 업데이트 하러 가시겠어요?',
@@ -179,7 +181,7 @@ class SettingsScreen extends StatelessWidget {
                       },
                     );
                   } else {
-                    Fluttertoast.showToast(
+                    await Fluttertoast.showToast(
                       msg: '현재 최신 버전이에요.',
                       toastLength: Toast.LENGTH_SHORT,
                     );
@@ -190,8 +192,8 @@ class SettingsScreen extends StatelessWidget {
           ),
           SettingItem(
             title: '오픈소스 라이선스',
-            onTap: () {
-              Navigator.of(context).push(
+            onTap: () async {
+              await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => const LicensesScreen(),
                 ),

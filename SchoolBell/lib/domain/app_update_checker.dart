@@ -9,7 +9,7 @@ class AppUpdateChecker extends ChangeNotifier {
   bool get isUpdateAvailable => _isUpdateAvailable;
 
   Future<void> checkForUpdate() async {
-    AppUpdateInfo info = await InAppUpdate.checkForUpdate();
+    final AppUpdateInfo info = await InAppUpdate.checkForUpdate();
     _isUpdateAvailable = info.updateAvailability == UpdateAvailability.updateAvailable;
     notifyListeners();
   }

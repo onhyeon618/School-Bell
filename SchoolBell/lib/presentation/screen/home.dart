@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +36,7 @@ class _HomeState extends State<Home> {
             selectedTab = 0;
           });
         } else {
-          MoveTaskBack.moveTaskToBack();
+          unawaited(MoveTaskBack.moveTaskToBack());
         }
       },
       child: Scaffold(
@@ -101,11 +103,11 @@ class _HomeState extends State<Home> {
           width: 72,
           child: FittedBox(
             child: FloatingActionButton(
-              onPressed: () {
+              onPressed: () async {
                 if (!isCounting) {
-                  startClass(context);
+                  await startClass(context);
                 } else {
-                  stopClass(context);
+                  await stopClass(context);
                 }
               },
               shape: const CircleBorder(),
@@ -119,7 +121,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void startClass(BuildContext context) async {
+  Future<void> startClass(BuildContext context) async {
     final permission = await checkPermission(context);
     if (!context.mounted) return;
 
@@ -138,11 +140,11 @@ class _HomeState extends State<Home> {
       initialValue: 1,
     );
     if (!context.mounted || result == null) return;
-    context.read<ClassManager>().startClass(result);
+    await context.read<ClassManager>().startClass(result);
   }
 
-  void stopClass(BuildContext context) {
-    SBDialog.showText(
+  Future<void> stopClass(BuildContext context) async {
+    await SBDialog.showText(
       context: context,
       title: '오늘 수업을 종료할까요?',
       content: '아직 ${context.read<ClassManager>().remainingPeriod}교시 남아있어요!',

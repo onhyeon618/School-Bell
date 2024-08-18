@@ -38,7 +38,7 @@ class ClassManager extends ChangeNotifier {
 
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
-    fetch();
+    await fetch();
   }
 
   Future<void> fetch() async {
@@ -91,9 +91,9 @@ class ClassManager extends ChangeNotifier {
     int timeSum = firstClassLength;
 
     for (int alarmId = 0; alarmId < (totalPeriod - 1) * 2; alarmId++) {
-      final alarmType = alarmId % 2 == 0 ? AlarmType.classEnd : AlarmType.restEnd;
+      final alarmType = alarmId.isEven ? AlarmType.classEnd : AlarmType.restEnd;
 
-      AndroidAlarmManager.oneShot(
+      await AndroidAlarmManager.oneShot(
         Duration(seconds: timeSum),
         alarmId,
         AlarmService.callback,
@@ -102,13 +102,13 @@ class ClassManager extends ChangeNotifier {
         params: {'alarmType': alarmType.index},
       );
 
-      if (alarmId % 2 == 0) {
+      if (alarmId.isEven) {
         timeSum += restLength;
       } else {
         timeSum += classLength;
       }
     }
-    AndroidAlarmManager.oneShot(
+    await AndroidAlarmManager.oneShot(
       Duration(seconds: timeSum),
       (totalPeriod - 1) * 2,
       AlarmService.callback,
@@ -126,7 +126,7 @@ class ClassManager extends ChangeNotifier {
 
   Future<void> stopClass() async {
     for (int id = 0; id < _totalPeriod * 2 - 1; id++) {
-      AndroidAlarmManager.cancel(id);
+      await AndroidAlarmManager.cancel(id);
     }
 
     await setClassState(state: ClassState.idle, period: -1, total: -1);

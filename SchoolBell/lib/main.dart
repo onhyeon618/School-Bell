@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +15,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   AlarmService.instance.initializeIsolate();
-  AndroidAlarmManager.initialize();
+  await AndroidAlarmManager.initialize();
 
   await NotificationService.instance.initialize();
 
@@ -42,16 +44,16 @@ class _SchoolBellState extends State<SchoolBell> {
       onResume: onResume,
     );
 
-    settingManager.initialize();
-    classManager.initialize();
-    appUpdateChecker.checkForUpdate();
+    unawaited(settingManager.initialize());
+    unawaited(classManager.initialize());
+    unawaited(appUpdateChecker.checkForUpdate());
 
     port.listen((_) async => await classManager.fetch());
   }
 
   void onResume() {
-    appUpdateChecker.checkForUpdate();
-    classManager.fetch();
+    unawaited(appUpdateChecker.checkForUpdate());
+    unawaited(classManager.fetch());
   }
 
   @override

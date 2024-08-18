@@ -1,6 +1,33 @@
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  exclude:
+    - '**/oss_licenses.dart'
+
 linter:
   rules:
-    require_trailing_commas: true
-    prefer_single_quotes: true
+    - always_declare_return_types
+    - always_use_package_imports
+    - avoid_escaping_inner_quotes
+    - avoid_final_parameters
+    - avoid_positional_boolean_parameters
+    - avoid_redundant_argument_values
+    - avoid_returning_this
+    - avoid_slow_async_io
+    - avoid_types_on_closure_parameters
+    - avoid_unused_constructor_parameters
+    - avoid_void_async
+    - directives_ordering
+    - eol_at_end_of_file
+    - literal_only_boolean_expressions
+    - no_literal_bool_comparisons
+    - prefer_asserts_with_message
+    - prefer_single_quotes
+    - prefer_final_locals
+    - prefer_null_aware_method_calls
+    - require_trailing_commas
+    - unawaited_futures
+    - unnecessary_lambdas
+    - unnecessary_parenthesis
+    - unnecessary_statements
+    - use_is_even_rather_than_modulo

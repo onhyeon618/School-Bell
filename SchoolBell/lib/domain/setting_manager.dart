@@ -89,7 +89,7 @@ class SettingManager extends ChangeNotifier {
       await _prefs.setInt('classBell', 8);
       _classBell = 8;
 
-      String fileName = classBell.toString().split('/').last;
+      final String fileName = classBell.toString().split('/').last;
       await _prefs.setString('customClassBellPath', classBell.toString());
       await _prefs.setString('customClassBellName', fileName);
       _customClassBell = fileName;
@@ -110,7 +110,7 @@ class SettingManager extends ChangeNotifier {
       await _prefs.setInt('restBell', 8);
       _classBell = 8;
 
-      String fileName = restBell.toString().split('/').last;
+      final String fileName = restBell.toString().split('/').last;
       await _prefs.setString('customRestBellPath', restBell.toString());
       await _prefs.setString('customRestBellName', fileName);
       _customClassBell = fileName;

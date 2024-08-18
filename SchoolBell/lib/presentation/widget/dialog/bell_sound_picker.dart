@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:school_bell/bell_sound_player.dart';
@@ -49,10 +51,10 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
             groupValue: selected,
             controlAffinity: ListTileControlAffinity.trailing,
             activeColor: SchoolBellColor.colorAccent,
-            onChanged: (newValue) {
+            onChanged: (newValue) async {
               if (newValue == null) return;
 
-              BellSoundPlayer.instance.playAssetSource(newValue);
+              unawaited(BellSoundPlayer.instance.playAssetSource(newValue));
               widget.onSelected.call(newValue);
 
               setState(() {
@@ -63,13 +65,14 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
         GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () async {
-            BellSoundPlayer.instance.stopPlaying();
-            FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.audio);
+            await BellSoundPlayer.instance.stopPlaying();
+
+            final FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.audio);
             if (result != null) {
               final path = result.files.single.path;
               if (path == null) return;
 
-              BellSoundPlayer.instance.playDeviceFile(path);
+              unawaited(BellSoundPlayer.instance.playDeviceFile(path));
               widget.onSelected.call(path);
 
               setState(() {

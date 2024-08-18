@@ -29,7 +29,7 @@ class LicenseDetail extends StatelessWidget {
                 if (package.homepage != null) ...[
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
-                    onTap: () => launchUrl(Uri.parse(package.homepage!)),
+                    onTap: () async => launchUrl(Uri.parse(package.homepage!)),
                     child: Text(
                       package.homepage!,
                       style: Theme.of(context)

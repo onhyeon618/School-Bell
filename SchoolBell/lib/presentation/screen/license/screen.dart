@@ -22,8 +22,8 @@ class LicensesScreen extends StatelessWidget {
               style: SchoolBellTheme.mainTextTheme.bodySmall,
             ),
             trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              Navigator.of(context).push(
+            onTap: () async {
+              await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => LicenseDetail(
                     package: dependency,

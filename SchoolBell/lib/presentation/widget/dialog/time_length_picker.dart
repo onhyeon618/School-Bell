@@ -70,7 +70,6 @@ class _TimeLengthPickerState extends State<TimeLengthPicker> {
                     value: widget.initialValue,
                     minValue: widget.minTime,
                     maxValue: widget.maxTime,
-                    step: 1,
                     itemHeight: 48,
                     textStyle: const TextStyle(
                       fontSize: 16.0,

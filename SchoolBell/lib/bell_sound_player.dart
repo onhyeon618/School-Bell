@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,9 +34,11 @@ class BellSoundPlayer {
     } catch (_) {
       await _player.play(AssetSource(_assetAudios[0]));
 
-      Fluttertoast.showToast(
-        msg: '파일에 오류가 있어 기본 종소리를 재생했어요.',
-        toastLength: Toast.LENGTH_SHORT,
+      unawaited(
+        Fluttertoast.showToast(
+          msg: '파일에 오류가 있어 기본 종소리를 재생했어요.',
+          toastLength: Toast.LENGTH_SHORT,
+        ),
       );
     }
   }
@@ -47,9 +51,9 @@ class BellSoundPlayer {
     final customClassBell = prefs.getString('customClassBellPath');
 
     if (customClassBell == null) {
-      playAssetSource(classBell);
+      await playAssetSource(classBell);
     } else {
-      playDeviceFile(customClassBell);
+      await playDeviceFile(customClassBell);
     }
   }
 
@@ -61,13 +65,13 @@ class BellSoundPlayer {
     final customRestBell = prefs.getString('customRestBellPath');
 
     if (customRestBell == null) {
-      playAssetSource(restBell);
+      await playAssetSource(restBell);
     } else {
-      playDeviceFile(customRestBell);
+      await playDeviceFile(customRestBell);
     }
   }
 
-  void stopPlaying() async {
+  Future<void> stopPlaying() async {
     await _player.release();
   }
 }

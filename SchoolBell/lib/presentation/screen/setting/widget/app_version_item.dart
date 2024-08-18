@@ -39,8 +39,8 @@ class AppVersionItem extends StatelessWidget {
             ),
             FutureBuilder(
               future: PackageInfo.fromPlatform(),
-              builder: (context, AsyncSnapshot<PackageInfo> snapshot) {
-                String versionName = snapshot.data?.version ?? '';
+              builder: (context, snapshot) {
+                final String versionName = snapshot.data?.version ?? '';
                 return Text(
                   versionName,
                   style: Theme.of(context).textTheme.bodyLarge,
