@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:school_bell/channel/MoveTaskBack.dart';
+import 'package:school_bell/channel/move_task_back.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/enum/class_state.dart';
 import 'package:school_bell/enum/dialog_type.dart';
@@ -17,7 +17,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedTab = 0;
+  int selectedTab = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +25,13 @@ class _HomeState extends State<Home> {
     final isCounting = classManager.currentState != ClassState.idle;
 
     return PopScope(
-      canPop: !isCounting && _selectedTab == 0,
+      canPop: !isCounting && selectedTab == 0,
       onPopInvoked: (didPop) {
         if (didPop) return;
 
-        if (_selectedTab == 1) {
+        if (selectedTab == 1) {
           setState(() {
-            _selectedTab = 0;
+            selectedTab = 0;
           });
         } else {
           MoveTaskBack.moveTaskToBack();
@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
           labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
           onDestinationSelected: (index) {
             setState(() {
-              _selectedTab = index;
+              selectedTab = index;
             });
           },
           height: 64.0,
@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
           shadowColor: SchoolBellColor.colorMain,
           surfaceTintColor: SchoolBellColor.colorSub,
           indicatorColor: Colors.transparent,
-          selectedIndex: _selectedTab,
+          selectedIndex: selectedTab,
           destinations: const [
             Padding(
               padding: EdgeInsets.only(right: 36.0),
@@ -94,7 +94,7 @@ class _HomeState extends State<Home> {
               currentPeriod: classManager.currentPeriod,
             ),
             const SettingsScreen(),
-          ][_selectedTab],
+          ][selectedTab],
         ),
         floatingActionButton: SizedBox(
           height: 72,
@@ -141,7 +141,7 @@ class _HomeState extends State<Home> {
     context.read<ClassManager>().startClass(result);
   }
 
-  void stopClass(BuildContext context) async {
+  void stopClass(BuildContext context) {
     SBDialog.showText(
       context: context,
       title: '오늘 수업을 종료할까요?',

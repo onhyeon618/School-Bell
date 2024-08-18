@@ -57,11 +57,13 @@ class _TimeLengthPickerState extends State<TimeLengthPicker> {
             Stack(
               alignment: Alignment.center,
               children: [
-                // 다이얼로그 크기 유지
+                ///// 다이얼로그 크기 유지용 빈 위젯
                 const SizedBox(
                   height: 144,
                   width: 100,
                 ),
+
+                ///// NumberPicker: 스크롤하여 시간 선택
                 Visibility(
                   visible: !showEditor,
                   child: NumberPicker(
@@ -83,12 +85,14 @@ class _TimeLengthPickerState extends State<TimeLengthPicker> {
                         bottom: BorderSide(),
                       ),
                     ),
-                    onChanged: (value) async {
+                    onChanged: (value) {
                       widget.onChanged.call(value);
                       controller.text = value.toString();
                     },
                   ),
                 ),
+
+                ///// TextField: 원하는 시간을 직접 입력
                 Visibility(
                   visible: showEditor,
                   child: Container(
@@ -122,6 +126,8 @@ class _TimeLengthPickerState extends State<TimeLengthPicker> {
                     ),
                   ),
                 ),
+
+                ///// 스택 최상단 투명 박스: 탭하여 TextField 노출여부 결정, 탭 외의 제스처는 하위로 전달(무시)
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {

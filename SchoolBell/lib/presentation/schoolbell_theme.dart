@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'schoolbell_colors.dart';
+import 'package:school_bell/presentation/schoolbell_colors.dart';
 
 class SchoolBellTheme {
   static TextTheme mainTextTheme = const TextTheme(

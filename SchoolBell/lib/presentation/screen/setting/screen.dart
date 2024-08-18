@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:school_bell/domain/app_update_checker.dart';
 import 'package:school_bell/bell_sound_player.dart';
+import 'package:school_bell/domain/app_update_checker.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/domain/setting_manager.dart';
 import 'package:school_bell/enum/bell_mode.dart';
@@ -11,9 +11,9 @@ import 'package:school_bell/enum/dialog_type.dart';
 import 'package:school_bell/presentation/schoolbell_colors.dart';
 import 'package:school_bell/presentation/schoolbell_theme.dart';
 import 'package:school_bell/presentation/screen/license/screen.dart';
+import 'package:school_bell/presentation/screen/setting/widget/app_version_item.dart';
 import 'package:school_bell/presentation/screen/setting/widget/category.dart';
 import 'package:school_bell/presentation/screen/setting/widget/setting_item.dart';
-import 'package:school_bell/presentation/screen/setting/widget/app_version_item.dart';
 import 'package:school_bell/presentation/widget/sb_dialog.dart';
 import 'package:store_redirect/store_redirect.dart';
 
@@ -40,7 +40,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 6),
 
-          /// 기본 설정
+          ///// 기본 설정
           const SettingCategory(title: '기본 설정'),
           Selector<SettingManager, BellMode>(
             selector: (_, state) => state.bellMode,
@@ -107,9 +107,9 @@ class SettingsScreen extends StatelessWidget {
               );
             },
           ),
-          _buildDivider(8),
+          buildDivider(8),
 
-          /// 종소리 설정
+          ///// 종소리 설정
           const SettingCategory(title: '종소리 설정'),
           Selector<SettingManager, String>(
             selector: (_, state) => state.classBellName,
@@ -157,15 +157,15 @@ class SettingsScreen extends StatelessWidget {
               );
             },
           ),
-          _buildDivider(8),
+          buildDivider(8),
 
-          /// 서비스 정보
+          ///// 서비스 정보
           const SettingCategory(title: '서비스 정보'),
           Consumer<AppUpdateChecker>(
             builder: (_, checker, __) {
               return AppVersionItem(
                 isUpdateAvailable: checker.isUpdateAvailable,
-                onTap: () async {
+                onTap: () {
                   if (checker.isUpdateAvailable) {
                     SBDialog.showText(
                       context: context,
@@ -203,7 +203,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDivider(double height) {
+  Widget buildDivider(double height) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: ColoredBox(

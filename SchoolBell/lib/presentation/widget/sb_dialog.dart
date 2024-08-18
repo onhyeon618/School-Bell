@@ -190,12 +190,12 @@ class SBDialog extends StatefulWidget {
 class _SBDialogState extends State<SBDialog> {
   Widget? dialogContent;
 
-  Object _selectedValue = 0;
+  Object selectedValue = 0;
 
   @override
   void initState() {
     super.initState();
-    _selectedValue = widget.initialValue;
+    selectedValue = widget.initialValue;
   }
 
   @override
@@ -204,13 +204,13 @@ class _SBDialogState extends State<SBDialog> {
       case DialogType.basic:
         dialogContent = widget.content;
       case DialogType.setClassSize:
-        dialogContent = _buildClassSizePicker();
+        dialogContent = buildClassSizePicker();
       case DialogType.setBellMode:
-        dialogContent = _buildBellModePicker();
+        dialogContent = buildBellModePicker();
       case DialogType.setTimeLength:
-        dialogContent = _buildTimeLengthPicker();
+        dialogContent = buildTimeLengthPicker();
       case DialogType.setBellSound:
-        dialogContent = _buildBellSoundPicker();
+        dialogContent = buildBellSoundPicker();
     }
 
     return Dialog(
@@ -224,7 +224,7 @@ class _SBDialogState extends State<SBDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            /// 내용
+            ///// 내용
             Flexible(
               child: SingleChildScrollView(
                 padding: widget.padding,
@@ -243,7 +243,7 @@ class _SBDialogState extends State<SBDialog> {
               ),
             ),
 
-            /// 버튼
+            ///// 버튼
             Row(
               children: [
                 if (widget.negative != null)
@@ -275,7 +275,7 @@ class _SBDialogState extends State<SBDialog> {
                       if (widget.onPositive != null) {
                         widget.onPositive!.call(context);
                       } else {
-                        Navigator.of(context).pop(_selectedValue);
+                        Navigator.of(context).pop(selectedValue);
                       }
                     },
                     child: Container(
@@ -297,56 +297,56 @@ class _SBDialogState extends State<SBDialog> {
     );
   }
 
-  Widget _buildClassSizePicker() {
+  Widget buildClassSizePicker() {
     return ClassSizePicker(
-      value: _selectedValue as int,
+      value: selectedValue as int,
       onPlus: () {
-        if (_selectedValue == 9) return;
+        if (selectedValue == 9) return;
         setState(() {
-          _selectedValue = (_selectedValue as int) + 1;
+          selectedValue = (selectedValue as int) + 1;
         });
       },
       onMinus: () {
-        if (_selectedValue == 1) return;
+        if (selectedValue == 1) return;
         setState(() {
-          _selectedValue = (_selectedValue as int) - 1;
+          selectedValue = (selectedValue as int) - 1;
         });
       },
     );
   }
 
-  Widget _buildBellModePicker() {
+  Widget buildBellModePicker() {
     return BellModePicker(
-      value: BellMode.values[_selectedValue as int],
+      value: BellMode.values[selectedValue as int],
       onSelected: (value) {
-        if (value == _selectedValue) return;
+        if (value == selectedValue) return;
         setState(() {
-          _selectedValue = value;
+          selectedValue = value;
         });
       },
     );
   }
 
-  Widget _buildTimeLengthPicker() {
+  Widget buildTimeLengthPicker() {
     return TimeLengthPicker(
-      initialValue: _selectedValue as int,
+      initialValue: selectedValue as int,
       minTime: widget.minValue!,
       maxTime: widget.maxValue!,
       onChanged: (value) {
-        if (value == _selectedValue) return;
+        if (value == selectedValue) return;
         setState(() {
-          _selectedValue = value;
+          selectedValue = value;
         });
       },
     );
   }
 
-  Widget _buildBellSoundPicker() {
+  Widget buildBellSoundPicker() {
     return BellSoundPicker(
-      initialValue: _selectedValue as int,
+      initialValue: selectedValue as int,
       customBell: widget.additional,
       onSelected: (value) {
-        _selectedValue = value;
+        selectedValue = value;
       },
     );
   }

@@ -29,7 +29,7 @@ class BellSoundPlayer {
   Future<void> playDeviceFile(String file) async {
     try {
       await _player.play(DeviceFileSource(file));
-    } catch (e) {
+    } catch (_) {
       await _player.play(AssetSource(_assetAudios[0]));
 
       Fluttertoast.showToast(

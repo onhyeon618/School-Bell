@@ -21,14 +21,14 @@ class BellSoundPicker extends StatefulWidget {
 }
 
 class _BellSoundPickerState extends State<BellSoundPicker> {
-  int _selected = 0;
-  String? _customBellName;
+  int selected = 0;
+  String? customBellName;
 
   @override
   void initState() {
     super.initState();
-    _selected = widget.initialValue;
-    _customBellName = widget.customBell;
+    selected = widget.initialValue;
+    customBellName = widget.customBell;
   }
 
   @override
@@ -46,7 +46,7 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
               style: SchoolBellTheme.mainTextTheme.bodyMedium,
             ),
             value: index,
-            groupValue: _selected,
+            groupValue: selected,
             controlAffinity: ListTileControlAffinity.trailing,
             activeColor: SchoolBellColor.colorAccent,
             onChanged: (newValue) {
@@ -56,7 +56,7 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
               widget.onSelected.call(newValue);
 
               setState(() {
-                _selected = newValue;
+                selected = newValue;
               });
             },
           ),
@@ -73,8 +73,8 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
               widget.onSelected.call(path);
 
               setState(() {
-                _selected = 8;
-                _customBellName = result.files.single.name;
+                selected = 8;
+                customBellName = result.files.single.name;
               });
             }
           },
@@ -89,7 +89,7 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
                 ),
                 Flexible(
                   child: Text(
-                    _customBellName ?? '',
+                    customBellName ?? '',
                     style: SchoolBellTheme.mainTextTheme.bodySmall,
                     overflow: TextOverflow.ellipsis,
                   ),

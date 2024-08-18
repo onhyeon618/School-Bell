@@ -1,9 +1,9 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:school_bell/domain/app_update_checker.dart';
 import 'package:school_bell/domain/class_manager.dart';
 import 'package:school_bell/domain/setting_manager.dart';
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:school_bell/presentation/schoolbell_theme.dart';
 import 'package:school_bell/presentation/screen/home.dart';
 import 'package:school_bell/service/alarm.dart';
@@ -28,35 +28,35 @@ class SchoolBell extends StatefulWidget {
 }
 
 class _SchoolBellState extends State<SchoolBell> {
-  late final AppLifecycleListener _listener;
+  late final AppLifecycleListener listener;
 
-  final _classManager = ClassManager();
-  final _settingManager = SettingManager();
-  final _appUpdateChecker = AppUpdateChecker();
+  final classManager = ClassManager();
+  final settingManager = SettingManager();
+  final appUpdateChecker = AppUpdateChecker();
 
   @override
   void initState() {
     super.initState();
 
-    _listener = AppLifecycleListener(
-      onResume: _onResume,
+    listener = AppLifecycleListener(
+      onResume: onResume,
     );
 
-    _settingManager.initialize();
-    _classManager.initialize();
-    _appUpdateChecker.checkForUpdate();
+    settingManager.initialize();
+    classManager.initialize();
+    appUpdateChecker.checkForUpdate();
 
-    port.listen((_) async => await _classManager.fetch());
+    port.listen((_) async => await classManager.fetch());
   }
 
-  void _onResume() {
-    _appUpdateChecker.checkForUpdate();
-    _classManager.fetch();
+  void onResume() {
+    appUpdateChecker.checkForUpdate();
+    classManager.fetch();
   }
 
   @override
   void dispose() {
-    _listener.dispose();
+    listener.dispose();
     super.dispose();
   }
 
@@ -66,13 +66,13 @@ class _SchoolBellState extends State<SchoolBell> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => _classManager,
+          create: (_) => classManager,
         ),
         ChangeNotifierProvider(
-          create: (context) => _settingManager,
+          create: (_) => settingManager,
         ),
         ChangeNotifierProvider(
-          create: (context) => _appUpdateChecker,
+          create: (_) => appUpdateChecker,
         ),
       ],
       child: MaterialApp(
