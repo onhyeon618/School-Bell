@@ -108,12 +108,12 @@ class SettingManager extends ChangeNotifier {
       _customRestBell = null;
     } else {
       await _prefs.setInt('restBell', 8);
-      _classBell = 8;
+      _restBell = 8;
 
       final String fileName = restBell.toString().split('/').last;
       await _prefs.setString('customRestBellPath', restBell.toString());
       await _prefs.setString('customRestBellName', fileName);
-      _customClassBell = fileName;
+      _customRestBell = fileName;
     }
 
     notifyListeners();
