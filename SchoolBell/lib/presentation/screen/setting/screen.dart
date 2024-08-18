@@ -175,6 +175,7 @@ class SettingsScreen extends StatelessWidget {
                       negative: '나중에',
                       onPositive: (dialogContext) {
                         StoreRedirect.redirect();
+                        Navigator.of(dialogContext).pop();
                       },
                     );
                   } else {

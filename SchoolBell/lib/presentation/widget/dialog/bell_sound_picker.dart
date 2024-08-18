@@ -66,9 +66,12 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
             BellSoundPlayer.instance.stopPlaying();
             FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.audio);
             if (result != null) {
-              final path = result.files.single.path!;
+              final path = result.files.single.path;
+              if (path == null) return;
+
               BellSoundPlayer.instance.playDeviceFile(path);
               widget.onSelected.call(path);
+
               setState(() {
                 _selected = 8;
                 _customBellName = result.files.single.name;
