@@ -158,15 +158,17 @@ class _HomeState extends State<Home> {
   }
 
   Future<bool> checkPermission(BuildContext context) async {
-    final isGranted = await Permission.notification.isGranted && await Permission.scheduleExactAlarm.status.isGranted;
-    if (!context.mounted) return false;
-
+    final isGranted = await Permission.notification.isGranted &&
+        await Permission.scheduleExactAlarm.isGranted &&
+        await Permission.ignoreBatteryOptimizations.isGranted;
     if (isGranted) return true;
+
+    if (!context.mounted) return false;
 
     final result = await SBDialog.showText(
       context: context,
       title: '권한이 필요합니다',
-      content: '알림: 앱 실행 상태 표시\n알람 및 리마인더: 종소리 재생',
+      content: '알림: 앱 실행 상태 표시\n알람 및 리마인더: 종소리 재생\n배터리 최적화 제외: 정확한 시각에 동작',
       positive: '허용하기',
       onPositive: (dialogContext) async {
         // 순차적으로 진행, 하나라도 거부할 경우 요청 프로세스 종료
@@ -179,7 +181,14 @@ class _HomeState extends State<Home> {
 
         final alarm = await Permission.scheduleExactAlarm.request();
         if (!dialogContext.mounted) return;
-        Navigator.of(dialogContext).pop(alarm.isGranted);
+        if (!alarm.isGranted) {
+          Navigator.of(dialogContext).pop(false);
+          return;
+        }
+
+        final battery = await Permission.ignoreBatteryOptimizations.request();
+        if (!dialogContext.mounted) return;
+        Navigator.of(dialogContext).pop(battery.isGranted);
       },
     );
     return result ?? false;
