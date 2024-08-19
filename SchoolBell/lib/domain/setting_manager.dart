@@ -61,7 +61,16 @@ class SettingManager extends ChangeNotifier {
 
   Future<void> setBellMode(int bellMode) async {
     await _prefs.setInt('bellMode', bellMode);
-    _bellMode = BellMode.fromInt(bellMode);
+
+    final mode = BellMode.fromInt(bellMode);
+    if (mode == BellMode.onTime) {
+      await _prefs.setInt('classLength', 50);
+      await _prefs.setInt('restLength', 10);
+      _classLength = 50;
+      _restLength = 10;
+    }
+
+    _bellMode = mode;
     notifyListeners();
   }
 

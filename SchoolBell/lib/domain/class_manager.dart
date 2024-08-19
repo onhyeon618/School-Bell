@@ -71,8 +71,8 @@ class ClassManager extends ChangeNotifier {
     await setClassState(state: ClassState.inClass, period: 1, total: totalPeriod);
 
     final bellMode = BellMode.fromInt(_prefs.getInt('bellMode') ?? 0);
-    final classLength = (_prefs.getInt('classLength') ?? 50) * 60;
-    final restLength = (_prefs.getInt('restLength') ?? 10) * 60;
+    final classLength = _prefs.getInt('classLength') ?? 50;
+    final restLength = _prefs.getInt('restLength') ?? 10;
 
     final int firstClassLength;
     if (bellMode == BellMode.onTime) {
@@ -80,12 +80,12 @@ class ClassManager extends ChangeNotifier {
 
       // onTime 모드인 경우 classLength, restLength는 각각 종이 울릴 분각을 의미함
       if (now.minute < classLength) {
-        firstClassLength = classLength - now.minute * 60 - now.second;
+        firstClassLength = (classLength - now.minute) * 60 - now.second;
       } else {
-        firstClassLength = (60 - now.minute) * 60 + classLength - now.second;
+        firstClassLength = (60 - now.minute + classLength) * 60 - now.second;
       }
     } else {
-      firstClassLength = classLength;
+      firstClassLength = classLength * 60;
     }
 
     int timeSum = firstClassLength;
@@ -103,9 +103,9 @@ class ClassManager extends ChangeNotifier {
       );
 
       if (alarmId.isEven) {
-        timeSum += restLength;
+        timeSum += restLength * 60;
       } else {
-        timeSum += classLength;
+        timeSum += classLength * 60;
       }
     }
     await AndroidAlarmManager.oneShot(
