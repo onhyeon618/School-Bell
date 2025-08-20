@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:provider/provider.dart';
 import 'package:school_bell/domain/app_update_checker.dart';
 import 'package:school_bell/domain/class_manager.dart';
@@ -9,15 +10,16 @@ import 'package:school_bell/domain/setting_manager.dart';
 import 'package:school_bell/presentation/schoolbell_theme.dart';
 import 'package:school_bell/presentation/screen/home.dart';
 import 'package:school_bell/service/alarm.dart';
-import 'package:school_bell/service/notification.dart';
+import 'package:school_bell/service/foreground.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  FlutterForegroundTask.initCommunicationPort();
+  ForegroundService.instance.initialize();
+
   AlarmService.instance.initializeIsolate();
   await AndroidAlarmManager.initialize();
-
-  await NotificationService.instance.initialize();
 
   runApp(const SchoolBell());
 }

@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:school_bell/bell_sound_player.dart';
 import 'package:school_bell/enum/alarm_type.dart';
 import 'package:school_bell/enum/class_state.dart';
-import 'package:school_bell/service/notification.dart';
+import 'package:school_bell/service/foreground.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String isolateName = 'SchoolBellIsolate';
@@ -27,8 +27,6 @@ class AlarmService {
 
   @pragma('vm:entry-point')
   static Future<void> callback(int id, Map<String, dynamic> params) async {
-    await NotificationService.instance.initialize();
-
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.reload();
 
@@ -46,8 +44,8 @@ class AlarmService {
 
         unawaited(BellSoundPlayer.instance.playRestBell());
 
-        await NotificationService.instance.showNotification(
-          '$currentPeriod교시 쉬는 시간! 이제 ${totalPeriod - currentPeriod}교시 남았어요.',
+        await ForegroundService.instance.updateService(
+          notificationText: '$currentPeriod교시 쉬는 시간! 이제 ${totalPeriod - currentPeriod}교시 남았어요.',
         );
       case AlarmType.restEnd:
         await prefs.setInt('currentState', ClassState.inClass.index);
@@ -55,8 +53,8 @@ class AlarmService {
 
         unawaited(BellSoundPlayer.instance.playClassBell());
 
-        await NotificationService.instance.showNotification(
-          totalPeriod == currentPeriod + 1
+        await ForegroundService.instance.updateService(
+          notificationText: totalPeriod == currentPeriod + 1
               ? '${currentPeriod + 1}교시 수업 중~ 오늘의 마지막 수업이에요. 화이팅!'
               : '지금은 ${currentPeriod + 1}교시 수업 중!',
         );
@@ -67,7 +65,7 @@ class AlarmService {
 
         unawaited(BellSoundPlayer.instance.playRestBell());
 
-        await NotificationService.instance.cancelNotifications();
+        await ForegroundService.instance.stopService();
     }
 
     uiSendPort ??= IsolateNameServer.lookupPortByName(isolateName);

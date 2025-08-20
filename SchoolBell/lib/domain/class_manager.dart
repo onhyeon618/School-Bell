@@ -4,7 +4,7 @@ import 'package:school_bell/enum/alarm_type.dart';
 import 'package:school_bell/enum/bell_mode.dart';
 import 'package:school_bell/enum/class_state.dart';
 import 'package:school_bell/service/alarm.dart';
-import 'package:school_bell/service/notification.dart';
+import 'package:school_bell/service/foreground.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String isolateName = 'SchoolBellIsolate';
@@ -117,9 +117,7 @@ class ClassManager extends ChangeNotifier {
       params: {'alarmType': AlarmType.lastClassEnd.index},
     );
 
-    await NotificationService.instance.showNotification(
-      '1교시 수업 중~! 오늘도 힘내봐요!',
-    );
+    await ForegroundService.instance.startService();
 
     notifyListeners();
   }
@@ -131,6 +129,6 @@ class ClassManager extends ChangeNotifier {
 
     await setClassState(state: ClassState.idle, period: -1, total: -1);
 
-    await NotificationService.instance.cancelNotifications();
+    await ForegroundService.instance.stopService();
   }
 }
