@@ -58,45 +58,27 @@ class _HomeState extends State<Home> {
             Padding(
               padding: EdgeInsets.only(right: 36.0),
               child: NavigationDestination(
-                selectedIcon: Icon(
-                  Icons.access_time,
-                  color: SchoolBellColor.colorMain,
-                  size: 32,
-                ),
-                icon: Icon(
-                  Icons.access_time,
-                  color: SchoolBellColor.colorDarkGray,
-                  size: 32,
-                ),
+                selectedIcon: Icon(Icons.access_time, color: SchoolBellColor.colorMain, size: 32),
+                icon: Icon(Icons.access_time, color: SchoolBellColor.colorDarkGray, size: 32),
                 label: '홈',
               ),
             ),
             Padding(
               padding: EdgeInsets.only(left: 36.0),
               child: NavigationDestination(
-                selectedIcon: Icon(
-                  Icons.settings,
-                  color: SchoolBellColor.colorMain,
-                  size: 32,
-                ),
-                icon: Icon(
-                  Icons.settings,
-                  color: SchoolBellColor.colorDarkGray,
-                  size: 32,
-                ),
+                selectedIcon: Icon(Icons.settings, color: SchoolBellColor.colorMain, size: 32),
+                icon: Icon(Icons.settings, color: SchoolBellColor.colorDarkGray, size: 32),
                 label: '설정',
               ),
             ),
           ],
         ),
         body: SafeArea(
-          child: [
-            ClassScreen(
-              currentState: classManager.currentState,
-              currentPeriod: classManager.currentPeriod,
-            ),
-            const SettingsScreen(),
-          ][selectedTab],
+          child:
+              [
+                ClassScreen(currentState: classManager.currentState, currentPeriod: classManager.currentPeriod),
+                const SettingsScreen(),
+              ][selectedTab],
         ),
         floatingActionButton: SizedBox(
           height: 72,
@@ -126,10 +108,7 @@ class _HomeState extends State<Home> {
     if (!context.mounted) return;
 
     if (!permission) {
-      await SBDialog.showConfirm(
-        context: context,
-        content: '권한이 없어 수업을 시작할 수 없습니다.',
-      );
+      await SBDialog.showConfirm(context: context, content: '권한이 없어 수업을 시작할 수 없습니다.');
       return;
     }
 
@@ -158,7 +137,8 @@ class _HomeState extends State<Home> {
   }
 
   Future<bool> checkPermission(BuildContext context) async {
-    final isGranted = await Permission.notification.isGranted &&
+    final isGranted =
+        await Permission.notification.isGranted &&
         await Permission.scheduleExactAlarm.isGranted &&
         await Permission.ignoreBatteryOptimizations.isGranted;
     if (isGranted) return true;

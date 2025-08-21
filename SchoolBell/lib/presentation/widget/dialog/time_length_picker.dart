@@ -58,10 +58,7 @@ class _TimeLengthPickerState extends State<TimeLengthPicker> {
               alignment: Alignment.center,
               children: [
                 ///// 다이얼로그 크기 유지용 빈 위젯
-                const SizedBox(
-                  height: 144,
-                  width: 100,
-                ),
+                const SizedBox(height: 144, width: 100),
 
                 ///// NumberPicker: 스크롤하여 시간 선택
                 Visibility(
@@ -71,19 +68,10 @@ class _TimeLengthPickerState extends State<TimeLengthPicker> {
                     minValue: widget.minTime,
                     maxValue: widget.maxTime,
                     itemHeight: 48,
-                    textStyle: const TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey,
-                    ),
+                    textStyle: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.grey),
                     selectedTextStyle: SchoolBellTheme.mainTextTheme.titleMedium,
                     haptics: true,
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        top: BorderSide(),
-                        bottom: BorderSide(),
-                      ),
-                    ),
+                    decoration: const BoxDecoration(border: Border(top: BorderSide(), bottom: BorderSide())),
                     onChanged: (value) {
                       widget.onChanged.call(value);
                       controller.text = value.toString();
@@ -134,23 +122,14 @@ class _TimeLengthPickerState extends State<TimeLengthPicker> {
                       showEditor = true;
                     });
                     focusNode.requestFocus();
-                    controller.selection = TextSelection(
-                      baseOffset: 0,
-                      extentOffset: controller.text.length,
-                    );
+                    controller.selection = TextSelection(baseOffset: 0, extentOffset: controller.text.length);
                   },
-                  child: const SizedBox(
-                    height: 48,
-                    width: 100,
-                  ),
+                  child: const SizedBox(height: 48, width: 100),
                 ),
               ],
             ),
             const SizedBox(width: 16),
-            Text(
-              '분',
-              style: SchoolBellTheme.mainTextTheme.bodyMedium,
-            ),
+            Text('분', style: SchoolBellTheme.mainTextTheme.bodyMedium),
           ],
         ),
       ),
@@ -162,16 +141,10 @@ class RangeFormatter extends TextInputFormatter {
   final int min;
   final int max;
 
-  RangeFormatter({
-    required this.min,
-    required this.max,
-  });
+  RangeFormatter({required this.min, required this.max});
 
   @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.text == '') return newValue;
 
     final input = int.parse(newValue.text);

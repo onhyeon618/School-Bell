@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:isolate';
 import 'dart:ui';
+
 import 'package:school_bell/bell_sound_player.dart';
 import 'package:school_bell/enum/alarm_type.dart';
 import 'package:school_bell/enum/class_state.dart';
@@ -17,10 +18,7 @@ class AlarmService {
   AlarmService._internal();
 
   void initializeIsolate() {
-    IsolateNameServer.registerPortWithName(
-      port.sendPort,
-      isolateName,
-    );
+    IsolateNameServer.registerPortWithName(port.sendPort, isolateName);
   }
 }
 

@@ -5,10 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 class LicenseDetail extends StatelessWidget {
   final Package package;
 
-  const LicenseDetail({
-    super.key,
-    required this.package,
-  });
+  const LicenseDetail({super.key, required this.package});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +19,7 @@ class LicenseDetail extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  package.description,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
+                Text(package.description, style: Theme.of(context).textTheme.bodyMedium),
                 const SizedBox(height: 12),
                 if (package.homepage != null) ...[
                   GestureDetector(
@@ -33,20 +27,16 @@ class LicenseDetail extends StatelessWidget {
                     onTap: () async => launchUrl(Uri.parse(package.homepage!)),
                     child: Text(
                       package.homepage!,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: Colors.blue, decoration: TextDecoration.underline),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodySmall!.copyWith(color: Colors.blue, decoration: TextDecoration.underline),
                     ),
                   ),
                   const SizedBox(height: 12),
                 ],
                 if (package.license != null) ...[
                   const Divider(),
-                  Text(
-                    package.license!,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
+                  Text(package.license!, style: Theme.of(context).textTheme.bodyLarge),
                 ],
               ],
             ),

@@ -9,9 +9,7 @@ class BellSoundPlayer {
 
   BellSoundPlayer._internal();
 
-  final _player = AudioPlayer(
-    playerId: 'school_bell_player',
-  );
+  final _player = AudioPlayer(playerId: 'school_bell_player');
 
   final List<String> _assetAudios = [
     'audio/bellsound1.mp3',
@@ -34,12 +32,7 @@ class BellSoundPlayer {
     } catch (_) {
       await _player.play(AssetSource(_assetAudios[0]));
 
-      unawaited(
-        Fluttertoast.showToast(
-          msg: '파일에 오류가 있어 기본 종소리를 재생했어요.',
-          toastLength: Toast.LENGTH_SHORT,
-        ),
-      );
+      unawaited(Fluttertoast.showToast(msg: '파일에 오류가 있어 기본 종소리를 재생했어요.', toastLength: Toast.LENGTH_SHORT));
     }
   }
 

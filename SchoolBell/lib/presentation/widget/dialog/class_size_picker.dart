@@ -7,12 +7,7 @@ class ClassSizePicker extends StatelessWidget {
   final VoidCallback onPlus;
   final VoidCallback onMinus;
 
-  const ClassSizePicker({
-    super.key,
-    required this.value,
-    required this.onPlus,
-    required this.onMinus,
-  });
+  const ClassSizePicker({super.key, required this.value, required this.onPlus, required this.onMinus});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +17,7 @@ class ClassSizePicker extends StatelessWidget {
         GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: onMinus,
-          child: const Icon(
-            Icons.remove,
-            color: Colors.black,
-          ),
+          child: const Icon(Icons.remove, color: Colors.black),
         ),
         Container(
           width: 48.0,
@@ -36,18 +28,12 @@ class ClassSizePicker extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(2)),
             color: SchoolBellColor.colorSub,
           ),
-          child: Text(
-            '$value',
-            style: SchoolBellTheme.mainTextTheme.bodyMedium,
-          ),
+          child: Text('$value', style: SchoolBellTheme.mainTextTheme.bodyMedium),
         ),
         GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: onPlus,
-          child: const Icon(
-            Icons.add,
-            color: Colors.black,
-          ),
+          child: const Icon(Icons.add, color: Colors.black),
         ),
       ],
     );

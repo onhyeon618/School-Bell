@@ -52,13 +52,14 @@ class SBDialog extends StatefulWidget {
     return showBasic(
       context: context,
       title: title,
-      content: content != null
-          ? Text(
-              content,
-              style: SchoolBellTheme.mainTextTheme.bodyMedium!.copyWith(height: 1.5),
-              textAlign: TextAlign.center,
-            )
-          : null,
+      content:
+          content != null
+              ? Text(
+                content,
+                style: SchoolBellTheme.mainTextTheme.bodyMedium!.copyWith(height: 1.5),
+                textAlign: TextAlign.center,
+              )
+              : null,
       positive: positive,
       negative: negative,
       onPositive: onPositive,
@@ -108,13 +109,14 @@ class SBDialog extends StatefulWidget {
       type: DialogType.basic,
       initialValue: 0,
       title: title,
-      content: content != null
-          ? Text(
-              content,
-              style: SchoolBellTheme.mainTextTheme.bodyMedium!.copyWith(height: 1.5),
-              textAlign: TextAlign.center,
-            )
-          : null,
+      content:
+          content != null
+              ? Text(
+                content,
+                style: SchoolBellTheme.mainTextTheme.bodyMedium!.copyWith(height: 1.5),
+                textAlign: TextAlign.center,
+              )
+              : null,
       positive: positive ?? DialogType.basic.positive,
       onPositive: onPositive,
       padding: padding,
@@ -166,20 +168,21 @@ class SBDialog extends StatefulWidget {
   }) {
     return showDialog(
       context: context,
-      builder: (dialogContext) => SBDialog(
-        type: type,
-        initialValue: initialValue,
-        additional: additional,
-        title: title,
-        content: content,
-        positive: positive,
-        negative: negative,
-        onPositive: onPositive,
-        onNegative: onNegative,
-        padding: padding,
-        minValue: minValue,
-        maxValue: maxValue,
-      ),
+      builder:
+          (dialogContext) => SBDialog(
+            type: type,
+            initialValue: initialValue,
+            additional: additional,
+            title: title,
+            content: content,
+            positive: positive,
+            negative: negative,
+            onPositive: onPositive,
+            onNegative: onNegative,
+            padding: padding,
+            minValue: minValue,
+            maxValue: maxValue,
+          ),
     );
   }
 
@@ -214,9 +217,7 @@ class _SBDialogState extends State<SBDialog> {
     }
 
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.transparent,
       child: ClipRRect(
@@ -231,10 +232,7 @@ class _SBDialogState extends State<SBDialog> {
                 child: Column(
                   children: [
                     if (widget.title != null) ...[
-                      Text(
-                        widget.title!,
-                        style: SchoolBellTheme.mainTextTheme.titleMedium,
-                      ),
+                      Text(widget.title!, style: SchoolBellTheme.mainTextTheme.titleMedium),
                       const SizedBox(height: 16),
                     ],
                     if (dialogContent != null) dialogContent!,
@@ -261,10 +259,7 @@ class _SBDialogState extends State<SBDialog> {
                         height: 48,
                         color: SchoolBellColor.colorGray,
                         alignment: Alignment.center,
-                        child: Text(
-                          widget.negative!,
-                          style: SchoolBellTheme.mainTextTheme.labelLarge,
-                        ),
+                        child: Text(widget.negative!, style: SchoolBellTheme.mainTextTheme.labelLarge),
                       ),
                     ),
                   ),
@@ -282,10 +277,7 @@ class _SBDialogState extends State<SBDialog> {
                       height: 48,
                       color: SchoolBellColor.colorMain,
                       alignment: Alignment.center,
-                      child: Text(
-                        widget.positive,
-                        style: SchoolBellTheme.mainTextTheme.labelLarge,
-                      ),
+                      child: Text(widget.positive, style: SchoolBellTheme.mainTextTheme.labelLarge),
                     ),
                   ),
                 ),

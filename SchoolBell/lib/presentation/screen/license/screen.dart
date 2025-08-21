@@ -9,27 +9,18 @@ class LicensesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('오픈소스 라이선스'),
-      ),
+      appBar: AppBar(title: const Text('오픈소스 라이선스')),
       body: ListView.separated(
         itemCount: allDependencies.length,
         itemBuilder: (context, index) {
           final dependency = allDependencies[index];
           return ListTile(
-            title: Text(
-              '${dependency.name} ${dependency.version}',
-              style: SchoolBellTheme.mainTextTheme.bodySmall,
-            ),
+            title: Text('${dependency.name} ${dependency.version}', style: SchoolBellTheme.mainTextTheme.bodySmall),
             trailing: const Icon(Icons.chevron_right),
             onTap: () async {
-              await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => LicenseDetail(
-                    package: dependency,
-                  ),
-                ),
-              );
+              await Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (context) => LicenseDetail(package: dependency)));
             },
           );
         },

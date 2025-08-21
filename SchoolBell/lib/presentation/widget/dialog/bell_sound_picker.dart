@@ -11,12 +11,7 @@ class BellSoundPicker extends StatefulWidget {
   final String? customBell;
   final ValueChanged onSelected;
 
-  const BellSoundPicker({
-    super.key,
-    required this.initialValue,
-    this.customBell,
-    required this.onSelected,
-  });
+  const BellSoundPicker({super.key, required this.initialValue, this.customBell, required this.onSelected});
 
   @override
   State<BellSoundPicker> createState() => _BellSoundPickerState();
@@ -43,10 +38,7 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
         for (int index = 0; index < 8; index++)
           RadioListTile(
             contentPadding: const EdgeInsets.only(left: 32, right: 16),
-            title: Text(
-              '#${index + 1}',
-              style: SchoolBellTheme.mainTextTheme.bodyMedium,
-            ),
+            title: Text('#${index + 1}', style: SchoolBellTheme.mainTextTheme.bodyMedium),
             value: index,
             groupValue: selected,
             controlAffinity: ListTileControlAffinity.trailing,
@@ -86,10 +78,7 @@ class _BellSoundPickerState extends State<BellSoundPicker> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  '기기에서 선택...  ',
-                  style: SchoolBellTheme.mainTextTheme.bodyMedium,
-                ),
+                Text('기기에서 선택...  ', style: SchoolBellTheme.mainTextTheme.bodyMedium),
                 Flexible(
                   child: Text(
                     customBellName ?? '',

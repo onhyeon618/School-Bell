@@ -5,10 +5,7 @@ enum DialogType {
   setTimeLength(positive: '설정하기', negative: '취소'),
   setBellSound(positive: '설정하기', negative: '취소');
 
-  const DialogType({
-    required this.positive,
-    required this.negative,
-  });
+  const DialogType({required this.positive, required this.negative});
 
   final String positive;
   final String negative;

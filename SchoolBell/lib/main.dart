@@ -43,9 +43,7 @@ class _SchoolBellState extends State<SchoolBell> {
   void initState() {
     super.initState();
 
-    listener = AppLifecycleListener(
-      onResume: onResume,
-    );
+    listener = AppLifecycleListener(onResume: onResume);
 
     unawaited(settingManager.initialize());
     unawaited(classManager.initialize());
@@ -70,26 +68,16 @@ class _SchoolBellState extends State<SchoolBell> {
     final theme = SchoolBellTheme.mainTheme();
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => classManager,
-        ),
-        ChangeNotifierProvider(
-          create: (_) => settingManager,
-        ),
-        ChangeNotifierProvider(
-          create: (_) => appUpdateChecker,
-        ),
+        ChangeNotifierProvider(create: (_) => classManager),
+        ChangeNotifierProvider(create: (_) => settingManager),
+        ChangeNotifierProvider(create: (_) => appUpdateChecker),
       ],
       child: AnnotatedRegion(
         value: const SystemUiOverlayStyle(
           statusBarBrightness: Brightness.light,
           statusBarIconBrightness: Brightness.dark,
         ),
-        child: MaterialApp(
-          title: 'SchoolBell',
-          theme: theme,
-          home: const Home(),
-        ),
+        child: MaterialApp(title: 'SchoolBell', theme: theme, home: const Home()),
       ),
     );
   }

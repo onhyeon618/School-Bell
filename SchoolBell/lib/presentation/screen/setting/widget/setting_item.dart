@@ -7,13 +7,7 @@ class SettingItem extends StatelessWidget {
   final VoidCallback? onTap;
   final bool isDisabled;
 
-  const SettingItem({
-    super.key,
-    required this.title,
-    this.attribute,
-    this.onTap,
-    this.isDisabled = false,
-  });
+  const SettingItem({super.key, required this.title, this.attribute, this.onTap, this.isDisabled = false});
 
   @override
   Widget build(BuildContext context) {
@@ -31,18 +25,16 @@ class SettingItem extends StatelessWidget {
           children: [
             Text(
               title,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(color: isDisabled ? SchoolBellColor.colorGray : Colors.black),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(color: isDisabled ? SchoolBellColor.colorGray : Colors.black),
             ),
             if (attribute != null)
               Text(
                 attribute!,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: isDisabled ? SchoolBellColor.colorGray : Colors.black),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(color: isDisabled ? SchoolBellColor.colorGray : Colors.black),
               ),
           ],
         ),

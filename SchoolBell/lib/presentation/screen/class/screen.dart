@@ -7,11 +7,7 @@ class ClassScreen extends StatelessWidget {
   final ClassState currentState;
   final int currentPeriod;
 
-  const ClassScreen({
-    super.key,
-    required this.currentState,
-    required this.currentPeriod,
-  });
+  const ClassScreen({super.key, required this.currentState, required this.currentPeriod});
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +17,9 @@ class ClassScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            '$classStr${currentState.description}',
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
+          Text('$classStr${currentState.description}', style: Theme.of(context).textTheme.headlineLarge),
           const SizedBox(height: 46),
-          SvgPicture(
-            AssetBytesLoader(currentState.imagePath),
-            width: MediaQuery.of(context).size.width - 40,
-          ),
+          SvgPicture(AssetBytesLoader(currentState.imagePath), width: MediaQuery.of(context).size.width - 40),
         ],
       ),
     );

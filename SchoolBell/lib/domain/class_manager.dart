@@ -51,11 +51,7 @@ class ClassManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setClassState({
-    required ClassState state,
-    required int period,
-    int? total,
-  }) async {
+  Future<void> setClassState({required ClassState state, required int period, int? total}) async {
     await _prefs.setInt('currentState', state.index);
     await _prefs.setInt('currentPeriod', period);
     if (total != null) await _prefs.setInt('totalPeriod', total);

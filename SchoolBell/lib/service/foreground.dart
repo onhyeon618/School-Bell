@@ -16,9 +16,7 @@ class ForegroundService {
         onlyAlertOnce: true,
       ),
       iosNotificationOptions: const IOSNotificationOptions(),
-      foregroundTaskOptions: ForegroundTaskOptions(
-        eventAction: ForegroundTaskEventAction.nothing(),
-      ),
+      foregroundTaskOptions: ForegroundTaskOptions(eventAction: ForegroundTaskEventAction.nothing()),
     );
   }
 
@@ -30,17 +28,13 @@ class ForegroundService {
         serviceId: _serviceId,
         notificationTitle: '',
         notificationText: '1교시 수업 중~! 오늘도 힘내봐요!',
-        notificationIcon: const NotificationIcon(
-          metaDataName: 'school_bell.service.NOTICE_ICON',
-        ),
+        notificationIcon: const NotificationIcon(metaDataName: 'school_bell.service.NOTICE_ICON'),
       );
     }
   }
 
   Future<ServiceRequestResult> updateService({required String notificationText}) async {
-    return FlutterForegroundTask.updateService(
-      notificationText: notificationText,
-    );
+    return FlutterForegroundTask.updateService(notificationText: notificationText);
   }
 
   Future<ServiceRequestResult> stopService() {

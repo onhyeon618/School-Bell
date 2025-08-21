@@ -7,26 +7,14 @@ class BellModePicker extends StatelessWidget {
   final BellMode value;
   final ValueChanged onSelected;
 
-  const BellModePicker({
-    super.key,
-    required this.value,
-    required this.onSelected,
-  });
+  const BellModePicker({super.key, required this.value, required this.onSelected});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        BellModeRadio(
-          mode: BellMode.onTime,
-          selectedValue: value,
-          onSelected: onSelected,
-        ),
-        BellModeRadio(
-          mode: BellMode.byCustom,
-          selectedValue: value,
-          onSelected: onSelected,
-        ),
+        BellModeRadio(mode: BellMode.onTime, selectedValue: value, onSelected: onSelected),
+        BellModeRadio(mode: BellMode.byCustom, selectedValue: value, onSelected: onSelected),
       ],
     );
   }
@@ -37,12 +25,7 @@ class BellModeRadio extends StatelessWidget {
   final BellMode selectedValue;
   final ValueChanged onSelected;
 
-  const BellModeRadio({
-    super.key,
-    required this.mode,
-    required this.selectedValue,
-    required this.onSelected,
-  });
+  const BellModeRadio({super.key, required this.mode, required this.selectedValue, required this.onSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -57,15 +40,9 @@ class BellModeRadio extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  mode.name,
-                  style: SchoolBellTheme.mainTextTheme.bodyMedium,
-                ),
+                Text(mode.name, style: SchoolBellTheme.mainTextTheme.bodyMedium),
                 const SizedBox(height: 8),
-                Text(
-                  mode.description,
-                  style: SchoolBellTheme.mainTextTheme.bodySmall,
-                ),
+                Text(mode.description, style: SchoolBellTheme.mainTextTheme.bodySmall),
               ],
             ),
             Radio(

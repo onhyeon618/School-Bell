@@ -35,10 +35,7 @@ class SettingsScreen extends StatelessWidget {
           Container(
             height: 64,
             alignment: Alignment.center,
-            child: Text(
-              '설정',
-              style: SchoolBellTheme.mainTextTheme.titleMedium,
-            ),
+            child: Text('설정', style: SchoolBellTheme.mainTextTheme.titleMedium),
           ),
           const SizedBox(height: 6),
 
@@ -181,10 +178,7 @@ class SettingsScreen extends StatelessWidget {
                       },
                     );
                   } else {
-                    await Fluttertoast.showToast(
-                      msg: '현재 최신 버전이에요.',
-                      toastLength: Toast.LENGTH_SHORT,
-                    );
+                    await Fluttertoast.showToast(msg: '현재 최신 버전이에요.', toastLength: Toast.LENGTH_SHORT);
                   }
                 },
               );
@@ -193,11 +187,7 @@ class SettingsScreen extends StatelessWidget {
           SettingItem(
             title: '오픈소스 라이선스',
             onTap: () async {
-              await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const LicensesScreen(),
-                ),
-              );
+              await Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LicensesScreen()));
             },
           ),
         ],
@@ -208,10 +198,7 @@ class SettingsScreen extends StatelessWidget {
   Widget buildDivider(double height) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: ColoredBox(
-        color: SchoolBellColor.colorSplash,
-        child: SizedBox(height: height, width: double.infinity),
-      ),
+      child: ColoredBox(color: SchoolBellColor.colorSplash, child: SizedBox(height: height, width: double.infinity)),
     );
   }
 }
