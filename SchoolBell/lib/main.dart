@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:provider/provider.dart';
 import 'package:school_bell/domain/app_update_checker.dart';
@@ -79,10 +80,16 @@ class _SchoolBellState extends State<SchoolBell> {
           create: (_) => appUpdateChecker,
         ),
       ],
-      child: MaterialApp(
-        title: 'SchoolBell',
-        theme: theme,
-        home: const Home(),
+      child: AnnotatedRegion(
+        value: const SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.dark,
+        ),
+        child: MaterialApp(
+          title: 'SchoolBell',
+          theme: theme,
+          home: const Home(),
+        ),
       ),
     );
   }
