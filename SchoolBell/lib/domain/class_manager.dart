@@ -96,7 +96,7 @@ class ClassManager extends ChangeNotifier {
       await AndroidAlarmManager.oneShot(
         Duration(seconds: timeSum),
         alarmId,
-        AlarmService.callback,
+        callbackForAlarm,
         alarmClock: true,
         wakeup: true,
         params: {'alarmType': alarmType.index},
@@ -111,7 +111,7 @@ class ClassManager extends ChangeNotifier {
     await AndroidAlarmManager.oneShot(
       Duration(seconds: timeSum),
       (totalPeriod - 1) * 2,
-      AlarmService.callback,
+      callbackForAlarm,
       alarmClock: true,
       wakeup: true,
       params: {'alarmType': AlarmType.lastClassEnd.index},
